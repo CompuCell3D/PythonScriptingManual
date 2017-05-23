@@ -10,6 +10,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    :maxdepth: 1
 
    introduction
+   how_to_use_python_in_cc3d
 
 
 
