@@ -25,3 +25,6 @@ On the next page of the Wizard we specify GGH global parameters, including cell-
 In this example, we specify a ``100x100x1`` cell-lattice, i.e., a 2D model, a fluctuation amplitude of 10, a simulation duration of 10000 MCS and a pixel-copy range of 2. ``BlobInitializer`` initializes the simulation with a disk of cells of specified size.
 
 .. image:: images/general_simulation_properties.png
+    :alt: Figure 2 Specification of basic cell-sorting properties in Simulation Wizard.
+
+    Figure 2 Specification of basic cell-sorting properties in Simulation Wizard.
