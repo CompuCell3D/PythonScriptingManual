@@ -16,6 +16,7 @@ To invoke the simulation wizard to create a simulation, we click ``CC3DProject->
 **Remark:** Simulation code for cellsorting will be generated in ``C:\CC3DProjects\cellsorting``. On Linux/OSX/Unix systems it will be generated in ``<your home directory>/ CC3DProjects/cellsorting``
 
 .. figure:: images/wizard_twedit.png
+    :alt: Figure 1 Invoking the CompuCell3D Simulation Wizard from Twedit++.
 
 
 On the next page of the Wizard we specify GGH global parameters, including cell-lattice dimensions, the cell fluctuation amplitude, the duration of the simulation in Monte-Carlo steps and the initial cell-lattice configuration.
