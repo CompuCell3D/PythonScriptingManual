@@ -1,5 +1,8 @@
 .. _introduction:
 
+Introduction
+============
+
 If you have been already using CompuCell3D you probably have realized the limitations of CC3DML (CompuCell3D XML model specification format). Simulations written CC3DML are “static”. That means you specify initial cellular behaviors, and throughout the simulation those behaviors descriptions remain unchanged. If your goal is to run simple cell-sorting or grain coarsening simulations CC3DML is all you need. However if you are seriously thinking about building complex biological models you have to look beyond markup-languages.
 Fortunately, CompuCell3D provides easy to use and learn Python scripting interface which allows users to build complex simulations without writing low-level code which requires compilation. If you have used Matlab or Mathematica you are familiar with such approach – somebody writes all number crunching functions and provides you with scripting language which you use to “glue” those functions together to build mathematical models. This approach is very successful because it allows non-programmers to enter the arena of mathematical modeling.
 Python scripting available in CompuCell3D offers modelers significant flexibility to construct models where behaviors of individual cells change (according to user specification) as simulation progresses.
