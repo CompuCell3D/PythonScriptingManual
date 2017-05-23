@@ -1,7 +1,5 @@
 .. python_scripting_manual documentation master file, created by
-sphinx-quickstart on Mon May 22 20:30:13 2017.
-You can adapt this file completely to your liking, but it should at least
-contain the root `toctree` directive.
+
 
 Python Scripting Manual for CompuCell3D - version 3.7.6
 =======================================================
@@ -9,14 +7,9 @@ Python Scripting Manual for CompuCell3D - version 3.7.6
 The focus of this manual is to teach you how to use Python scripting language to develop complex CompuCell3D simulations. We will assume that you have a working knowledge of Python. You do not have to be a Python guru but you should know how to write simple Python scripts that use functions, classes, dictionaries and lists. You can find decent tutorials online (e.g. `Instant Python Hacking <http://hetland.org/writing/instant-hacking.html>`__, or `Instant Python Hacking <http://hetland.org/writing>`__) or simply purchase a book on introductory Python programming.
 
 .. toctree::
-:maxdepth: 2
-       :caption: Contents:
+   :maxdepth: 1
+
+   introduction
 
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
