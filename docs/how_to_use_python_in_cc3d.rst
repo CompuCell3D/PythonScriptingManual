@@ -28,3 +28,11 @@ In this example, we specify a ``100x100x1`` cell-lattice, i.e., a 2D model, a fl
     :alt: Figure 2 Specification of basic cell-sorting properties in Simulation Wizard.
 
     Figure 2 Specification of basic cell-sorting properties in Simulation Wizard.
+
+Trying out equations
+
+.. math::
+
+   (a + b)^2 = a^2 + 2ab + b^2
+
+   (a - b)^2 = a^2 - 2ab + b^2
