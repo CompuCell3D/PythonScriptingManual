@@ -10,11 +10,11 @@ comment out BlobInitializer section in the CC3DML code in our
 cellsorting simulation:
 
 File: ``C:\\CC3DProjects\\cellsorting\\Simulation\\cellsorting.xml``
+
 .. code-block:: xml
 
     <CompuCell3D version="3.6.2">
       <Potts>
-        <!-- Basic properties of CPM (GGH) algorithm -->
         <Dimensions x="100" y="100" z="1"/>
         <Steps>10000</Steps>
         <Temperature>10.0</Temperature>
@@ -22,7 +22,6 @@ File: ``C:\\CC3DProjects\\cellsorting\\Simulation\\cellsorting.xml``
       </Potts>
 
       <Plugin Name="CellType">
-        <!-- Listing all cell types in the simulation -->
         <CellType TypeId="0" TypeName="Medium"/>
         <CellType TypeId="1" TypeName="Condensing"/>
         <CellType TypeId="2" TypeName="NonCondensing"/>
@@ -36,11 +35,10 @@ File: ``C:\\CC3DProjects\\cellsorting\\Simulation\\cellsorting.xml``
       </Plugin>
 
       <Plugin Name="CenterOfMass">
-        <!-- Module tracking center of mass of each cell -->
       </Plugin>
 
       <Plugin Name="Contact">
-        <!-- Specification of adhesion energies -->
+
         <Energy Type1="Medium" Type2="Medium">10.0</Energy>
         <Energy Type1="Medium" Type2="Condensing">10.0</Energy>
         <Energy Type1="Medium" Type2="NonCondensing">10.0</Energy>
@@ -150,3 +148,10 @@ The following snippet will erase all cells of type Condensing:
 
 We use member function of ``SteppableBasePy`` – ``deleteCell`` where the first
 argument is a pointer to cell object.
+
+.. |image9| image:: images/image10.jpeg
+   :width: 3.32292in
+   :height: 0.89996in
+.. |image10| image:: images/image11.png
+   :width: 4.58333in
+   :height: 2.25886in
