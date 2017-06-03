@@ -115,8 +115,10 @@ with
 
 .. code-block:: python
 
-    self.invariantDistanceVectorBetweenCells(_from=[ self.cellA.xCOM, self.cellA.yCOM, \
-    self.cellA.yCOM], _to=[=[ self.cellB.xCOM, self.cellB.yCOM, self.cellB.yCOM])
+    self.invariantDistanceVectorBetweenCells(
+        _from=[ self.cellA.xCOM, self.cellA.yCOM, self.cellA.yCOM],
+        _to=[ self.cellB.xCOM, self.cellB.yCOM, self.cellB.yCOM]
+     )
 
 
 but it is not hard to notice that the former is much easier to read.
