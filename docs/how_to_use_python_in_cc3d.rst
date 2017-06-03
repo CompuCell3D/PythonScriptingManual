@@ -29,7 +29,23 @@ In this example, we specify a ``100x100x1`` cell-lattice, i.e., a 2D model, a fl
 
     Figure 2 Specification of basic cell-sorting properties in Simulation Wizard.
 
-Trying out equations - see if mathjax works
+
+
+|image1|
+
+Figure 2 Specification of basic cell-sorting properties in Simulation
+Wizard.
+
+On the next Wizard page we name the cell types in the model. We will use
+two cells types: Condensing (more cohesive) and NonCondensing (less
+cohesive). CC3D by default includes a special generalized-cell type
+Medium with unconstrained volume which fills otherwise unspecified space
+in the cell-lattice.
+
+|image2|
+
+*Figure 3 Specification of cell-sorting cell types in Simulation
+Wizard.*
 
 .. math::
 
