@@ -24,7 +24,7 @@ To invoke the simulation wizard to create a simulation, we click ``CC3DProject->
 On the next page of the Wizard we specify GGH global parameters, including cell-lattice dimensions, the cell fluctuation amplitude, the duration of the simulation in Monte-Carlo steps and the initial cell-lattice configuration.
 In this example, we specify a ``100x100x1`` cell-lattice, i.e., a 2D model, a fluctuation amplitude of 10, a simulation duration of 10000 MCS and a pixel-copy range of 2. ``BlobInitializer`` initializes the simulation with a disk of cells of specified size.
 
-.. figure:: images/image1.jpeg
+.. figure:: images/image2.jpeg
     :alt: Figure 2 Specification of basic cell-sorting properties in Simulation Wizard.
 
     Figure 2 Specification of basic cell-sorting properties in Simulation Wizard.
@@ -36,10 +36,12 @@ cohesive). CC3D by default includes a special generalized-cell type
 Medium with unconstrained volume which fills otherwise unspecified space
 in the cell-lattice.
 
-|image2|
+.. figure:: images/image3.jpeg
+    :alt: Figure 3 Specification of cell-sorting cell types in Simulation Wizard.
 
-*Figure 3 Specification of cell-sorting cell types in Simulation
-Wizard.*
+    Figure 3 Specification of cell-sorting cell types in Simulation Wizard.
+
+
 
 .. math::
 
