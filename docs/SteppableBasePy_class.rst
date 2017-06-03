@@ -81,4 +81,8 @@ simulations. This class is very powerful and has many constructs which
 make coding simple.
 
 .. |image5| image:: images/image6.jpeg
+   :width: 5.98958in
+   :height: 0.89583in
 .. |image6| image:: images/image7.jpeg
+   :width: 6.00000in
+   :height: 2.03125in
