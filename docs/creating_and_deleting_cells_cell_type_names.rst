@@ -91,7 +91,7 @@ number SteppableBasePy provides very convenient member variables
 denoting cell type numbers. The name of such variable is obtained by
 capitalizing all letters in the name of the cell type and prepending if
 with self. In our example we will have 3 such variables ``self.MEDIUM``,
-``self.CONDENSING``, ``self.NONCONDENSING`` with values ``0``,``1``,``2``, respectively.
+``self.CONDENSING``, ``self.NONCONDENSING`` with values ``0``, ``1``, ``2`` respectively.
 
 IMPORTANT: To ensure that cell type names are correctly translated into
 Python class variables avoid using spaces in cell type name.
