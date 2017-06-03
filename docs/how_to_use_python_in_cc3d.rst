@@ -99,37 +99,36 @@ Let’s first look at a generated Python code:
 File: ``C:\\CC3DProjects\\cellsorting\\Simulation\\cellsorting.py``
 
 .. code-block:: python
-    :linenos:
-    :emphasize-lines: 1,5
-    import sys
 
-    from os import environ
+        import sys
 
-    from os import getcwd
+        from os import environ
 
-    import string
+        from os import getcwd
 
-    sys.path.append(environ["PYTHON\_MODULE\_PATH"])
+        import string
 
-    import CompuCellSetup
+        sys.path.append(environ["PYTHON\_MODULE\_PATH"])
 
-    sim,simthread = CompuCellSetup.getCoreSimulationObjects()
+        import CompuCellSetup
 
-    CompuCellSetup.initializeSimulationObjects(sim,simthread)
+        sim,simthread = CompuCellSetup.getCoreSimulationObjects()
 
-    #Add Python steppables here
+        CompuCellSetup.initializeSimulationObjects(sim,simthread)
 
-    steppableRegistry=CompuCellSetup.getSteppableRegistry()
+        #Add Python steppables here
 
-    from cellsortingSteppables import cellsortingSteppable
+        steppableRegistry = CompuCellSetup.getSteppableRegistry()
 
-    steppableInstance=cellsortingSteppable(sim,\_frequency=1)
+        from cellsortingSteppables import cellsortingSteppable
 
-    steppableRegistry.registerSteppable(steppableInstance)
+        steppableInstance = cellsortingSteppable(sim,_frequency=1)
 
-    CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+        steppableRegistry.registerSteppable(steppableInstance)
 
-The first line line provides access to standard functions and variables
+        CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+
+    The first line line provides access to standard functions and variables
 needed to manipulate the Python runtime environment. The next two lines (2, 3),
 
 
