@@ -113,6 +113,7 @@ all that remains is to initialize lattice sites using newly created cell
 object so that atleast one lattice site points to this cell object.
 
 The syntax which assigns cell object to 25 lattice sites
+
 .. code-block:: python
 
     self.cellField[10:14, 10:14, 0] = cell
@@ -122,7 +123,7 @@ which stores pointers to cell objects. In this example our cell is a 5x5
 square collection of pixels. Notice that the 10:14 has 5 elements because
 the both the lower and the upper limits are included in the range. As
 you can probably tell, ``self.cellField`` is member of ``SteppableBasePy``. To
-access cell object occupying lattice site, ``x``,``y``,``z``, we type:
+access cell object occupying lattice site, ``x``, ``y``, ``z``, we type:
 
 .. code-block:: python
 
