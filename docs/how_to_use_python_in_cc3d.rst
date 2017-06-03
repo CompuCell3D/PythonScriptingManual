@@ -60,11 +60,11 @@ volume using the Volume Constraint module.
 
 We skip the next page related to Python scripting, after which
 Twedit++-CC3D generates the draft simulation code. Double clicking on
-cellsorting.cc3d opens both the CC3DML (cellsorting.xml) and Python
+``cellsorting.cc3d`` opens both the CC3DML (``cellsorting.xml``) and Python
 scripts for the model.
 
 The structure of generated CC3D simulation code is stored in .cc3d file
-(*C:\\CC3DProjects\\cellsorting*):
+(``C:\\CC3DProjects\\cellsorting``):
 
 .. code-block:: xml
 
@@ -78,21 +78,183 @@ The structure of generated CC3D simulation code is stored in .cc3d file
 
     </Simulation>
 
-Cellsorting.cc3d stores names of the files files that actually implement
+``Cellsorting.cc3d`` stores names of the files files that actually implement
 the simulation, and most importantly it tells you that both
-cellsorting.xml, cellsorting.py and cellsortingSteppables.py are part of
+``cellsorting.xml``, ``cellsorting.py`` and ``cellsortingSteppables.py`` are part of
 the same simulation. CompuCell3D analyzes .cc3d file and when it sees
-**<PythonScript>** tag it knows that users will be using Python scripting.
+``<PythonScript>`` tag it knows that users will be using Python scripting.
 In such situation CompuCell3D opens Python script specified in .cc3d
-file (here *cellsorting.py*) and if user specified CC3DML script using
-**<XMLScript>** tag it loads this CC3DML file as well. In other words, .cc3d
+file (here ``cellsorting.py``) and if user specified CC3DML script using
+``<XMLScript>`` tag it loads this CC3DML file as well. In other words, .cc3d
 file is used to link Python simulation files together in an unbigous
 way. It also creates “root directory” for simulation so that in the
 Python or XML code modelrs can refer to file resources using partial
 paths i.e. if you store additional files in the Simulation directory you
-can refer to them via Simulation/your\_file\_name instead of typing full
-path e.g. *C:\\CC3DProjects\\cellsorting\\Simulation\\your\_file\_name* .
+can refer to them via ``Simulation\\your_file_name`` instead of typing full
+path e.g. ``C:\\CC3DProjects\\cellsorting\\Simulation\\your\_file\_name`` .
 For more discussion on this topic please see CompuCell Manual.
+
+Let’s first look at a generated Python code:
+
+File: ``C:\\CC3DProjects\\cellsorting\\Simulation\\cellsorting.py``
+
+.. code-block:: python
+    :linenos:
+    :emphasize-lines: 1,5
+    import sys
+
+    from os import environ
+
+    from os import getcwd
+
+    import string
+
+    sys.path.append(environ["PYTHON\_MODULE\_PATH"])
+
+    import CompuCellSetup
+
+    sim,simthread = CompuCellSetup.getCoreSimulationObjects()
+
+    CompuCellSetup.initializeSimulationObjects(sim,simthread)
+
+    #Add Python steppables here
+
+    steppableRegistry=CompuCellSetup.getSteppableRegistry()
+
+    from cellsortingSteppables import cellsortingSteppable
+
+    steppableInstance=cellsortingSteppable(sim,\_frequency=1)
+
+    steppableRegistry.registerSteppable(steppableInstance)
+
+    CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+
+The first line line provides access to standard functions and variables
+needed to manipulate the Python runtime environment. The next two lines (2, 3),
+
+
+The import sys line provides access to standard functions and variables
+needed to manipulate the Python runtime environment. The next two lines,
+
+from os import environ
+
+from os import getcwd
+
+import environ and getcwd housekeeping functions into the current
+*namespace* (*i.e.*, current script) and are included in all our Python
+programs. In the next three lines,
+
+import string
+
+sys.path.append(environ["PYTHON\_MODULE\_PATH"])
+
+import CompuCellSetup
+
+we import the string module, which contains convenience functions for
+performing operations on strings of characters, set the search path for
+Python modules and import the CompuCellSetup module, which provides a
+set of convenience functions that simplify initialization of CompuCell3D
+simulations.
+
+Next, we create and initialize the core CompuCell3D modules:
+
+sim,simthread = CompuCellSetup.getCoreSimulationObjects()
+
+CompuCellSetup.initializeSimulationObjects(sim,simthread)
+
+We then create a steppable **registry** (a Python **container** that
+stores steppables, *i.e.*, a list of all steppables that the Python code
+can access) and pass it to the function that runs the simulation. We
+also create and register cellsortingSteppable:
+
+steppableRegistry=CompuCellSetup.getSteppableRegistry()
+
+from cellsortingSteppables import cellsortingSteppable
+
+steppableInstance=cellsortingSteppable(sim,\_frequency=1)
+
+steppableRegistry.registerSteppable(steppableInstance)
+
+CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+
+Once we open .cc3d file in CompuCell3D the simulation begins to run.When
+you look at he console output from this simulation it will look
+something like:
+
+|image4|
+
+Figure 5 Printing cell ids using Python script
+
+You may wonder where strings cell.id=1 come from but when you look at
+C:\\CC3DProjects\\cellsorting\\Simulation\\cellsortingSteppables.py
+file, it becomes obvious:
+
+from PySteppables import \*
+
+import CompuCell
+
+import sys
+
+class cellsortingSteppable(SteppableBasePy):
+
+def \_\_init\_\_(self,\_simulator,\_frequency=1):
+
+SteppableBasePy.\_\_init\_\_(self,\_simulator,\_frequency)
+
+def start(self):
+
+# any code in the start function runs before MCS=0
+
+pass
+
+def step(self,mcs):
+
+#type here the code that will run every \_frequency MCS
+
+for cell in self.cellList:
+
+print "cell.id=",cell.id
+
+def finish(self):
+
+# Finish Function gets called after the last MCS
+
+pass
+
+Inside step function we have the following code snippet:
+
+for cell in self.cellList:
+
+print "cell.id=",cell.id
+
+which prints to the screen id of every cell in the simulation. The step
+function is called every Monte Carlo Step (MCS) and therefore after
+completion of each MCS you see a list of all cell ids. In addition to
+step function you can see start and finish functions which have empty
+bodies. Start function is called after simulation have been initialized
+but before first MCS. Finish function is called immediately after last
+MCS.When writing Pyton extension modules you have flexibility to
+implement any combination of these 3 functions (start, step, finish).You
+can, of course, leave them unimplemented in which case they will have no
+effect on the simulation.
+
+Let’s rephrase it again because this is the essence of Python scripting
+inside CC3D - each steppable will contain by default 3 functions:
+
+1) start(self)
+
+2) step(self,mcs)
+
+3) finish(self)
+
+Those 3 functions are imported , via inheritance, from SteppableBasePy
+(which in turn imports SteppablePy). The nice feature of inheritance is
+that oncve you import functions from base class you are free to redefine
+their content in the child class. We can redefine any combination of
+these functions. Had we not redefined e.g. finish functions then at the
+end simulation the implementation from SteppableBasePy of finish
+function would get called (which as you can see is an empty function) .
+
 
 
 .. math::
