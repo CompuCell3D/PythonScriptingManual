@@ -90,94 +90,87 @@ file is used to link Python simulation files together in an unbigous
 way. It also creates “root directory” for simulation so that in the
 Python or XML code modelrs can refer to file resources using partial
 paths i.e. if you store additional files in the Simulation directory you
-can refer to them via ``Simulation\\your_file_name`` instead of typing full
-path e.g. ``C:\\CC3DProjects\\cellsorting\\Simulation\\your\_file\_name`` .
+can refer to them via ``Simulation\your_file_name`` instead of typing full
+path e.g. ``C:\CC3DProjects\cellsorting\Simulation\your\_file\_name`` .
 For more discussion on this topic please see CompuCell Manual.
 
 Let’s first look at a generated Python code:
 
-File: ``C:\\CC3DProjects\\cellsorting\\Simulation\\cellsorting.py``
+File: ``C:\CC3DProjects\cellsorting\Simulation\cellsorting.py``
 
 .. code-block:: python
     :linenos:
 
         import sys
-
         from os import environ
-
         from os import getcwd
-
         import string
 
         sys.path.append(environ["PYTHON\_MODULE\_PATH"])
 
         import CompuCellSetup
 
-        sim,simthread = CompuCellSetup.getCoreSimulationObjects()
+        sim, simthread = CompuCellSetup.getCoreSimulationObjects()
 
-        CompuCellSetup.initializeSimulationObjects(sim,simthread)
+        CompuCellSetup.initializeSimulationObjects(sim, simthread)
 
-        #Add Python steppables here
+        # Add Python steppables here
 
         steppableRegistry = CompuCellSetup.getSteppableRegistry()
 
         from cellsortingSteppables import cellsortingSteppable
 
-        steppableInstance = cellsortingSteppable(sim,_frequency=1)
+        steppableInstance = cellsortingSteppable(sim, _frequency=1)
 
         steppableRegistry.registerSteppable(steppableInstance)
 
-        CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+        CompuCellSetup.mainLoop(sim, simthread, steppableRegistry)
 
 The first line line provides access to standard functions and variables
 needed to manipulate the Python runtime environment. The next two lines (2, 3),
-
-
-The import sys line provides access to standard functions and variables
-needed to manipulate the Python runtime environment. The next two lines,
-
-from os import environ
-
-from os import getcwd
-
 import environ and getcwd housekeeping functions into the current
-*namespace* (*i.e.*, current script) and are included in all our Python
+**namespace** (*i.e.*, current script) and are included in all our Python
 programs. In the next three lines,
 
-import string
+.. code-block:: python
 
-sys.path.append(environ["PYTHON\_MODULE\_PATH"])
+        import string
 
-import CompuCellSetup
+        sys.path.append(environ["PYTHON\_MODULE\_PATH"])
+        import CompuCellSetup
 
-we import the string module, which contains convenience functions for
+we import the ``string`` module, which contains convenience functions for
 performing operations on strings of characters, set the search path for
-Python modules and import the CompuCellSetup module, which provides a
+Python modules and import the ``CompuCellSetup`` module, which provides a
 set of convenience functions that simplify initialization of CompuCell3D
 simulations.
 
 Next, we create and initialize the core CompuCell3D modules:
 
-sim,simthread = CompuCellSetup.getCoreSimulationObjects()
+.. code-block:: python
 
-CompuCellSetup.initializeSimulationObjects(sim,simthread)
+        sim, simthread = CompuCellSetup.getCoreSimulationObjects()
+
+        CompuCellSetup.initializeSimulationObjects(sim,simthread)
 
 We then create a steppable **registry** (a Python **container** that
 stores steppables, *i.e.*, a list of all steppables that the Python code
 can access) and pass it to the function that runs the simulation. We
 also create and register cellsortingSteppable:
 
-steppableRegistry=CompuCellSetup.getSteppableRegistry()
+.. code-block:: python
 
-from cellsortingSteppables import cellsortingSteppable
+        steppableRegistry=CompuCellSetup.getSteppableRegistry()
 
-steppableInstance=cellsortingSteppable(sim,\_frequency=1)
+        from cellsortingSteppables import cellsortingSteppable
 
-steppableRegistry.registerSteppable(steppableInstance)
+        steppableInstance=cellsortingSteppable(sim,_frequency=1)
 
-CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+        steppableRegistry.registerSteppable(steppableInstance)
 
-Once we open .cc3d file in CompuCell3D the simulation begins to run.When
+        CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+
+Once we open .cc3d file in CompuCell3D the simulation begins to run. When
 you look at he console output from this simulation it will look
 something like:
 
@@ -267,3 +260,7 @@ got here
 
 .. [1]
    We have graphically edited screenshots of Wizard pages to save space.
+
+.. |image4| image:: images/image5.jpeg
+   :width: 4.52083in
+   :height: 1.13806in
