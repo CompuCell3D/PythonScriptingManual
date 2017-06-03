@@ -1,21 +1,16 @@
-from PySteppables import *
-import CompuCell
-import sys
-
-
-class cellsortingSteppable(SteppableBasePy):
+class SteppableCommunicationSteppable(SteppableBasePy):
     def __init__(self, _simulator, _frequency=1):
         SteppableBasePy.__init__(self, _simulator, _frequency)
 
-    def start(self):
-        # any code in the start function runs before MCS=0
-        pass
+    def step(self, mcs):
+        extraSteppable = self.getSteppableByClassName('ExtraSteppable')
+        print 'extraSteppable.sharedParameter=', extraSteppable.sharedParameter
+
+
+class ExtraSteppable(SteppableBasePy):
+    def __init__(self, _simulator, _frequency=1):
+        SteppableBasePy.__init__(self, _simulator, _frequency)
+        self.sharedParameter = 25
 
     def step(self, mcs):
-        # type here the code that will run every _frequency MCS
-        for cell in self.cellList:
-            print "cell.id=", cell.id
-
-    def finish(self):
-        # Finish Function gets called after the last MCS
-        pass
+        print "ExtraSteppable: This function is called every 1 MCS"
