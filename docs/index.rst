@@ -14,6 +14,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    SteppableBasePy_class
    adding_steppable_to_simulation_using_twedit++
    passing_information_between_steppables
+   creating_and_deleting_cells_cell_type_names
 
 
 
