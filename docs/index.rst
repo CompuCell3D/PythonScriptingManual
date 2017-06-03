@@ -15,6 +15,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    adding_steppable_to_simulation_using_twedit++
    passing_information_between_steppables
    creating_and_deleting_cells_cell_type_names
+   calculating_distances_in_CC3D_simulations
 
 
 
