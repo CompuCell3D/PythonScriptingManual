@@ -99,6 +99,7 @@ Let’s first look at a generated Python code:
 File: ``C:\\CC3DProjects\\cellsorting\\Simulation\\cellsorting.py``
 
 .. code-block:: python
+    :linenos:
 
         import sys
 
@@ -128,7 +129,7 @@ File: ``C:\\CC3DProjects\\cellsorting\\Simulation\\cellsorting.py``
 
         CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
 
-    The first line line provides access to standard functions and variables
+The first line line provides access to standard functions and variables
 needed to manipulate the Python runtime environment. The next two lines (2, 3),
 
 
