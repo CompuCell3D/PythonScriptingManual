@@ -1,24 +1,21 @@
+from PySteppables import *
+import CompuCell
 import sys
-from os import environ
-from os import getcwd
-import string
 
-sys.path.append(environ["PYTHON\_MODULE\_PATH"])
 
-import CompuCellSetup
+class cellsortingSteppable(SteppableBasePy):
+    def __init__(self, _simulator, _frequency=1):
+        SteppableBasePy.__init__(self, _simulator, _frequency)
 
-sim, simthread = CompuCellSetup.getCoreSimulationObjects()
+    def start(self):
+        # any code in the start function runs before MCS=0
+        pass
 
-CompuCellSetup.initializeSimulationObjects(sim, simthread)
+    def step(self, mcs):
+        # type here the code that will run every _frequency MCS
+        for cell in self.cellList:
+            print "cell.id=", cell.id
 
-# Add Python steppables here
-
-steppableRegistry = CompuCellSetup.getSteppableRegistry()
-
-from cellsortingSteppables import cellsortingSteppable
-
-steppableInstance = cellsortingSteppable(sim, _frequency=1)
-
-steppableRegistry.registerSteppable(steppableInstance)
-
-CompuCellSetup.mainLoop(sim, simthread, steppableRegistry)
+    def finish(self):
+        # Finish Function gets called after the last MCS
+        pass

@@ -179,46 +179,38 @@ something like:
 Figure 5 Printing cell ids using Python script
 
 You may wonder where strings cell.id=1 come from but when you look at
-C:\\CC3DProjects\\cellsorting\\Simulation\\cellsortingSteppables.py
+``C:\CC3DProjects\cellsorting\Simulation\cellsortingSteppables.py``
 file, it becomes obvious:
 
-from PySteppables import \*
+.. code-block:: python
 
-import CompuCell
+        from PySteppables import *
+        import CompuCell
+        import sys
 
-import sys
 
-class cellsortingSteppable(SteppableBasePy):
+        class cellsortingSteppable(SteppableBasePy):
+            def __init__(self, _simulator, _frequency=1):
+                SteppableBasePy.__init__(self, _simulator, _frequency)
 
-def \_\_init\_\_(self,\_simulator,\_frequency=1):
+            def start(self):
+                # any code in the start function runs before MCS=0
+                pass
 
-SteppableBasePy.\_\_init\_\_(self,\_simulator,\_frequency)
+            def step(self, mcs):
+                # type here the code that will run every _frequency MCS
+                for cell in self.cellList:
+                    print "cell.id=", cell.id
 
-def start(self):
-
-# any code in the start function runs before MCS=0
-
-pass
-
-def step(self,mcs):
-
-#type here the code that will run every \_frequency MCS
-
-for cell in self.cellList:
-
-print "cell.id=",cell.id
-
-def finish(self):
-
-# Finish Function gets called after the last MCS
-
-pass
+            def finish(self):
+                # Finish Function gets called after the last MCS
+                pass
 
 Inside step function we have the following code snippet:
+.. code-block:: python
 
-for cell in self.cellList:
-
-print "cell.id=",cell.id
+        for cell in self.cellList:
+            print "cell.id=",cell.id
 
 which prints to the screen id of every cell in the simulation. The step
 function is called every Monte Carlo Step (MCS) and therefore after
@@ -226,8 +218,8 @@ completion of each MCS you see a list of all cell ids. In addition to
 step function you can see start and finish functions which have empty
 bodies. Start function is called after simulation have been initialized
 but before first MCS. Finish function is called immediately after last
-MCS.When writing Pyton extension modules you have flexibility to
-implement any combination of these 3 functions (start, step, finish).You
+MCS.When writing Python extension modules you have flexibility to
+implement any combination of these 3 functions (``start``, ``step``, ``finish``).You
 can, of course, leave them unimplemented in which case they will have no
 effect on the simulation.
 
@@ -240,12 +232,12 @@ inside CC3D - each steppable will contain by default 3 functions:
 
 3) finish(self)
 
-Those 3 functions are imported , via inheritance, from SteppableBasePy
-(which in turn imports SteppablePy). The nice feature of inheritance is
-that oncve you import functions from base class you are free to redefine
+Those 3 functions are imported , via inheritance, from ``SteppableBasePy``
+(which in turn imports ``SteppablePy``). The nice feature of inheritance is
+that once you import functions from base class you are free to redefine
 their content in the child class. We can redefine any combination of
 these functions. Had we not redefined e.g. finish functions then at the
-end simulation the implementation from SteppableBasePy of finish
+end simulation the implementation from ``SteppableBasePy`` of finish
 function would get called (which as you can see is an empty function) .
 
 
