@@ -56,7 +56,7 @@ to a file:
 
 The formatting string contains regular text and formatting characters
 such as ``\n`` denoting end of line, %d denoting integer number, ``%f``
-denoting floating point number and %s denoting strings. For more
+denoting floating point number and ``%s`` denoting strings. For more
 information on this topic please see any Python manual or see online
 Python documentation.
 
