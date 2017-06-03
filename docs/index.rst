@@ -17,6 +17,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    creating_and_deleting_cells_cell_type_names
    calculating_distances_in_CC3D_simulations
    looping_over_select_cell_types_finding_cell_in_the_inventory
+   writing_data_files_in_the_simulation_output_directory
 
 
 
