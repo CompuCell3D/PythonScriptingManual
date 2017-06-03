@@ -52,11 +52,9 @@ Adhesion module from the Adhesion section and give the cells a defined
 volume using the Volume Constraint module.
 
 .. figure:: images/image4.jpeg
-    :alt: Figure 4 Selection of cell-sorting cell behaviors in Simulation
-Wizard.
+    :alt: Figure 4 Selection of cell-sorting cell behaviors in Simulation Wizard.
 
-    Figure 4 Selection of cell-sorting cell behaviors in Simulation
-Wizard. [1]_
+    Figure 4 Selection of cell-sorting cell behaviors in Simulation Wizard. [1]_
 
 
 
@@ -68,16 +66,17 @@ scripts for the model.
 The structure of generated CC3D simulation code is stored in .cc3d file
 (C:\\CC3DProjects\\cellsorting):
 
-<Simulation version="3.6.2">
+.. code-block:: xml
 
-<XMLScript Type="XMLScript">Simulation/cellsorting.xml</XMLScript>
+    <Simulation version="3.6.2">
 
-<PythonScript
-Type="PythonScript">Simulation/cellsorting.py</PythonScript>
+        <XMLScript Type="XMLScript">Simulation/cellsorting.xml</XMLScript>
 
-<Resource Type="Python">Simulation/cellsortingSteppables.py</Resource>
+        <PythonScript Type="PythonScript">Simulation/cellsorting.py</PythonScript>
 
-</Simulation>
+        <Resource Type="Python">Simulation/cellsortingSteppables.py</Resource>
+
+    </Simulation>
 
 Cellsorting.cc3d stores names of the files files that actually implement
 the simulation, and most importantly it tells you that both
