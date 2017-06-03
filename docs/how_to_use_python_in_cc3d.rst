@@ -43,6 +43,59 @@ in the cell-lattice.
 
 
 
+We skip the Chemical Field page of the Wizard and move to the Cell
+Behaviors and Properties page. Here we select the biological behaviors
+we will include in our model. **Objects in CC3D have no properties or
+behaviors unless we specify then explicitly**. Since cell sorting
+depends on differential adhesion between cells, we select the Contact
+Adhesion module from the Adhesion section and give the cells a defined
+volume using the Volume Constraint module.
+
+.. figure:: images/image4.jpeg
+    :alt: Figure 4 Selection of cell-sorting cell behaviors in Simulation
+Wizard.
+
+    Figure 4 Selection of cell-sorting cell behaviors in Simulation
+Wizard. [1]_
+
+
+
+We skip the next page related to Python scripting, after which
+Twedit++-CC3D generates the draft simulation code. Double clicking on
+cellsorting.cc3d opens both the CC3DML (cellsorting.xml) and Python
+scripts for the model.
+
+The structure of generated CC3D simulation code is stored in .cc3d file
+(C:\\CC3DProjects\\cellsorting):
+
+<Simulation version="3.6.2">
+
+<XMLScript Type="XMLScript">Simulation/cellsorting.xml</XMLScript>
+
+<PythonScript
+Type="PythonScript">Simulation/cellsorting.py</PythonScript>
+
+<Resource Type="Python">Simulation/cellsortingSteppables.py</Resource>
+
+</Simulation>
+
+Cellsorting.cc3d stores names of the files files that actually implement
+the simulation, and most importantly it tells you that both
+cellsorting.xml, cellsorting.py and cellsortingSteppables.py are part of
+the same simulation. CompuCell3D analyzes .cc3d file and when it sees
+<PythonScript> tag it knows that users will be using Python scripting.
+In such situation CompuCell3D opens Python script specified in .cc3d
+file (here cellsorting.py) and if user specified CC3DML script using
+<XMLScript> tag it loads this CC3DML file as well. In other words, .cc3d
+file is used to link Python simulation files together in an unbigous
+way. It also creates “root directory” for simulation so that in the
+Python or XML code modelrs can refer to file resources using partial
+paths i.e. if you store additional files in the Simulation directory you
+can refer to them via Simulation/your\_file\_name instead of typing full
+path e.g. C:\\CC3DProjects\\cellsorting\\Simulation\\your\_file\_name.
+For more discussion on this topic please see CompuCell Manual.
+
+
 .. math::
 
    (a + b)^2 = a^2 + 2ab + b^2
@@ -50,3 +103,6 @@ in the cell-lattice.
    (a - b)^2 = a^2 - 2ab + b^2
 
 got here
+
+.. [1]
+   We have graphically edited screenshots of Wizard pages to save space.
