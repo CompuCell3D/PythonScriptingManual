@@ -29,7 +29,7 @@ In this example, we specify a ``100x100x1`` cell-lattice, i.e., a 2D model, a fl
 
     Figure 2 Specification of basic cell-sorting properties in Simulation Wizard.
 
-Trying out equations
+Trying out equations - see if mathjax works
 
 .. math::
 
