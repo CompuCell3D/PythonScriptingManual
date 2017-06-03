@@ -64,7 +64,7 @@ cellsorting.cc3d opens both the CC3DML (cellsorting.xml) and Python
 scripts for the model.
 
 The structure of generated CC3D simulation code is stored in .cc3d file
-(C:\\CC3DProjects\\cellsorting):
+(*C:\\CC3DProjects\\cellsorting*):
 
 .. code-block:: xml
 
@@ -82,16 +82,16 @@ Cellsorting.cc3d stores names of the files files that actually implement
 the simulation, and most importantly it tells you that both
 cellsorting.xml, cellsorting.py and cellsortingSteppables.py are part of
 the same simulation. CompuCell3D analyzes .cc3d file and when it sees
-<PythonScript> tag it knows that users will be using Python scripting.
+**<PythonScript>** tag it knows that users will be using Python scripting.
 In such situation CompuCell3D opens Python script specified in .cc3d
-file (here cellsorting.py) and if user specified CC3DML script using
-<XMLScript> tag it loads this CC3DML file as well. In other words, .cc3d
+file (here *cellsorting.py*) and if user specified CC3DML script using
+**<XMLScript>** tag it loads this CC3DML file as well. In other words, .cc3d
 file is used to link Python simulation files together in an unbigous
 way. It also creates “root directory” for simulation so that in the
 Python or XML code modelrs can refer to file resources using partial
 paths i.e. if you store additional files in the Simulation directory you
 can refer to them via Simulation/your\_file\_name instead of typing full
-path e.g. C:\\CC3DProjects\\cellsorting\\Simulation\\your\_file\_name.
+path e.g. *C:\\CC3DProjects\\cellsorting\\Simulation\\your\_file\_name* .
 For more discussion on this topic please see CompuCell Manual.
 
 
