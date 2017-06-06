@@ -1,30 +1,24 @@
-def configureSimulation(sim):
-    import CompuCellSetup
-    from XMLUtils import ElementCC3D
+from random import uniform
 
-    cc3d = ElementCC3D("CompuCell3D")
-    potts = cc3d.ElementCC3D("Potts")
-    potts.ElementCC3D("Dimensions", {"x": 100, "y": 100, "z": 1})
 
-…
-CompuCellSetup.setSimulationXMLDescription(cc3d)
+class CellMotilitySteppable(SteppableBasePy):
+    def __init__(self, _simulator, _frequency=10):
+        SteppableBasePy.__init__(self, _simulator, _frequency)
 
-import sys
-from os import environ
-import string
+    def start(self):
+        print "This function is called once before simulation"
 
-sys.path.append(environ["PYTHON_MODULE_PATH"])
+        # iterating over all cells in simulation
+        for cell in self.cellList:
+            break
+            # Make sure ExternalPotential plugin is loaded
+            # negative lambdaVecX makes force point in the positive direction
+            cell.lambdaVecX = 10.1 * uniform(-0.5, 0.5)  # force component along X axis
+            cell.lambdaVecY = 10.1 * uniform(-0.5, 0.5)  # force component along Y axis
+            #         cell.lambdaVecZ=0.0 # force component along Z axis
 
-import CompuCellSetup
+    def step(self, mcs):
 
-sim, simthread = CompuCellSetup.getCoreSimulationObjects()
-
-configureSimulation(sim)
-
-CompuCellSetup.initializeSimulationObjects(sim, simthread)
-
-from PySteppables import SteppableRegistry
-
-steppableRegistry = SteppableRegistry()
-
-CompuCellSetup.mainLoop(sim, simthread, steppableRegistry)
+        for cell in self.cellList:
+            cell.lambdaVecX = 10.1 * uniform(-0.5, 0.5)  # force component along X axis
+            cell.lambdaVecY = 10.1 * uniform(-0.5, 0.5)  # force component along Y axis

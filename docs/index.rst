@@ -26,6 +26,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    chemotaxis_on_a_cell-by-cell_basis
    steering_changing_cc3dml_parameters_on-the-fly
    replacing_cc3dml_with_equivalent_python_syntax
+   cell_motility_applying_force_to_cells
 
 
 
