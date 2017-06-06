@@ -27,6 +27,8 @@ The focus of this manual is to teach you how to use Python scripting language to
    steering_changing_cc3dml_parameters_on-the-fly
    replacing_cc3dml_with_equivalent_python_syntax
    cell_motility_applying_force_to_cells
+   setting_cell_membrane_fluctuation_ona_cell-by-cell_basis
+
 
 
 
