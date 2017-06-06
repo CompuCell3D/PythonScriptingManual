@@ -1,17 +1,30 @@
-class ContactSteeringAndTemperature(SteppableBasePy):
-    def __init__(self, _simulator, _frequency=10):
-        SteppableBasePy.__init__(self, _simulator, _frequency)
+def configureSimulation(sim):
+    import CompuCellSetup
+    from XMLUtils import ElementCC3D
 
-    def step(self, mcs):
-        temp = float(self.getXMLElementValue(['Potts'], ['Temperature']))
-        self.setXMLElementValue(temp + 1, ['Potts'], ['Temperature'])
+    cc3d = ElementCC3D("CompuCell3D")
+    potts = cc3d.ElementCC3D("Potts")
+    potts.ElementCC3D("Dimensions", {"x": 100, "y": 100, "z": 1})
 
-        val = float(
-            self.getXMLElementValue(
-                ['Plugin', 'Name', 'Contact'], ['Energy', 'Type1', 'NonCondensing', 'Type2', 'Condensing']))
+…
+CompuCellSetup.setSimulationXMLDescription(cc3d)
 
-        self.setXMLElementValue(
-            val + 1, ['Plugin', 'Name', 'Contact'], ['Energy', 'Type1', 'NonCondensing', 'Type2', 'Condensing']
-        )
+import sys
+from os import environ
+import string
 
-        self.updateXML()
+sys.path.append(environ["PYTHON_MODULE_PATH"])
+
+import CompuCellSetup
+
+sim, simthread = CompuCellSetup.getCoreSimulationObjects()
+
+configureSimulation(sim)
+
+CompuCellSetup.initializeSimulationObjects(sim, simthread)
+
+from PySteppables import SteppableRegistry
+
+steppableRegistry = SteppableRegistry()
+
+CompuCellSetup.mainLoop(sim, simthread, steppableRegistry)
