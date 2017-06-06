@@ -22,7 +22,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    custom_cell_attributes_in_python
    adding_and_managing_extra_fields_for_visualization_purposes
    automatic_tracking_of_cells_attributes
-
+   field_secretion
 
 
 
