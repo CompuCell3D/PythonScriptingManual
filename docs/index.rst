@@ -19,6 +19,8 @@ The focus of this manual is to teach you how to use Python scripting language to
    looping_over_select_cell_types_finding_cell_in_the_inventory
    writing_data_files_in_the_simulation_output_directory
    adding_plots_to_the_simulation
+   custom_cell_attributes_in_python
+   adding_and_managing_extra_fields_for_visualization_purposes
 
 
 
