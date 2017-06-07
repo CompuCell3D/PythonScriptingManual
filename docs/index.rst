@@ -28,6 +28,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    replacing_cc3dml_with_equivalent_python_syntax
    cell_motility_applying_force_to_cells
    setting_cell_membrane_fluctuation_ona_cell-by-cell_basis
+   checking_if_two_cell_objects_point_to_different_cells
 
 
 

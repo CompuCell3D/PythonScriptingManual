@@ -20,7 +20,7 @@ fluctuation amplitude you use the following code:
 
 .. code-block:: python
 
-    cell.fluctAmpl=-1
+    cell.fluctAmpl = -1
 
 In fact, this is how CC3D figures out whether to use local or global
 membrane fluctuation amplitude. If ``fluctAmpl`` is a negative number CC3D
