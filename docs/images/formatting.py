@@ -1,10 +1,14 @@
-class DynamicNumberOfProcessorsSteppable(SteppableBasePy):
-    def __init__(self, _simulator, _frequency=1):
+class cellsortingSteppable(SteppableBasePy):
+    def __init__(self, _simulator, _frequency=1)
         SteppableBasePy.__init__(self, _simulator, _frequency)
 
-    def step(self, mcs):
-        if mcs == 10:
-            self.resizeAndShiftLattice(_newSize=(400, 400, 1), _shiftVec=(100, 100, 0))
+    def start(self):
+        field = self.getConcentrationField("FGF")
+        field[0, 0, 0] = 2000
 
-        if mcs == 100:
-            self.changeNumberOfWorkNodes(8)
+    def step(self, mcs):
+        field = self.getConcentrationField("FGF")
+
+        for cell in self.cellList:
+            if field[cell.xCOM, cell.yCOM, cell.zCOM] > 0.1:
+                cell.type = self.CONDENSING
