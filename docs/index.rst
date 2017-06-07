@@ -36,6 +36,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    changing_number_of_worknodes
    iterating_over_cell_neighbors
    mitosis
+   dividing_clusters
 
 
 
