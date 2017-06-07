@@ -35,6 +35,8 @@ The focus of this manual is to teach you how to use Python scripting language to
    resizing_the_lattice
    changing_number_of_worknodes
    iterating_over_cell_neighbors
+   mitosis
+
 
 
 
