@@ -1,41 +1,47 @@
-class MitosisSteppableClusters(MitosisSteppableClustersBase):
-    def __init__(self, _simulator, _frequency=1):
-        MitosisSteppableClustersBase.__init__(self, _simulator, _frequency)
+
+import random
+
+class DeltaNotchClass(SteppableBasePy):
+    def __init__(self, _simulator, _frequency):
+        SteppableBasePy.__init__(self, _simulator, _frequency)
+
+    def start(self):
+
+        modelFile = 'Simulation/DN_Collier.sbml'
+        self.addSBMLToCellTypes(_modelFile=modelFile, _modelName='DN',
+                                _types=[self.TYPEA], _stepSize=0.2)
+
+        # Initial conditions
+        state = {}  # dictionary to store state veriables of the SBML model
+
+        for cell in self.cellList:
+            state['D'] = random.uniform(0.9, 1.0)
+            state['N'] = random.uniform(0.9, 1.0)
+            self.setSBMLState(_modelName='DN', _cell=cell, _state=state)
+
+            cellDict = self.getDictionaryAttribute(cell)
+            cellDict['D'] = state['D']
+            cellDict['N'] = state['N']
 
     def step(self, mcs):
+        for cell in self.cellList:
+            D = 0.0
+            nn = 0
+            for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
+                if neighbor:
+                    nn += 1
+                    state = self.getSBMLState(_modelName='DN', _cell=neighbor)
 
-        mitosisClusterIdList = []
-        for compartmentList in self.clusterList:
-            clusterId = 0
-            clusterVolume = 0
-            for cell in CompartmentList(compartmentList):
-                clusterVolume += cell.volume
-                clusterId = cell.clusterId
+                    D += state['D']
+            if nn > 0:
+                D = D / nn
 
-            if clusterVolume > 250:
-                mitosisClusterIdList.append(clusterId)
+            state = {}
+            state['Davg'] = D
+            self.setSBMLState(_modelName='DN', _cell=cell, _state=state)
 
-        for clusterId in mitosisClusterIdList:
-            # to change mitosis mode uncomment one of the lines below
-            self.divideClusterRandomOrientation(clusterId)
-            # self.divideClusterOrientationVectorBased(clusterId,1,0,0)
-            # self.divideClusterAlongMajorAxis(clusterId)
-            # self.divideClusterAlongMinorAxis(clusterId)
-
-    def updateAttributes(self):
-
-        parentCell = self.mitosisSteppable.parentCell
-        childCell = self.mitosisSteppable.childCell
-
-        compartmentListChild \
-            = self.getClusterCells(childCell.clusterId)
-        compartmentListParent \
-            = self.getClusterCells(parentCell.clusterId)
-
-        for i in xrange(compartmentListChild.size()):
-            compartmentListParent[i].targetVolume /= 2.0
-
-            compartmentListChild[i].targetVolume \
-                = compartmentListParent[i].targetVolume
-            compartmentListChild[i].lambdaVolume \
-                = compartmentListParent[i].lambdaVolume
+            state = self.getSBMLState(_modelName='DN', _cell=cell)
+            cellDict = self.getDictionaryAttribute(cell)
+            cellDict['D'] = D
+            cellDict['N'] = state['N']
+        self.timestepSBML()

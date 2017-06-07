@@ -37,6 +37,10 @@ The focus of this manual is to teach you how to use Python scripting language to
    iterating_over_cell_neighbors
    mitosis
    dividing_clusters
+   changing_cluster_id_of_a_cell
+   sbml_solver
+
+
 
 
 
