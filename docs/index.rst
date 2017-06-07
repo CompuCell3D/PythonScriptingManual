@@ -29,6 +29,8 @@ The focus of this manual is to teach you how to use Python scripting language to
    cell_motility_applying_force_to_cells
    setting_cell_membrane_fluctuation_ona_cell-by-cell_basis
    checking_if_two_cell_objects_point_to_different_cells
+   modifying_attributes_of_cellg_object
+
 
 
 
