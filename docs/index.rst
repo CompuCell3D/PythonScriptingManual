@@ -32,6 +32,8 @@ The focus of this manual is to teach you how to use Python scripting language to
    modifying_attributes_of_cellg_object
    controlling_steppable_call_frequency_stopping_simulation_on_demand_or_increasing_maximum_monte_carlo_step
    building_a_wall
+   resizing_the_lattice
+   changing_number_of_worknodes
 
 
 
