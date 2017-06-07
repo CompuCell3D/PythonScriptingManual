@@ -346,8 +346,8 @@ interaction due to changing spatial relationships in a real tissue:
    :nowrap:
 
    \begin{eqnarray}
-      y    & = & ax^2 + bx + c \\
-      f(x) & = & x^2 + 2xy + y^2
+      \frac{dD}{dt}  & = & \left ( \nu \times \frac{1}{1+b N^h} -D \right )  \\
+      \frac{dN}{dt} & = & \frac{\bar{D}^k}{a + \bar{D}^k} -N
    \end{eqnarray}
 
 where and are the concentrations of activated Delta and Notch proteins
