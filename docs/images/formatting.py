@@ -1,22 +1,22 @@
-class SBMLSolverOscilatorDemoSteppable(SteppableBasePy):
-    def __init__(self, _simulator, _frequency=10):
-        SteppableBasePy.__init__(self, _simulator, _frequency)
+import CompuCellSetup
 
-    def start(self):
-        self.pW = self.addNewPlotWindow(_title='S1 concentration', \
-                                        _xAxisTitle='MonteCarlo Step (MCS)', _yAxisTitle='Variables')
-        self.pW.addPlot('S1', _style='Dots', _color='red', _size=5)
+sim, simthread = CompuCellSetup.getCoreSimulationObjects()
 
-        # iterating over all cells in simulation
-        for cell in self.cellList:
-            # you can access/manipulate cell properties here
-            cell.targetVolume = 25
-            cell.lambdaVolume = 2.0
+import CompuCell  # notice importing CompuCell to main script has to be done after call to getCoreSimulationObjects()
 
-        ...
+# Create extra player fields here or add attributes or plugins
+energyFunctionRegistry = CompuCellSetup.getEnergyFunctionRegistry(sim)
 
-    def step(self, mcs):
-        ...
+from cellsort_2D_plugins_with_py_plugin import VolumeEnergyFunctionPlugin
 
-        self.pW.showAllPlots()
-        self.timestepSBML()
+volumeEnergy = VolumeEnergyFunctionPlugin(energyFunctionRegistry)
+volumeEnergy.setParams(2.0, 25.0)
+
+energyFunctionRegistry.registerPyEnergyFunction(volumeEnergy)
+
+CompuCellSetup.initializeSimulationObjects(sim, simthread)
+
+# Add Python steppables here
+steppableRegistry = CompuCellSetup.getSteppableRegistry()
+
+CompuCellSetup.mainLoop(sim, simthread, steppableRegistry)

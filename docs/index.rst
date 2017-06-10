@@ -42,6 +42,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    building_sbml_models_using_tellurium
    parameter_scans
    restarting_simulations
+   implementing_energy_functions_in_python
 
 
 
