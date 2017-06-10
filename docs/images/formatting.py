@@ -1,18 +1,22 @@
-from PySteppables import *
-import CompuCell
-import sys
-
-MYVAR = 10
-MYVAR1 = 'new str'
-
-
-class CellSortingSteppable(SteppableBasePy):
-    def __init__(self, _simulator, _frequency=1):
+class SBMLSolverOscilatorDemoSteppable(SteppableBasePy):
+    def __init__(self, _simulator, _frequency=10):
         SteppableBasePy.__init__(self, _simulator, _frequency)
 
-    def step(self, mcs):
-        global MYVAR
-        print 'MYVAR=', MYVAR
+    def start(self):
+        self.pW = self.addNewPlotWindow(_title='S1 concentration', \
+                                        _xAxisTitle='MonteCarlo Step (MCS)', _yAxisTitle='Variables')
+        self.pW.addPlot('S1', _style='Dots', _color='red', _size=5)
+
+        # iterating over all cells in simulation
         for cell in self.cellList:
-            if cell.type == self.DARK:
-                cell.lambdaVecX = -0.5
+            # you can access/manipulate cell properties here
+            cell.targetVolume = 25
+            cell.lambdaVolume = 2.0
+
+        ...
+
+    def step(self, mcs):
+        ...
+
+        self.pW.showAllPlots()
+        self.timestepSBML()

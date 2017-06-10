@@ -41,6 +41,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    sbml_solver
    building_sbml_models_using_tellurium
    parameter_scans
+   restarting_simulations
 
 
 
