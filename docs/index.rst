@@ -43,6 +43,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    parameter_scans
    restarting_simulations
    implementing_energy_functions_in_python
+   appendix_a
 
 
 
