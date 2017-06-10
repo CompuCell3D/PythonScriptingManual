@@ -1,47 +1,15 @@
+import tellurium as te
+import roadrunner
 
-import random
+r = te.loada("""
+    $X0 -> S1 ; k1*X0;
+    S1 -> S2 ; k2*S1*S2^h/(10 + S2^h) + k3*S1;
+    S2 -> $X3 ; k4*S2;
 
-class DeltaNotchClass(SteppableBasePy):
-    def __init__(self, _simulator, _frequency):
-        SteppableBasePy.__init__(self, _simulator, _frequency)
-
-    def start(self):
-
-        modelFile = 'Simulation/DN_Collier.sbml'
-        self.addSBMLToCellTypes(_modelFile=modelFile, _modelName='DN',
-                                _types=[self.TYPEA], _stepSize=0.2)
-
-        # Initial conditions
-        state = {}  # dictionary to store state veriables of the SBML model
-
-        for cell in self.cellList:
-            state['D'] = random.uniform(0.9, 1.0)
-            state['N'] = random.uniform(0.9, 1.0)
-            self.setSBMLState(_modelName='DN', _cell=cell, _state=state)
-
-            cellDict = self.getDictionaryAttribute(cell)
-            cellDict['D'] = state['D']
-            cellDict['N'] = state['N']
-
-    def step(self, mcs):
-        for cell in self.cellList:
-            D = 0.0
-            nn = 0
-            for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
-                if neighbor:
-                    nn += 1
-                    state = self.getSBMLState(_modelName='DN', _cell=neighbor)
-
-                    D += state['D']
-            if nn > 0:
-                D = D / nn
-
-            state = {}
-            state['Davg'] = D
-            self.setSBMLState(_modelName='DN', _cell=cell, _state=state)
-
-            state = self.getSBMLState(_modelName='DN', _cell=cell)
-            cellDict = self.getDictionaryAttribute(cell)
-            cellDict['D'] = D
-            cellDict['N'] = state['N']
-        self.timestepSBML()
+    h=2;
+    k1 =1.0;
+    k2 = 2.0;
+    k3 = 0.02;
+    k4 = 1.0;
+    X0 = 1;
+""")
