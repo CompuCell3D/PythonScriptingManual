@@ -1,15 +1,18 @@
-import tellurium as te
-import roadrunner
+from PySteppables import *
+import CompuCell
+import sys
 
-r = te.loada("""
-    $X0 -> S1 ; k1*X0;
-    S1 -> S2 ; k2*S1*S2^h/(10 + S2^h) + k3*S1;
-    S2 -> $X3 ; k4*S2;
+MYVAR = 10
+MYVAR1 = 'new str'
 
-    h=2;
-    k1 =1.0;
-    k2 = 2.0;
-    k3 = 0.02;
-    k4 = 1.0;
-    X0 = 1;
-""")
+
+class CellSortingSteppable(SteppableBasePy):
+    def __init__(self, _simulator, _frequency=1):
+        SteppableBasePy.__init__(self, _simulator, _frequency)
+
+    def step(self, mcs):
+        global MYVAR
+        print 'MYVAR=', MYVAR
+        for cell in self.cellList:
+            if cell.type == self.DARK:
+                cell.lambdaVecX = -0.5
