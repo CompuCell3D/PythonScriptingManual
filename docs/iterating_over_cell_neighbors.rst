@@ -26,6 +26,7 @@ this loop picks a single cell. For each such cell we construct the inner
 loop where we access a list of cell neighbors:
 
 .. code-block:: python
+
     for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
 
 Notice that during each iteration loop Python returns two objects:
@@ -41,6 +42,7 @@ If you are puzzled why loop above has two variables after ``for`` it is because 
 object when iterated over will return tuples of two objects. Let's do an experiment:
 
 .. code-block:: python
+
     for neighbor_tuple in self.getCellNeighborDataList(cell):
         print neighbor_tuple
         if neighbor_tuple[0]:
@@ -53,6 +55,7 @@ object when iterated over will return tuples of two objects. Let's do an experim
 The output will be:
 
 .. code-block:: bash
+
     neighbor_tuple= (<CompuCell.CellG; proxy of <Swig Object of type 'std::vector< CompuCell3D::CellG * >::value_type' at 0x0000000007388EA0> >, 5)
     Cell id =  11
     Common Surface Area =  5
@@ -68,6 +71,7 @@ In general, when Python iterates over a list-like object that returns tuples you
 loop. You can either use
 
 .. code-block:: python
+
     for neighbor_tuple in self.getCellNeighborDataList(cell):
         print neighbor_tuple[0],neighbor_tuple[1]
 
@@ -75,6 +79,7 @@ and refer to to the elements of the returned tuple using indices or you can be m
 directly into two variables and access them by different "names":
 
 .. code-block:: python
+
     for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
         print neighbor, commonSurfaceArea
 
@@ -92,6 +97,7 @@ Sometimes we are interested in a common surface area of a given ``cell`` with AL
 ``CellNeighborDataList`` has a convenience function ``commonSurfaceAreaWithCellTypes`` that computes it. Here is an example
 
 .. code-block:: python
+
     for cell in self.cellList:
         neighborList = self.getCellNeighborDataList(cell)
         common_area_with_types = neighborList.commonSurfaceAreaWithCellTypes(cell_type_list=[1, 2])
@@ -100,6 +106,7 @@ Sometimes we are interested in a common surface area of a given ``cell`` with AL
 The example output is:
 
 .. code-block:: bash
+
     Common surface of cell.id=10 with cells of types [1,2] = 24
     Common surface of cell.id=11 with cells of types [1,2] = 22
 
@@ -115,6 +122,7 @@ surface area with cells of type 1, what was the common surface area with cells o
 ``neighborList.commonSurfaceAreaByType()`` call :
 
 .. code-block:: python
+
     for cell in self.cellList:
         neighborList = self.getCellNeighborDataList(cell)
         common_area_with_types = neighborList.commonSurfaceAreaWithCellTypes(cell_type_list=[1, 2])
@@ -127,6 +135,7 @@ surface area with cells of type 1, what was the common surface area with cells o
 The output may look as follows:
 
 .. code-block:: bash
+
     Common surface of cell.id=10 with cells of types [1,2] = 20
     Common surface of cell.id=10 with neighbors
      details defaultdict(<type 'int'>, {1L: 15, 2L: 5})
@@ -146,6 +155,7 @@ A more interesting thing is to look at cell with ``id==``. In this particular si
 and the output looks as follows:
 
 .. code-block:: bash
+
     Common surface of cell.id=1 with cells of types [1,2] = 12
     Common surface of cell.id=1 with neighbors
      details defaultdict(<type 'int'>, {0: 10, 1L: 1, 2L: 11})
@@ -155,11 +165,13 @@ to ``12`` - the total contact area between cell with ``id=1`` and cells of type 
 However if we replaced
 
 .. code-block:: python
+
     common_area_with_types = neighborList.commonSurfaceAreaWithCellTypes(cell_type_list=[1, 2])
 
 with
 
 .. code-block:: python
+
     common_area_with_types = neighborList.commonSurfaceAreaWithCellTypes(cell_type_list=[0, 1, 2])
 
 all the surfaced areas for cell with ``id=1`` woudl add up as they did for cells with ``id=10``
@@ -176,6 +188,7 @@ how many neighbors of this type are in contact with a given cell
 Here is an example:
 
 .. code-block:: python
+
     for cell in self.cellList:
         neighborList = self.getCellNeighborDataList(cell)
         neighbor_count_by_type_dict = neighborList.neighborCountByType()
@@ -185,6 +198,7 @@ Here is an example:
 and the output is:
 
 .. code-block:: bash
+
     Neighbor count for cell.id=1 is defaultdict(<type 'int'>, {0: 1, 1L: 1, 2L: 2})
     Neighbor count for cell.id=2 is defaultdict(<type 'int'>, {0: 1, 1L: 2, 2L: 1})
     ...
