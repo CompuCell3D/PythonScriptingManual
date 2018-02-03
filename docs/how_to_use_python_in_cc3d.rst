@@ -78,7 +78,7 @@ The structure of generated CC3D simulation code is stored in .cc3d file
 
     </Simulation>
 
-``Cellsorting.cc3d`` stores names of the files files that actually implement
+``Cellsorting.cc3d`` stores names of the files that actually implement
 the simulation, and most importantly it tells you that both
 ``cellsorting.xml``, ``cellsorting.py`` and ``cellsortingSteppables.py`` are part of
 the same simulation. CompuCell3D analyzes .cc3d file and when it sees
