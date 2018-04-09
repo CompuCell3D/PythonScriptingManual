@@ -39,7 +39,7 @@ cell or outside pixels touching cell boundary. Finally,
 ``secreteInsideCellAtCOM`` increases concentration in a single pixel that is
 closest to cell center of mass of a cell.
 
-Notice that ``SecretionSteppable`` inherits from ``SecretionBasePy11. We do this
+Notice that ``SecretionSteppable`` inherits from ``SecretionBasePy``. We do this
 to ensure that Python-based secretion plays nicely with PDE solvers.
 This requires that such steppable must be called before MCS, or rather
 before the PDE solvers start evolving the field. If we look at the
@@ -54,6 +54,8 @@ definition of ``SecretionBasePy`` we will see that it inherits from
             SteppableBasePy.__init__(self,_simulator,_frequency)
             self.runBeforeMCS=1
 
+Direct (but somewhat naive) Implementation
+---------------------
 Now, for the sake of completeness, let us implement cell secretion at
 the COM using alternative code:
 
@@ -104,3 +106,131 @@ Python menu Distances, Vectors, Transformations:
 
     hex_coords = self.cartesian2Hex(_in=[10, 20, 11])
     pt = self.hex2Cartesian(_in=[11.2, 13.1, 21.123])
+
+
+Tracking Amount of Secreted (Uptaken) Chemical
+-----------------------------------------------
+
+While the ability to have fine control over how the chemicals get secreted/uptaken
+is a useful feature, quite often we would like to know the total amount of the chemical that was added
+to the simulation as a result of the call to one of the ``secrete`` or ``uptake`` functions from he secretor object.
+
+Let us rewrite previous example using the API ythat facilitates tracking of the amount of
+chemical that was added:
+
+
+.. code-block:: python
+
+    class SecretionSteppable(SecretionBasePy):
+        def __init__(self,_simulator,_frequency=1):
+            SecretionBasePy.__init__(self,_simulator, _frequency)
+
+        def step(self,mcs):
+            attrSecretor=self.getFieldSecretor("ATTR")
+            for cell in self.cellList:
+                if cell.type==3:
+
+                    res = attrSecretor.secreteInsideCellTotalCount(cell,300)
+                    print 'secreted  ', res.tot_amount, ' inside cell'
+                    res = attrSecretor.secreteInsideCellAtBoundaryTotalCount(cell,300)
+                    print 'secreted  ', res.tot_amount, ' inside cell at the boundary'
+                    res = attrSecretor.secreteOutsideCellAtBoundaryTotalCount(cell,500)
+                    print 'secreted  ', res.tot_amount, ' outside the cell at the boundary'
+                    res = attrSecretor.secreteInsideCellAtCOMTotalCount(cell,300)
+                    print 'secreted  ', res.tot_amount, ' inside the cell at the COM'
+
+As you can see the calls to that return the total amount of chemical added/uptaked are the same calls as we
+used in our previous example except we add ``TotalCount`` to the name of the function. The new function e.g.
+``secreteInsideCellTotalCount`` returns object ``res`` that is an instance of ``FieldSecretorResult`` class
+that contains the summary of the secreion/uptake operation. Most importantly when we access ``total_amount``
+member of the ``res`` object we get the total amount that was added/uptaken from the chemical field e.g. :
+
+
+.. code-block:: python
+
+    res = attrSecretor.secreteInsideCellTotalCount(cell,300)
+    print 'secreted  ', res.tot_amount, ' inside cell'
+
+For cmpleteness we present a complete list of C++ signatures of all the functions that can be used to fine-control
+how uptake/secretion happens in CC3D. All those functions are members of the ``secretor`` object and are
+accessible from Python
+
+.. code-block:: cpp
+
+    bool _secreteInsideCellConstantConcentration(CellG * _cell, float _amount);
+
+    FieldSecretorResult _secreteInsideCellConstantConcentrationTotalCount(CellG * _cell, float _amount);
+
+    bool _secreteInsideCell(CellG * _cell, float _amount);
+
+    FieldSecretorResult _secreteInsideCellTotalCount(CellG * _cell, float _amount);
+
+    bool _secreteInsideCellAtBoundary(CellG * _cell, float _amount);
+
+    FieldSecretorResult _secreteInsideCellAtBoundaryTotalCount(CellG * _cell, float _amount);
+
+    bool _secreteInsideCellAtBoundaryOnContactWith(CellG * _cell, float _amount,
+    const std::vector<unsigned char> & _onContactVec);
+
+    FieldSecretorResult _secreteInsideCellAtBoundaryOnContactWithTotalCount(CellG * _cell,
+    float _amount, const std::vector<unsigned char> & _onContactVec);
+
+    bool _secreteOutsideCellAtBoundary(CellG * _cell, float _amount);
+
+    FieldSecretorResult _secreteOutsideCellAtBoundaryTotalCount(CellG * _cell, float _amount);
+
+    bool _secreteOutsideCellAtBoundaryOnContactWith(CellG * _cell, float _amount,
+    const std::vector<unsigned char> & _onContactVec);
+
+    FieldSecretorResult  _secreteOutsideCellAtBoundaryOnContactWithTotalCount(CellG * _cell,
+    float _amount, const std::vector<unsigned char> & _onContactVec);
+
+    bool secreteInsideCellAtCOM(CellG * _cell, float _amount);
+
+    FieldSecretorResult secreteInsideCellAtCOMTotalCount(CellG * _cell, float _amount);
+
+    bool _uptakeInsideCell(CellG * _cell, float _maxUptake, float _relativeUptake);
+
+    FieldSecretorResult _uptakeInsideCellTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);
+
+    bool _uptakeInsideCellAtBoundary(CellG * _cell, float _maxUptake, float _relativeUptake);
+
+    FieldSecretorResult _uptakeInsideCellAtBoundaryTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);
+
+    bool _uptakeInsideCellAtBoundaryOnContactWith(CellG * _cell, float _maxUptake,
+    float _relativeUptake,const std::vector<unsigned char> & _onContactVec);
+
+    FieldSecretorResult _uptakeInsideCellAtBoundaryOnContactWithTotalCount(CellG * _cell,
+    float _maxUptake, float _relativeUptake, const std::vector<unsigned char> & _onContactVec);
+
+    bool _uptakeOutsideCellAtBoundary(CellG * _cell, float _maxUptake, float _relativeUptake);
+
+    FieldSecretorResult _uptakeOutsideCellAtBoundaryTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);
+
+    bool _uptakeOutsideCellAtBoundaryOnContactWith(CellG * _cell, float _maxUptake,
+     float _relativeUptake,const std::vector<unsigned char> & _onContactVec);
+
+    FieldSecretorResult _uptakeOutsideCellAtBoundaryOnContactWithTotalCount(CellG * _cell,
+    float _maxUptake, float _relativeUptake, const std::vector<unsigned char> & _onContactVec);
+
+    bool uptakeInsideCellAtCOM(CellG * _cell, float _maxUptake, float _relativeUptake);
+
+    FieldSecretorResult  uptakeInsideCellAtCOMTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);
+
+For example if we want to use ``uptakeInsideCellAtCOMTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);``
+from python we would use the following code:
+
+.. code-block:: python
+    ...
+    res = attrSecretor.uptakeInsideCellAtCOMTotalCount(cell,3,0.1)
+    print 'uptaken ', res.tot_amount, ' inside cell and the COM'
+
+In this case  ``_cell`` is a ``cell`` object that we normally deal with in Python, ``_maxUptake`` has value of ``3``
+and ``_relativeUptake`` is set to ``0.1``
+
+Following the same principles we could use other functions
+
+
+
+
+
