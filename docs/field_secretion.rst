@@ -228,7 +228,7 @@ from python we would use the following code:
 In this case  ``_cell`` is a ``cell`` object that we normally deal with in Python, ``_maxUptake`` has value of ``3``
 and ``_relativeUptake`` is set to ``0.1``
 
-Following the same principles we could use other functions
+In similar fashion we could use remaining functions listed above
 
 
 
