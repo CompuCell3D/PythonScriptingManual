@@ -321,6 +321,19 @@ are attributes of the XML element ``Energy``, whereas ``20.0`` is the value of t
 In what follows below we will be accessing and modifying both attributes and Values of the XML elements.
 Please pay close attention whwther the function we are using is of ``*XMLValue`` or ``*XMLAttributeValue`` type
 
+**Note** Some XML elements might have only attributes e.g. :
+
+.. code-block:: xml
+
+    <VolumeConstraint LambdaVolume=“20” TargetVolume="125" Type="Condensing"/>
+
+and some might have only values:
+
+.. code-block:: xml
+
+    <Steps>10000</Steps>
+
+
 
 
 
