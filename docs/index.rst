@@ -1,7 +1,7 @@
 .. python_scripting_manual documentation master file, created by
 
 
-Python Scripting Manual for CompuCell3D - version 3.7.6
+Python Scripting Manual for CompuCell3D - version 3.7.8
 =======================================================
 
 The focus of this manual is to teach you how to use Python scripting language to develop complex CompuCell3D simulations. We will assume that you have a working knowledge of Python. You do not have to be a Python guru but you should know how to write simple Python scripts that use functions, classes, dictionaries and lists. You can find decent tutorials online (e.g. `Instant Python Hacking <http://hetland.org/writing/instant-hacking.html>`__, or `Instant Python Hacking <http://hetland.org/writing>`__) or simply purchase a book on introductory Python programming.
@@ -25,6 +25,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    field_secretion
    chemotaxis_on_a_cell-by-cell_basis
    steering_changing_cc3dml_parameters_on-the-fly
+   steering_changing_python_parameters_using_UI
    replacing_cc3dml_with_equivalent_python_syntax
    cell_motility_applying_force_to_cells
    setting_cell_membrane_fluctuation_ona_cell-by-cell_basis
