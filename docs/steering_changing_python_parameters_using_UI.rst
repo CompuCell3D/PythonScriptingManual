@@ -140,6 +140,7 @@ given parameter has on the overall simulation.
 **IMPORTANT** . You can simplify setting up of interactive steering using Twedit Python helpers menu. Simply, go to
 ``CC3D Python -> Steering Panel`` menu and choose ``1. Setup Steering Panel`` option:
 
+|twedit_steering_panel|
 
 .. |sliders_screenshot| image:: images/sliders_screenshot.png
 
