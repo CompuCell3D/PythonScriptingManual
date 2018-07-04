@@ -5,7 +5,7 @@ The most convenient way to start Python scripting in CC3D is by learning Twedit+
 
 **Hint:** Twedit++ has CC3D Python Menu which greatly simplifies Python coding in CC3D. Make sure to familiarize yourself with this conveninent tool.
 
-Every CC3D simulation that uses Python consists of the, so called, main Python script. The structure of this script is fairly “rigid” (templated) which implies that, unless you know exactly what you are doing, you should make changes in this script only in few disctinc places, leaveing the rest of the template untouched. The goal of the main Python script is to setup a CC3D simulation and make sure that all modules are initialized in the correct order. Typically, the only place where you, as a user, will modify this script is towards the end of the script where you register your extension modules (steppables and plugins).
+Every CC3D simulation that uses Python consists of the, so called, main Python script. The structure of this script is fairly “rigid” (templated) which implies that, unless you know exactly what you are doing, you should make changes in this script only in few disctinc places, leaving the rest of the template untouched. The goal of the main Python script is to setup a CC3D simulation and make sure that all modules are initialized in the correct order. Typically, the only place where you, as a user, will modify this script is towards the end of the script where you register your extension modules (steppables and plugins).
 
 Another task of main Python script is to load CC3DML file which contains initial description of cellular behaviors. You may ask, why we need CC3DML file when we are using Python. Wasn’t the goal of Python to replace CC3DML? There are two answers to this question short and long. The short answer is that CC3DML provides the description of INITIAL cell behaviors and we will modify those behaviors as simulation runs using Python. But we still need a starting point for our simulation and this is precisely what CC3DML file provides. If you, however, dislike XML, and would rather not use separate file you can easily convert CC3DML into equivalent Python function – all you have to do is to use Twedit++ context menu. We will come back to this topic later. For now, let’s assume that we will still load CC3DML along with main Python script.
 
@@ -88,7 +88,7 @@ file (here ``cellsorting.py``) and if user specified CC3DML script using
 ``<XMLScript>`` tag it loads this CC3DML file as well. In other words, .cc3d
 file is used to link Python simulation files together in an unbigous
 way. It also creates “root directory” for simulation so that in the
-Python or XML code modelrs can refer to file resources using partial
+Python or XML code modelers can refer to file resources using partial
 paths i.e. if you store additional files in the Simulation directory you
 can refer to them via ``Simulation\your_file_name`` instead of typing full
 path e.g. ``C:\CC3DProjects\cellsorting\Simulation\your\_file\_name`` .
@@ -218,7 +218,7 @@ completion of each MCS you see a list of all cell ids. In addition to
 step function you can see start and finish functions which have empty
 bodies. Start function is called after simulation have been initialized
 but before first MCS. Finish function is called immediately after last
-MCS.When writing Python extension modules you have flexibility to
+MCS. When writing Python extension modules you have flexibility to
 implement any combination of these 3 functions (``start``, ``step``, ``finish``).You
 can, of course, leave them unimplemented in which case they will have no
 effect on the simulation.
