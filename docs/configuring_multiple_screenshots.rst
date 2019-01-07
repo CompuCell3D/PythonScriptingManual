@@ -30,9 +30,28 @@ Fig.2 Open up simulation and start running it. Press "Pause" and click "camera b
 
 |screenshots_config_2|
 
-Fig.2 Repeat the sam process on other graphics configurations you would like to output as screenshots. Here we are
-adding screenshots for FGF field and for the cell field in 3D. See above
+Fig.3 Repeat the sam process on other graphics configurations you would like to output as screenshots. Here we are
+adding screenshots for FGF field and for the cell field in 3D. See pictures above
 
+The screenshot configuration data folder is stored along the simulation code in the original .cc3d project location:
+
+|screenshots_config_5|
+
+Fig 4. When you click camera button , CC3D will store screenshot configuration data in the ``screenshot data`` folder
+and it will become integral part od .cc3d. project. Every time you run a simulation screenshots described there will
+be output to the CC3DWorkspace folder - unless you disable taking of the screenshots via configuration dialog or by removing
+the ``screenshot_data`` folder
+
+
+The screenshots are written in the ``CC3DWorkspace`` folder. Simpy go the the subfolder of the ``CC3DWorkspace`` directory
+and search for folders with screenshots. In our case there are 3 folders that have the screenshots we configured:
+``Cell_Field_CellField_2D_XY_0``, ``Cell_Field_CellField_3D_0``, ``FGF_ConField_2D_XY_0`` - see figures below:
+
+|screenshots_config_6|
+
+|screenshots_config_7|
+
+Fig 5. Screenshots are written to simulation output folder (*i.e.* subfolder of ``CC3DWorkspace``)
 
 
 
@@ -53,8 +72,18 @@ adding screenshots for FGF field and for the cell field in 3D. See above
    :width: 3.5000in
    :height: 2.5526in
 
+.. |screenshots_config_5| image:: images/screenshots_config_5.png
+   :width: 2.5000in
+   :height: 0.9526in
 
 
+.. |screenshots_config_6| image:: images/screenshots_config_6.png
+   :width: 2.5000in
+   :height: 0.9526in
+
+.. |screenshots_config_7| image:: images/screenshots_config_7.png
+   :width: 2.7in
+   :height: 2.85in
 
 
 
