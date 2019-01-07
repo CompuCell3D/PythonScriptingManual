@@ -305,6 +305,38 @@ completes the discussion of CC3DML steering.
 Simplifying steering - XML access path
 --------------------------------------
 
+Basic Terminology
+-----------------
+
+When accessing variables defined in the XML element we are typically dealing with ``attributes``
+and ``values``. Let's consider the following XML element
+
+.. code-block:: xml
+
+    <Energy Type1=“Condensing” Type2=“NonCondensing”>20.0</Energy>
+
+The difference between attribute and value of the element is that attributes are all the
+labels inside ``<>`` element marker to which we assign some value. For example ``Type1`` and ``Type2``
+are attributes of the XML element ``Energy``, whereas ``20.0`` is the value of this XML element.
+In what follows below we will be accessing and modifying both attributes and Values of the XML elements.
+Please pay close attention whwther the function we are using is of ``*XMLValue`` or ``*XMLAttributeValue`` type
+
+**Note** Some XML elements might have only attributes e.g. :
+
+.. code-block:: xml
+
+    <VolumeConstraint LambdaVolume=“20” TargetVolume="125" Type="Condensing"/>
+
+and some might have only values:
+
+.. code-block:: xml
+
+    <Steps>10000</Steps>
+
+
+
+
+
 The above examples demonstrate how to steer CC3DML-based part of the
 simulation in a fairly verbose way i.e. the amount of code is quite
 significant. In 3.7.1 we have introduced more compact way to access and
