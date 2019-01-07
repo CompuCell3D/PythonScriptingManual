@@ -19,26 +19,26 @@ the configuration page:
 |screenshots_config_4_conf|
 
 
-Fig 1. Enable screenshot output - check box next to "Save image every Nth MCS" and choose screenshot output frequency
+**Fig 1.** Enable screenshot output - check box next to ``Save image every Nth MCS`` and choose screenshot output frequency
 
 |screenshots_config_1|
 
-Fig.2 Open up simulation and start running it. Press "Pause" and click "camera button" (the button next to
-"Take screenshot" tool-tip) on the graphics configuration you would like to save.
+**Fig 2.** Open up simulation and start running it. Press ``Pause`` and click ``camera button`` (the button next to
+``Take screenshot`` tool-tip) on the graphics configuration you would like to save.
 
 |screenshots_config_2|
 
 |screenshots_config_2|
 
-Fig.3 Repeat the sam process on other graphics configurations you would like to output as screenshots. Here we are
+**Fig 3.** Repeat the sam process on other graphics configurations you would like to output as screenshots. Here we are
 adding screenshots for FGF field and for the cell field in 3D. See pictures above
 
-The screenshot configuration data folder is stored along the simulation code in the original .cc3d project location:
+The screenshot configuration data folder is stored along the simulation code in the original ``.cc3d`` project location:
 
 |screenshots_config_5|
 
-Fig 4. When you click camera button , CC3D will store screenshot configuration data in the ``screenshot data`` folder
-and it will become integral part od .cc3d. project. Every time you run a simulation screenshots described there will
+**Fig 4.** When you click camera button , CC3D will store screenshot configuration data in the ``screenshot data`` folder
+and it will become integral part od ``.cc3d`` project. Every time you run a simulation screenshots described there will
 be output to the CC3DWorkspace folder - unless you disable taking of the screenshots via configuration dialog or by removing
 the ``screenshot_data`` folder
 
@@ -51,7 +51,7 @@ and search for folders with screenshots. In our case there are 3 folders that ha
 
 |screenshots_config_7|
 
-Fig 5. Screenshots are written to simulation output folder (*i.e.* subfolder of ``CC3DWorkspace``)
+**Fig 5.** Screenshots are written to simulation output folder (*i.e.* subfolder of ``CC3DWorkspace``)
 
 
 
