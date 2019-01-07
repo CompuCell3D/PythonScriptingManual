@@ -41,6 +41,7 @@ The focus of this manual is to teach you how to use Python scripting language to
    changing_cluster_id_of_a_cell
    sbml_solver
    building_sbml_models_using_tellurium
+   configuring_multiple_screenshots
    parameter_scans
    restarting_simulations
    implementing_energy_functions_in_python
