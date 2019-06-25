@@ -19,6 +19,7 @@ for the near future we will still provide minor updates for Python 2.7-based CC3
    :maxdepth: 2
 
    introduction
+   transition_to_cc3d_4
    how_to_use_python_in_cc3d
    SteppableBasePy_class
    adding_steppable_to_simulation_using_twedit++
