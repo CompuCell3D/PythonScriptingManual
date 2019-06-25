@@ -18,6 +18,7 @@ or simply purchase a book on introductory Python programming.
    :maxdepth: 2
 
    introduction
+   transition_to_cc3d_4
    how_to_use_python_in_cc3d
    SteppableBasePy_class
    adding_steppable_to_simulation_using_twedit++
