@@ -86,7 +86,7 @@ the constructor of the class. For exampmple.
 
 .. code-block:: python
 
-from cc3d.core.PySteppables import *
+    from cc3d.core.PySteppables import *
 
     class ChemotaxisSteering(SteppableBasePy):
         def __init__(self, frequency=100):
