@@ -7,7 +7,7 @@ simulation snapshots it does so in the special directory which is
 created automatically and whose name consists of simulation core name
 and timestamp. By default, CC3D creates such directories as subfolders
 of ``<your_home_directory>/CC3DWorkspace``. You can redefine the location
-of CC3D output in the Player. If standard simulation output is placed in
+of CC3D output in the Player or from the command line. If standard simulation output is placed in
 a special directory it makes a lot of sense to store your custom data
 files in the same directory. The following code snippet shows you how to
 accomplish this (the code to open file in the simulation output
@@ -15,68 +15,60 @@ directory can be inserted from Twedit++ - simply go to ``CC3D Python->Python Uti
 
 .. code-block:: python
 
-    def step(self,mcs):
-        fileName='myOutput+'+str(mcs)+'.txt'
-        try:
-            fileHandle,fullFileName\
-            =self.openFileInSimulationOutputDirectory(fileName,"w")
-        except IOError:
-            print "Could not open file ", fileName," for writing. "
-            return
+    def step(self, mcs):
 
-        for cell in self.cellListByType(self.NONCONDENSING):
-            print >>fileHandle, 'cell.id=',cell.id,'volume=',cell.volume
+        output_dir = self.output_dir
 
-        fileHandle.close()
+        if output_dir is not None:
+            output_path = Path(output_dir).joinpath('step_' + str(mcs).zfill(3) + '.dat')
+            with open(output_path, 'w') as fout:
 
-In the step function we create fileName by concatenating ``'myOutput'``,
-current MCS - str(mcs), and extension ``'.txt'``. Inside ``try/except``
-statement (refresh you knowledge about Python exceptions) we call
-``self.openFileInSimulationOutputDirectory`` function where first argument
-is file name and second argument is file open mode. Since we are opening
-file for writing we use ``"w"`` . To open file in the read mode we would use
-``"r"``. Please consult appropriate chapter from Python programing manual
-for more information about file modes. If CC3D fails to open file in the
-simulation directory we print error message and return from step function.
-If the file open operation is successful we iterate over all cells of
-type NonCondensing and print cell id and cell current volume. Notice
-that when writing to a file in Python we have to use
+                attr_field = self.field.ATTR
+                for x, y, z in self.every_pixel():
+                    fout.write('{} {} {} {}\n'.format(x, y, z, attr_field[x, y, z]))
 
-.. code-block:: python
+In the step function we create ``output_path`` by concatenating ``output_dir`` with a string
+that contains word ``step_`` , current mcs (zero-filled up to 3 positions - note how we use standard string
+function ``zfill``) and extension ``.dat``
 
-    print >>fileHandle
+.. note::
 
-syntax. The reminder of this print statemnt looks exactly as a regular
-print statement. Alternatively we can use the following syntax to write
-to a file:
+    ``self.output_dir`` is a special variable in each steppable that stores directory where the output
+of the current simulation will be written.
+
+.. note::
+
+    Path concatenation in ``Path(output_dir).joinpath(...)`` is done using standard Python package ``pathlib``. we import this functionality using ``from pathlib import Path``
+
+
+Next, we open file using ``with`` statement - if you are unfamiliar with this way of interacting with files in Python
+ please check new Python tutorials online:
 
 .. code-block:: python
 
-    fileHandle.write('formatting string' %(values for formatting string))
+    with open(output_path, 'w') as fout:
+        # file is open at this point and there is no need to close it
+        # because "with" statement will take care of it automatically
+        ...
 
-The formatting string contains regular text and formatting characters
-such as ``\n`` denoting end of line, %d denoting integer number, ``%f``
-denoting floating point number and ``%s`` denoting strings. For more
-information on this topic please see any Python manual or see online
-Python documentation.
+Inside ``with`` statement (where the file is open) we access chemical field ``ATTR`` and use ``self.every_pixel``
+operator to access and write field values to the file:
 
-After we are done with writing we close the file which ensures that file
-buffers are transferred to a disk. Do not forget to close the file after
-you are done writing.
+.. code-block:: python
 
-Notice that with self.openFileInSimulationOutputDirectory function we do
-not need to know the actual nameof the output directory. This makes
-things much easier than if we had to construct full file path. If you
-would prefer to store your files in a separate subfolder of the
-simulation directory all you have to do is to prepend filename with
-the name of the subfolder followed by ``/``. For example the following
-statement:
+    with open(output_path, 'w') as fout:
 
-``self.openFileInSimulationOutputDirectory('OUTPUT_SUBFOLDER/myoutput.txt','w')``
+        attr_field = self.field.ATTR
+        for x, y, z in self.every_pixel():
+            fout.write('{} {} {} {}\n'.format(x, y, z, attr_field[x, y, z]))
 
-creates subfolder called ``OUTPUT_SUBFOLDER`` inside simulation output
-directory and inside this subfolder it opens file myoutput.txt for
-writing. You can replace ``OUTPUT_SUBFOLDER` with any partial path e.g.
-``OUTPUT/TXT_FILES`` and CC3D will make sure that all directories specified
-in the partial paths get created. This greatly simplifies file output
-operations in the CC3D.
+
+If we want to create directory inside simulaiton output folder we can use the following functionality of pathlib
+
+.. code-block:: python
+
+    new_dir = Path(self.output_dir).joinpath('new_dir/new_subdir')
+    new_dir.mkdir(exist_ok=True, parents=True)
+
+We first create path to the new directory using pathlib's ``Path`` object and its ``joinpath`` method. and then use
+``Path``'s method  ``mkdir`` to create directory. The ``exist_ok=True, parents=True`` arguments ensure that the function will not crash if the directory already exists and all the paths along directory path will be created as needed (``parents=True``). In our case it means that ``new_dir`` and ``new_subdir`` will be created. ``self.output_dir`` will be created as well but in a different place by the CC3D simulation setup code.
