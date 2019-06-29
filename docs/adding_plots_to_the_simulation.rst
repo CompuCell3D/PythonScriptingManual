@@ -1,7 +1,7 @@
 Adding plots to the simulation
 ==============================
 
-Some modelers like to monitor simulation progress bydisplaying “live”
+Some modelers like to monitor simulation progress by displaying “live”
 plots that characterize current state of the simulation. In CC3D it is
 very easy to add to the Player windows. The best way to add plots is via
 Twedit++ CC3D Python->Scientific Plots menu. Take a look at example code
@@ -11,56 +11,58 @@ CC3D:
 .. code-block:: python
 
     class cellsortingSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=1):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self, frequency=1):
+            SteppableBasePy.__init__(self, frequency)
 
         def start(self):
-            self.pW = self.addNewPlotWindow(
-                _title='Average Volume And Volume of Cell 1',
-                _xAxisTitle='MonteCarlo Step (MCS)',
-                _yAxisTitle='Variables',
-                _xScaleType='linear',
-                _yScaleType='log',
-                _grid=True # only in 3.7.6 or higher
+            self.plot_win = self.add_new_plot_window(
+                title='Average Volume And Volume of Cell 1',
+                x_axis_title='MonteCarlo Step (MCS)',
+                y_axis_title='Variables',
+                x_scale_type='linear',
+                y_scale_type='log',
+                grid=True # only in 3.7.6 or higher
             )
 
-            self.pW.addPlot('AverageVol', _style='Dots', _color='red', _size=5)
-            self.pW.addPlot('Cell1Vol', _style='Steps', _color='black', _size=5)
+            self.plot_win.add_plot("AverageVol", style='Dots', color='red', size=5)
+            self.plot_win.add_plot('Cell1Vol', style='Steps', color='black', size=5)
 
         def step(self, mcs):
 
-            averVol = 0.0
-            numberOfCells = 0
+            avg_vol = 0.0
+            number_of_cells = 0
 
-            for cell in self.cellList:
-                averVol += cell.volume
-                numberOfCells += 1
+            for cell in self.cell_list:
+                avg_vol += cell.volume
+                number_of_cells += 1
 
-            averVol /= float(numberOfCells)
+            avg_vol /= float(number_of_cells)
 
-            cell1 = self.attemptFetchingCellById(1)
-            print cell1
+            cell1 = self.fetch_cell_by_id(1)
+            print(cell1)
 
-            self.pW.addDataPoint("AverageVol", mcs, averVol)  # name of the data series, x, y
-            self.pW.addDataPoint("Cell1Vol", mcs, cell1.volume)  # name of the data series, x, y
-            # self.pW.showAllPlots() # no longer necessary
+            # name of the data series, x, y
+            self.plot_win.add_data_point('AverageVol', mcs, avg_vol)
+            # name of the data series, x, y
+            self.plot_win.add_data_point('Cell1Vol', mcs, cell1.volume)
 
-In the ``start`` function we create plot window (``self.pW``) – the arguments of
-this function are self explanatory. After we have plot windows object
-(``self.pW``) we are adding actual plots to it. Here we will plot two
+
+In the ``start`` function we create plot window (``self.plot_win``) – the arguments of
+this function are self-explanatory. After we have plot windows object
+(``self.plot_win``) we are adding actual plots to it. Here, we will plot two
 time-series data, one showing average volume of all cells and one
 showing instantaneous volume of cell with id 1:
 
 .. code-block:: python
 
-    self.pW.addPlot('AverageVol',_style='Dots',_color='red',_size=5)
-    self.pW.addPlot('Cell1Vol',_style='Steps',_color='black',_size=5)
+      self.plot_win.add_plot('AverageVol', style='Dots', color='red', size=5)
+      self.plot_win.add_plot('Cell1Vol', style='Steps', color='black', size=5)
 
 We are specifying here plot symbol types (``Dots``, ``Steps``), their sizes and
 colors. The first argument is then name of the data series. This name
 has two purposes – **1.** It is used in the legend to identify data points
 and **2.** It is used as an identifier when appending new data. We can also
-specify logarithmic axis by using ``_yScaleType='log'`` as in the example
+specify logarithmic axis by using ``y_scale_type='log'`` as in the example
 above.
 
 In the ``step`` function we are calculating average volume of all cells and
@@ -69,18 +71,15 @@ calculations we are adding our results to the time series:
 
 .. code-block:: python
 
-    self.pW.addDataPoint("AverageVol",mcs,averVol) # name of the data series, x, y
-    self.pW.addDataPoint("Cell1Vol",mcs,cell1.volume) # name of the data series, x, y
+      # name of the data series, x, y
+      self.plot_win.add_data_point('AverageVol', mcs, avg_vol)
+      # name of the data series, x, y
+      self.plot_win.add_data_point('Cell1Vol', mcs, cell1.volume)
 
 Notice that we are using data series identifiers (``AverageVol`` and
 ``Cell1Vol``) to add new data. The second argument in the above function
 calls is current Monte Carlo Step (mcs) whereas the third is actual
 quantity that we want to plot on Y axis. We are done at this point
-
-**Important:** Previous versions of CC3D required users to explicitly
-update plots by calling self.pW.showAllPlots() . ***This is no longer
-necessary although including this call will not cause any side-effects ***.
-self.pW.showAllPlots() # DEPRECATED
 
 The results of the above code may look something like:
 
@@ -98,8 +97,8 @@ stand-alone plotting programs. Plots provided in CC3D are used mainly as
 a convenience feature and used to monitor current state of the
 simulation.
 
- Histograms
------------
+Histograms
+----------
 
 Adding histograms to CC3D player is a bit more complex than adding
 simple plots. This is because you need to first process data to produce
@@ -111,43 +110,52 @@ at the example steppable (you can also find relevant code snippets in
 
 .. code-block:: python
 
-    class HistPlotSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=10):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+   from cc3d.core.PySteppables import *
+   import random
+   import numpy as np
+   from pathlib import Path
 
-        def start(self):
 
-            # initialize setting for Histogram
-            self.pW = self.addNewPlotWindow(_title='HIstogram', _xAxisTitle='Cell #', _yAxisTitle='Volume')
+   class HistPlotSteppable(SteppableBasePy):
+       def __init__(self, frequency=1):
+           SteppableBasePy.__init__(self, frequency)
+           self.plot_win = None
 
-            # _alpha is transparency 0 is transparent, 255 is opaque
-            self.pW.addHistogramPlot(_plotName='Hist 1', _color='green', _alpha=100)
-            self.pW.addHistogramPlot(_plotName='Hist 2', _color='red')
-            self.pW.addHistogramPlot(_plotName='Hist 3', _color='blue')
+       def start(self):
 
-        def step(self, mcs):
-            volList = []
-            for cell in self.cellList:
-                volList.append(cell.volume)
+           # initialize setting for Histogram
+           self.plot_win = self.add_new_plot_window(title='Histogram of Cell Volumes', x_axis_title='Number of Cells',
+                                                    y_axis_title='Volume Size in Pixels')
+           # alpha is transparency 0 is transparent, 255 is opaque
+           self.plot_win.add_histogram_plot(plot_name='Hist 1', color='green', alpha=100)
+           self.plot_win.add_histogram_plot(plot_name='Hist 2', color='red', alpha=100)
+           self.plot_win.add_histogram_plot(plot_name='Hist 3', color='blue')
 
-            gauss = []
-            for i in range(100):
-                gauss.append(random.gauss(0, 1))
+       def step(self, mcs):
 
-            self.pW.addHistogram(plot_name='Hist 1', value_array=gauss, number_of_bins=10)
-            self.pW.addHistogram(plot_name='Hist 2', value_array=volList, number_of_bins=10)
-            self.pW.addHistogram(plot_name='Hist 3', value_array=volList, number_of_bins=50)
+           vol_list = []
+           for cell in self.cell_list:
+               vol_list.append(cell.volume)
 
-            fileName = "HistPlots_" + str(mcs) + ".png"
-            self.pW.savePlotAsPNG(fileName, 1000, 1000)  # here we specify size of the image
+           gauss = np.random.normal(0.0, 1.0, size=(100,))
 
-            fileName = "HistPlots_" + str(mcs) + ".txt"
-            self.pW.savePlotAsData(fileName)
+           self.plot_win.add_histogram(plot_name='Hist 1', value_array=gauss, number_of_bins=10)
+           self.plot_win.add_histogram(plot_name='Hist 2', value_array=vol_list, number_of_bins=10)
+           self.plot_win.add_histogram(plot_name='Hist 3', value_array=vol_list, number_of_bins=50)
 
-In the start function we call ``self.addNewPlotWindow`` to add new plot
-window -``self.pW``- to the Player. Subsequently we specify display
+           if self.output_dir is not None:
+               output_path = Path(self.output_dir).joinpath("HistPlots_" + str(mcs) + ".txt")
+               self.plot_win.save_plot_as_data(output_path, CSV_FORMAT)
+
+               png_output_path = Path(self.output_dir).joinpath("HistPlots_" + str(mcs) + ".png")
+
+               # here we specify size of the image saved - default is 400 x 400
+               self.plot_win.save_plot_as_png(png_output_path, 1000, 1000)
+
+In the start function we call ``self.add_new_plot_window`` to add new plot
+window -``self.plot_win``- to the Player. Subsequently we specify display
 properties of different data series (histograms). Notice that we can
-specify opacity using ``_alpha`` parameter.
+specify opacity using ``alpha`` parameter.
 
 In the step function we first iterate over each cell and append their
 volumes to Python list. Later plot histogram of the array using a very
@@ -155,38 +163,11 @@ simple call:
 
 .. code-block:: python
 
-    self.pW.addHistogram(plot_name='Hist 2' , value_array=volList ,number_of_bins=10)
+    self.plot_win.add_histogram(plot_name='Hist 2', value_array=vol_list, number_of_bins=10)
 
 that takes an array of values and the number of bins and adds histogram
 to the plot window.
 
-Alternatively we may use slightly more complex way od adding histogram
-which in some situations may actually give you a bit more control. First
-we bin array of values using numpy functionality:
-
-.. code-block:: python
-
-    (n, bins) = numpy.histogram(volList, bins=10)
-
-The return values are two numpy arrays: n which specifies center of the
-bin (we plot it on x axis) and bins which determines stores counts for a
-given bin.
-
-**Important**: Make sure you import random and numpy modules in the
-steppable file. Place the following code:
-
-.. code-block:: python
-
-    import random, numpy
-
-at the top of the file.
-
-Next you add histogram data output from numpy to the plot using the
-following call:
-
-.. code-block:: python
-
-    self.pW.addHistPlotData('Hist 2', n, bins)
 
 The following snippet:
 
@@ -210,32 +191,30 @@ code:
 When we look at the code in the ``start`` function we will see that this
 data series will be displayed using green bars.
 
-**Imnportant:** Calling ``showAllHistPlots`` is no longer necessary
-
 
 At the end of the steppable we output histogram plot as a png image file
 using:
 
 .. code-block:: python
-    self.pW.savePlotAsPNG(fileName,1000,1000)
+    self.plot_win.save_plot_as_png(png_output_path,1000, 1000)
 
 
-two last arguments of this function represent `x` and `y` sizes of the
+two last arguments of this function represent ``x`` and ``y`` sizes of the
 image.
 
 **Imnportant:** as of writing this manual we do not support scaling of the plot image output.
 This might change in the future releases, however we strongly recommend that you save all the data you plot
 in a separate file and post-process it in the full-featured plotting program
 
-We construct fileName in such a way that it contains MCS in it.
+We construct file_name in such a way that it contains MCS in it.
 The image file will be written in the simulation outpt directory.
 Finally, for any plot we can output plotted data in the form of a text
 file. All we need to do is to call ``savePlotAsData`` from the plot windows
 object:
 
 .. code-block:: python
-    fileName = "HistPlots_"+str(mcs)+".txt"
-    self.pW.savePlotAsData(fileName)
+    outout_path = "HistPlots_"+str(mcs)+".txt"
+    self.plot_win.save_plot_as_data(output_path, CSV_FORMAT)
 
 This file will be written in the simulation output directory. You can
 use it later to post process plot data using external plotting software.
