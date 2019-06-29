@@ -121,7 +121,7 @@ Next, we import newly generated steppable
 
 .. note::
 
-    If the the modeule from which we import steppable (here ``cellsortingSteppables``) or the steppable class (here ``cellsortingSteppable``) itself contains word ``steppable`` (capitalization is not important) we can put ``.`` in front of the module: ``from .cellsortingSteppables import cellsortingSteppable``. This is not necessary but some development environments (e.g. PyCharm) will autocomplete syntax. This is quitehelpful and speeds up development process.
+    If the the module from which we import steppable (here ``cellsortingSteppables``) or the steppable class (here ``cellsortingSteppable``) itself contains word ``steppable`` (capitalization is not important) we can put ``.`` in front of the module: ``from .cellsortingSteppables import cellsortingSteppable``. This is not necessary but some development environments (e.g. PyCharm) will autocomplete syntax. This is quite helpful and speeds up development process.
 
 Subsequently we register steppable by instantiating it using the constructor and specifying frequency with
 which it will be called
