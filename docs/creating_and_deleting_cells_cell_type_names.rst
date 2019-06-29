@@ -1,4 +1,4 @@
-Creating and Deleting Cells. Cell Type Names
+Creating and Deleting Cells. Cell-Type Names
 ============================================
 
 The simulation that Twedit++ Simulation Wizard generates contains some
@@ -62,7 +62,11 @@ To create a single cell in CC3D we type the following code snippet:
 .. code-block:: python
 
     def start(self):
-        self.cellField[10:14,10:14,0] = self.newCell(self.CONDENSING)
+        self.cell_field[10:14,10:14,0] = self.new_cell(self.CONDENSING)
+
+.. note::
+
+   ``self.cellField`` still works. We can also access this field via ``self.field.cell_field`` although ``self.cell_field`` looks much simpler
 
 In Twedit++ go to CC3D Python->Cell Manipulation->Create Cell:
 
@@ -77,7 +81,7 @@ statement:
 
 .. code-block:: python
 
-    self.newCell(self.CONDENSING)
+    self.new_cell(self.CONDENSING)
 
 We initialize its type using ``self.CONDENSING`` class variable that
 corresponds to an integer assigned to type Condensing. Cell type is an
@@ -87,14 +91,15 @@ the CellType plugin in CC3DML for cellsorting simulation you can easily
 infer that number 1 denotes cells of type Condensing and 2 denotes cells
 of type NonCondensing. Because it is much easier to remember names of
 cell types than keeping track which cell type corresponds to which
-number SteppableBasePy provides very convenient member variables
+number ``SteppableBasePy`` provides very convenient member variables
 denoting cell type numbers. The name of such variable is obtained by
 capitalizing all letters in the name of the cell type and prepending if
 with self. In our example we will have 3 such variables ``self.MEDIUM``,
 ``self.CONDENSING``, ``self.NONCONDENSING`` with values ``0``, ``1``, ``2`` respectively.
 
-IMPORTANT: To ensure that cell type names are correctly translated into
-Python class variables avoid using spaces in cell type name.
+.. note::
+
+   To ensure that cell type names are correctly translated into Python class variables avoid using spaces in cell type name.
 
 Consequently,
 
@@ -106,7 +111,7 @@ is equivalent to
 
 .. code-block:: python
 
-    cell.type=1
+    cell.type = 1
 
 but the former makes the code more readable. After assigning cell type
 all that remains is to initialize lattice sites using newly created cell
@@ -116,18 +121,18 @@ The syntax which assigns cell object to 25 lattice sites
 
 .. code-block:: python
 
-    self.cellField[10:14, 10:14, 0] = cell
+    self.cell_field[10:14, 10:14, 0] = cell
 
-is based on Numpy syntax. ``self.cellField`` is a pointer to a C++ lattice
-which stores pointers to cell objects. In this example our cell is a 5x5
-square collection of pixels. Notice that the 10:14 has 5 elements because
+is based on Numpy syntax. ``self.cell_field`` is a pointer to a C++ lattice
+which stores pointers to cell objects. In this example our cell is a ``5x5``
+square collection of pixels. Notice that the ``10:14`` has 5 elements because
 the both the lower and the upper limits are included in the range. As
 you can probably tell, ``self.cellField`` is member of ``SteppableBasePy``. To
 access cell object occupying lattice site, ``x``, ``y``, ``z``, we type:
 
 .. code-block:: python
 
-    cell=self.cellField[x,y,z]
+    cell=self.cell_field[x,y,z]
 
 The way we access cell field is very convenient and should look familiar
 to anybody who has used Matlab, Octave or Numpy.
@@ -137,14 +142,14 @@ to remember is that we have to add PixelTracker Plugin to CC3DML (in
 case you forget this CC3D will throw error message informing you that you
 need to add this plugin).
 
-The following snippet will erase all cells of type Condensing:
+The following snippet will erase all cells of type ``Condensing``:
 
 .. code-block:: python
 
     def step(self, mcs):
-        for cell in self.cellList:
+        for cell in self.cell_list:
             if cell.type == self.CONDENSING:
-                self.deleteCell(cell)
+                self.delete_cell(cell)
 
 
 We use member function of ``SteppableBasePy`` – ``deleteCell`` where the first
