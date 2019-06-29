@@ -197,11 +197,11 @@ effect on the simulation.
 Let’s rephrase it again because this is the essence of Python scripting
 inside CC3D - each steppable will contain by default 3 functions:
 
-1) start(self)
+#. ``start(self)``
 
-2) step(self,mcs)
+#. ``step(self,mcs)``
 
-3) finish(self)
+#. ``finish(self)``
 
 Those 3 functions are imported , via inheritance, from ``SteppableBasePy``.
 The nice feature of inheritance is
