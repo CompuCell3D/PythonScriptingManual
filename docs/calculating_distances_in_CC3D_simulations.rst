@@ -36,61 +36,62 @@ cells or between any 3D points:
 
 .. code-block:: python
 
+
+
+
     class CellDistanceSteppable(SteppableBasePy):
 
-        def __init__(self,_simulator,_frequency=1):
-            SteppableBasePy.__init__(self,_simulator,_frequency)
-            self.cellA=None
-            self.cellB=None
+        def __init__(self, frequency=1):
+            SteppableBasePy.__init__(self, frequency)
+            self.cellA = None
+            self.cellB = None
+
         def start(self):
-            self.cellA=self.potts.createCell()
-            self.cellA.type=self.A
-            self.cellField[10:12,10:12,0]=self.cellA
+            self.cellA = self.potts.createCell()
+            self.cellA.type = self.A
+            self.cell_field[10:12, 10:12, 0] = self.cellA
 
-            self.cellB=self.potts.createCell()
-            self.cellB.type=self.B
-            self.cellField[92:94,10:12,0]=self.cellB
+            self.cellB = self.potts.createCell()
+            self.cellB.type = self.B
+            self.cell_field[92:94, 10:12, 0] = self.cellB
 
-        def step(self,mcs):
+        def step(self, mcs):
+            dist_vec = self.invariant_distance_vector_integer(p1=[10, 10, 0], p2=[92, 12, 0])
 
-            distVec=self.invariantDistanceVectorInteger(_from=[10,10,0] ,_to=[92,12,0])
-            print 'distVec=',distVec, ' norm=',self.vectorNorm(distVec)
+            print('dist_vec=', dist_vec, ' norm=', self.vector_norm(dist_vec))
 
-            distVec=self.invariantDistanceVector(_from=[10,10,0] ,_to=[92.3,12.1,0])
-            print 'distVec=',distVec, ' norm=',self.vectorNorm(distVec)
+            dist_vec = self.invariant_distance_vector(p1=[10, 10, 0], p2=[92.3, 12.1, 0])
+            print('dist_vec=', dist_vec, ' norm=', self.vector_norm(dist_vec))
 
-            print 'distance invariant='\
-            ,self.invariantDistance(_from=[10,10,0] ,_to=[92.3,12.1,0])
+            print('distance invariant=', self.invariant_distance(p1=[10, 10, 0], p2=[92.3, 12.1, 0]))
 
-            print 'distance =',self.distance(_from=[10,10,0] ,_to=[92.3,12.1,0])
+            print('distance =', self.distance(p1=[10, 10, 0], p2=[92.3, 12.1, 0]))
 
-            print 'distance vector between cells ='\
-            ,self.distanceVectorBetweenCells(self.cellA,self.cellB)
-            print 'inv. vec between cells ='\
-            ,self.invariantDistanceVectorBetweenCells(self.cellA,self.cellB)
-            print 'distanceBetweenCells = ',self.distanceBetweenCells(self.cellA,self.cellB)
-            print 'invariantDistanceBetweenCells = ',\
-            self.invariantDistanceBetweenCells(self.cellA,self.cellB)
+            print('distance vector between cells =', self.distance_vector_between_cells(self.cellA, self.cellB))
+            print('invariant distance vector between cells =',
+                  self.invariant_distance_vector_between_cells(self.cellA, self.cellB))
+            print('distanceBetweenCells = ', self.distance_between_cells(self.cellA, self.cellB))
+            print('invariantDistanceBetweenCells = ', self.invariant_distance_between_cells(self.cellA, self.cellB))
 
 In the start function we create two cells – ``self.cellA`` and ``self.cellB``.
 In the step function we calculate invariant distance vector between two
-points using ``self.invariantDistanceVectorInteger`` function. Notice that
+points using ``self.invariant_distance_vector_integer`` function. Notice that
 the word Integer in the function name suggests that the result of this
 call will be a vector with integer components. Invariant distance vector
 is a vector that is obtained using our shifting operations described
 earlier.
 
-The next function used inside step is ``self.vectorNorm``. It returns length
+The next function used inside step is ``self.vector_norm``. It returns length
 of the vector. Notice that we specify vectors or 3D points in space
 using ``[]`` operator. For example to specify vector, or a point with
 coordinates ``x, y, z = (10, 12, -5)`` you use the following syntax:
 
 .. code-block:: python
 
-    [10,12,-5]
+    [10, 12, -5]
 
 If we want to calculate invariant vector but with components being
-floating point numbers we use ``self.invariantDistanceVector`` function. You
+floating point numbers we use ``self.invariant_distance_vector`` function. You
 may ask why not using floating point always? The reason is that
 sometimes CC3D expects vectors/points with integer coordinates to e.g.
 access specific lattice points. By using appropriate distance functions
@@ -102,23 +103,22 @@ functions.
 
 Function self.distance calculates distance between two points in a naïve
 way. Sometimes this is all you need. Finally the set of last four calls
-``self.distanceVectorBetweenCells``,
-``self.invariantDistanceVectorBetweenCells``, ``self.distanceBetweenCells``,
-``self.invariantDistanceBetweenCells`` calculates distances and vectors
+``self.distance_vector_between_cells``,
+``self.invariant_distance_vector_between_cells``, ``self.distance_between_cells``,
+``self.invariant_distance_between_cells`` calculates distances and vectors
 between center of masses of cells. You could replace
 
 .. code-block:: python
 
-    self.invariantDistanceVectorBetweenCells(self.cellA,self.cellB)
+    self.invariant_distance_vector_between_cells(self.cellA,self.cellB)
 
 with
 
 .. code-block:: python
 
-    self.invariantDistanceVectorBetweenCells(
-        _from=[ self.cellA.xCOM, self.cellA.yCOM, self.cellA.yCOM],
-        _to=[ self.cellB.xCOM, self.cellB.yCOM, self.cellB.yCOM]
+    self.invariant_distance_vector_between(
+        p1=[ self.cellA.xCOM, self.cellA.yCOM, self.cellA.yCOM],
+        p2=[ self.cellB.xCOM, self.cellB.yCOM, self.cellB.yCOM]
      )
-
 
 but it is not hard to notice that the former is much easier to read.
