@@ -26,8 +26,8 @@ called exactly that):
 .. code-block:: python
 
     class VolumeSteeringSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=10):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
 
         def add_steering_panel(self):
             self.add_steering_param(name='target_vol', val=25, min_val=0, max_val=100, widget_name='slider')
@@ -54,15 +54,15 @@ no functionality. Panel will have just 3 entries as show below:
 
 |sliders_screenshot_1|
 
-**IMPORTANT** : you can add steering panel from multiple steppables. In such a case CC3D will gather all parameters
-you defined in the ``add_steering_panel`` function and display them in a single panel. For example, if our code has
-two steppables and we add steering parameters in both of them:
+.. note::
+
+    You can add steering panel from multiple steppables. In such a case CC3D will gather all parametersyou defined  in the ``add_steering_panel`` function and display them in a single panel. For example, if our code has two  steppables and we add steering parameters in both of them:
 
 .. code-block:: python
 
     class VolumeSteeringSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=10):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
 
         def add_steering_panel(self):
             self.add_steering_param(name='target_vol', val=25, min_val=0, max_val=100, widget_name='slider')
@@ -70,8 +70,8 @@ two steppables and we add steering parameters in both of them:
             self.add_steering_param(name='lam_vol_enum', val=2.0, min_val=0, max_val=10.0, decimal_precision=2,widget_name='slider')
 
     class SurfaceSteeringSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=10):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
 
         def add_steering_panel(self):
             #adding slider
@@ -96,8 +96,8 @@ is to implement another function in the steppable - ``process_steering_panel_dat
 .. code-block:: python
 
     class VolumeSteeringSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=10):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
 
         def add_steering_panel(self):
             self.add_steering_param(name='target_vol', val=25, min_val=0, max_val=100, widget_name='slider')
@@ -108,28 +108,29 @@ is to implement another function in the steppable - ``process_steering_panel_dat
             target_vol = self.get_steering_param('target_vol')
             lambda_vol = self.get_steering_param('lambda_vol')
 
-            for cell in self.cellList:
+            for cell in self.cell_list:
 
                 cell.targetVolume = target_vol
                 cell.lambdaVolume = lambda_vol
 
 
-Inside ``process_steering_panel_data`` (the function has to be called exactly that) we read the current value indicated
-in the steering panel using convenience function ``get_steering_param`` . In our example we are reading
+Inside ``process_steering_panel_data`` (the function has to be called exactly that) we read the current value
+indicated in the steering panel using convenience function ``get_steering_param`` . In our example we are reading
 two parameter values from the panel -``target_val`` and ``lambda_val``. Once we fetched the values from the panel
 we iterate over all cells and modify ``targetVolume`` and ``lambdaVolume`` parameters of every cell.
 
-**Important**: ``process_steering_panel_data`` gets called only when the user modified the values in the steering panel by
-either moving a slider, changing entry in the pull-down list or changing the parameter value using text field. This means
-that potentially expensive loops that alter parameters are not executed every MCS but only if panel entries have changed.
-you can manually check if the panel values have changed by adding to your code steppable's convenience function
-``steering_param_dirty()``. You do not have to do that but just in case you would like to get a flag indicating whether
-panel has change or not all that's required is simple code like that:
+**Important**: ``process_steering_panel_data`` gets called only when the user modified the values in the
+steering panel by either moving a slider, changing entry in the pull-down list or changing the parameter value
+using text field. This means
+that potentially expensive loops that alter parameters are not executed every MCS but only if panel entries have
+changed. you can manually check if the panel values have changed by adding to your code steppable's
+convenience function ``steering_param_dirty()``. You do not have to do that but just in case you would like to get
+flag indicating whether panel has change or not all that's required is simple code like that:
 
 .. code-block:: python
 
     def process_steering_panel_data(self):
-        print 'all dirty flag=', self.steering_param_dirty()
+        print('all dirty flag=', self.steering_param_dirty())
 
 
 As you can see by adding two functions to the steppable - ``add_steering_panel`` and  ``process_steering_panel_data`` you
@@ -137,8 +138,8 @@ can create truly interactive simulations where you can have a direct control ove
 can be especially useful in the exploratory phases of your model building where you want to quickly see what impact a
 given parameter has on the overall simulation.
 
-**IMPORTANT** . You can simplify setting up of interactive steering using Twedit Python helpers menu. Simply, go to
-``CC3D Python -> Steering Panel`` menu and choose ``1. Setup Steering Panel`` option:
+**IMPORTANT** . You can simplify setting up of interactive steering using Twedit Python helpers menu.
+Simply, go to ``CC3D Python -> Steering Panel`` menu and choose ``1. Setup Steering Panel`` option:
 
 |twedit_steering_panel|
 
