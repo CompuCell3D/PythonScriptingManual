@@ -25,15 +25,15 @@ The solution is to use the following function
 
 .. code-block:: python
 
-    self.areCellsDifferent(cell1,cell2)
+    self.are_cells_different(cell1,cell2)
 
 or write your own Python function that would do the same:
 
 .. code-block:: python
 
-    def areCellsDifferent(self,_cell1,_cell2):
-        if (_cell1 and _cell2 and _cell1.this!=_cell2.this) or\
-           (not _cell1 and _cell2) or (_cell1 and not _cell2):
+    def are_cells_different(self, cell1, cell2):
+        if (cell1 and cell2 and cell1.this != cell2.this) or\
+           (not cell1 and cell2) or (cell1 and not cell2):
             return 1
         else:
             return 0

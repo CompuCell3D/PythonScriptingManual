@@ -29,11 +29,11 @@ a cell and how to implement cell differentiation (changing cell type):
 .. code-block:: python
 
     class TypeSwitcherAndVolumeParamSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=100):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self, frequency=100):
+            SteppableBasePy.__init__(self, frequency)
 
         def start(self):
-            for cell in self.cellList:
+            for cell in self.cell_list:
                 if cell.type == 1:
                     cell.targetVolume = 25
                     cell.lambdaVolume = 2.0
@@ -42,7 +42,7 @@ a cell and how to implement cell differentiation (changing cell type):
                     cell.lambdaVolume = 2.0
 
         def step(self, mcs):
-            for cell in self.cellList:
+            for cell in self.cell_list:
                 if cell.type == 1:
                     cell.type = 2
                 elif cell.type == 2:
@@ -61,7 +61,6 @@ from:
        <TargetVolume>25</TargetVolume>
        <LambdaVolume>2.0</LambdaVolume>
     </Plugin>
-
 
 to
 
