@@ -31,16 +31,21 @@ demonstrates how to change number of CPUs used by the simulation:
 
 .. code-block:: python
 
+    from cc3d.core.PySteppables import *
+
+
     class DynamicNumberOfProcessorsSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=1):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+
+        def __init__(self, frequency=1):
+            SteppableBasePy.__init__(self, frequency)
 
         def step(self, mcs):
             if mcs == 10:
-                self.resizeAndShiftLattice(_newSize=(400, 400, 1), _shiftVec=(100, 100, 0))
+                self.resize_and_shift_lattice(new_size=(400, 400, 1), shift_vec=(100, 100, 0))
 
             if mcs == 100:
-                self.changeNumberOfWorkNodes(8)
+                self.change_number_of_work_nodes(8)
+
 
 At ``MCS = 10`` we resize the lattice and shift its content and at ``MCS = 100`` we
 change number of CPU’s to 8. Actually what we do here is we chane number

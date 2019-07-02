@@ -12,14 +12,22 @@ implementation of the step function where we visit cell neighbors:
 
 .. code-block:: python
 
-    def step(self, mcs):
-        for cell in self.cellList:
-            print "*********NEIGHBORS OF CELL WITH ID ", cell.id,
-            for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
-                if neighbor:
-                    print "neighbor.id", neighbor.id, " commonSurfaceArea=", commonSurfaceArea
-                else:
-                    print "Medium commonSurfaceArea=", commonSurfaceArea
+    from cc3d.core.PySteppables import *
+
+
+    class NeighborTrackerPrinterSteppable(SteppableBasePy):
+        def __init__(self, frequency=100):
+            SteppableBasePy.__init__(self, frequency)
+
+        def step(self, mcs):
+
+            for cell in self.cell_list:
+
+                for neighbor, common_surface_area in self.get_cell_neighbor_data_list(cell):
+                    if neighbor:
+                        print("neighbor.id", neighbor.id, " common_surface_area=", common_surface_area)
+                    else:
+                        print("Medium common_surface_area=", common_surface_area)
 
 In the outer for loop we iterate over all cells. During each iteration
 this loop picks a single cell. For each such cell we construct the inner
@@ -27,7 +35,7 @@ loop where we access a list of cell neighbors:
 
 .. code-block:: python
 
-    for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
+    for neighbor, common_surface_area in self.get_cell_neighbor_data_list(cell):
 
 Notice that during each iteration loop Python returns two objects:
 neighbor and common surface area. neighbor points to a cell object that
@@ -38,23 +46,23 @@ Take a look at the if-else statement in the example code above. If you
 want to paste neighbor iteration code template into your simulation go
 to ``CC3D Python->Visit->Cell Neighbors`` in Twedit++.
 
-If you are puzzled why loop above has two variables after ``for`` it is because ``self.getCellNeighborDataList(cell)``
+If you are puzzled why loop above has two variables after ``for`` it is because ``self.get_cell_neighbor_data_list(cell)``
 object when iterated over will return tuples of two objects. Let's do an experiment:
 
 .. code-block:: python
 
-    for neighbor_tuple in self.getCellNeighborDataList(cell):
+    for neighbor_tuple in self.get_cell_neighbor_data_list(cell):
         print neighbor_tuple
         if neighbor_tuple[0]:
-            print 'Cell id = ', neighbor_tuple[0].id
+            print('Cell id = ', neighbor_tuple[0].id)
         else:
-            print 'Got Medium Cell '
-        print 'Common Surface Area = ', neighbor_tuple[1]
+            print('Got Medium Cell ')
+        print('Common Surface Area = ', neighbor_tuple[1])
 
 
 The output will be:
 
-.. code-block:: bash
+.. code-block:: console
 
     neighbor_tuple= (<CompuCell.CellG; proxy of <Swig Object of type 'std::vector< CompuCell3D::CellG * >::value_type' at 0x0000000007388EA0> >, 5)
     Cell id =  11
@@ -72,69 +80,69 @@ loop. You can either use
 
 .. code-block:: python
 
-    for neighbor_tuple in self.getCellNeighborDataList(cell):
-        print neighbor_tuple[0],neighbor_tuple[1]
+    for neighbor_tuple in self.get_cell_neighbor_data_list(cell):
+        print(neighbor_tuple[0], neighbor_tuple[1])
 
 and refer to to the elements of the returned tuple using indices or you can be more explicit and ``unpack`` the tuple
 directly into two variables and access them by different "names":
 
 .. code-block:: python
 
-    for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
-        print neighbor, commonSurfaceArea
+    for neighbor, common_surface_area in self.get_cell_neighbor_data_list(cell):
+        print neighbor, common_surface_area
 
 
 Neighbor Iteration Helpers
 --------------------------
 
 In addition to a plain-vanilla iteration over neighbors the ``CellNeighborDataList`` object that you get using
-``self.getCellNeighborDataList(cell)`` has few useful tools that summarize properties of cell neighbors.
+``self.get_cell_neighbor_data_list(cell)`` has few useful tools that summarize properties of cell neighbors.
 
 Common Surface Area With Cells of Given Types
 ----------------------------
 
 Sometimes we are interested in a common surface area of a given ``cell`` with ALL neighbors that are of specific type.
-``CellNeighborDataList`` has a convenience function ``commonSurfaceAreaWithCellTypes`` that computes it. Here is an example
+``CellNeighborDataList`` has a convenience function ``common_surface_area_with_cell_types`` that computes it. Here is an example
 
 .. code-block:: python
 
-    for cell in self.cellList:
-        neighborList = self.getCellNeighborDataList(cell)
-        common_area_with_types = neighborList.commonSurfaceAreaWithCellTypes(cell_type_list=[1, 2])
+    for cell in self.cell_list:
+        neighbor_list = self.get_cell_neighbor_data_list(cell)
+        common_area_with_types = neighbor_list.common_surface_area_with_cell_types(cell_type_list=[1, 2])
         print 'Common surface of cell.id={} with cells of types [1,2] = {}'.format(cell.id, common_area_with_types)
 
 The example output is:
 
-.. code-block:: bash
+.. code-block:: console
 
     Common surface of cell.id=10 with cells of types [1,2] = 24
     Common surface of cell.id=11 with cells of types [1,2] = 22
 
-As you can see ``commonSurfaceAreaWithCellTypes`` returns a number that is a total common surtface area of a given cell
-with other cells of the type that you specify as argument to ``commonSurfaceAreaWithCellTypes`` function as shown above
+As you can see ``common_surface_area_with_cell_types`` returns a number that is a total common surface area of a given cell
+with other cells of the type that you specify as argument to ``common_surface_area_with_cell_types`` function as shown above
 
 
-Common Surface Area With Cells of a Given Type - Detailed view
-----------------------------
+Common Surface Area With Cells of a Given Type - Detailed View
+--------------------------------------------------------------
 
 If you want to break the above common surface area by cell types. i.e. you want to know what was the common
 surface area with cells of type 1, what was the common surface area with cells of type 2, *etc...*, you want to use
-``neighborList.commonSurfaceAreaByType()`` call :
+``neighbor_list.common_surface_area_by_type()`` call :
 
 .. code-block:: python
 
     for cell in self.cellList:
-        neighborList = self.getCellNeighborDataList(cell)
-        common_area_with_types = neighborList.commonSurfaceAreaWithCellTypes(cell_type_list=[1, 2])
+        neighbor_list = self.get_cell_neighbor_data_list(cell)
+        common_area_with_types = neighbor_list.common_surface_area_with_cell_types(cell_type_list=[1, 2])
         print 'Common surface of cell.id={} with cells of types [1,2] = {}'.format(cell.id, common_area_with_types)
 
-        common_area_by_type_dict = neighborList.commonSurfaceAreaByType()
+        common_area_by_type_dict = neighbor_list.common_surface_area_by_type()
         print 'Common surface of cell.id={} with neighbors \ndetails {}'.format(cell.id, common_area_by_type_dict)
 
 
 The output may look as follows:
 
-.. code-block:: bash
+.. code-block:: console
 
     Common surface of cell.id=10 with cells of types [1,2] = 20
     Common surface of cell.id=10 with neighbors
@@ -166,32 +174,32 @@ However if we replaced
 
 .. code-block:: python
 
-    common_area_with_types = neighborList.commonSurfaceAreaWithCellTypes(cell_type_list=[1, 2])
+    common_area_with_types = neighbor_ist.common_surface_area_with_cell_types(cell_type_list=[1, 2])
 
 with
 
 .. code-block:: python
 
-    common_area_with_types = neighborList.commonSurfaceAreaWithCellTypes(cell_type_list=[0, 1, 2])
+    common_area_with_types = neighbor_list.common_surface_area_with_cell_types(cell_type_list=[0, 1, 2])
 
-all the surfaced areas for cell with ``id=1`` woudl add up as they did for cells with ``id=10``
+all the surfaced areas for cell with ``id=1`` would add up as they did for cells with ``id=10``
 
 
 Counting Neighbors of Particular Type
 -------------------------------------
 
 If you want to know how many neighbors of a given type a given cell has you can do "manual" iteration of all neighbors
-and keep track of how many of them were of a particular type or you can use a convenience function ``neighborCountByType``.
-``neighborCountByType`` will return a dicitonary where the key is a type io the neighbor and the value is
+and keep track of how many of them were of a particular type or you can use a convenience function ``neighbor_count_by_type``.
+``neighbor_count_by_type`` will return a dicitonary where the key is a type io the neighbor and the value is
 how many neighbors of this type are in contact with a given cell
 
 Here is an example:
 
 .. code-block:: python
 
-    for cell in self.cellList:
-        neighborList = self.getCellNeighborDataList(cell)
-        neighbor_count_by_type_dict = neighborList.neighborCountByType()
+    for cell in self.cell_list:
+        neighbor_list = self.get_cell_neighbor_data_list(cell)
+        neighbor_count_by_type_dict = neighbor_list.neighbor_count_by_type()
         print 'Neighbor count for cell.id={} is {}'.format(cell.id, neighbor_count_by_type_dict)
 
 
