@@ -10,10 +10,9 @@ MCS – as code snippet below shows:
 
     from cellsortingSteppables import cellsortingSteppable
 
-    steppableInstance = cellsortingSteppable(sim, _frequency=1)
-    steppableRegistry.registerSteppable(steppableInstance)
+    CompuCellSetup.register_steppable(steppable=cellsortingSteppable(frequency=1))
 
-We can change ``_frequency`` argument to any non-negative value ``N`` to ensure
+We can change ``frequency`` argument to any non-negative value ``N`` to ensure
 that our steppable gets called every ``N`` MCS.
 
 Sometimes in the simulation it may happen that initially you want to
@@ -42,7 +41,7 @@ code (``CC3D Python->Simulation->Stop Simulation``)
 
 .. code-block:: python
 
-    self.stopSimulation()
+    self.stop_simulation()
 
 anywhere in the steppable and after this call simulation will get
 stopped.
@@ -54,6 +53,6 @@ In this case you use (``CC3D Python->Simulation->SetMaxMCS``)
 
 .. code-block:: python
 
-    self.setMaxMCS(100000)
+    self.set_max_mcs(100000)
 
 to extend simulation to 100000 MCS.
