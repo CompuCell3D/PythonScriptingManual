@@ -33,7 +33,7 @@ as follows:
 .. code-block:: python
 
     def start(self):
-        self.buildWall(self.WALL)
+        self.build_wall(self.WALL)
 
 If you go to ``CC3D Python->Simulation`` menu in Twedit++ you will find
 shortcut that will paste appropriate code snippet to build wall.
