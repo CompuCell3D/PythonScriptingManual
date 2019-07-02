@@ -132,15 +132,13 @@ manually set ``parent`` and ``child`` properties could look like that:
 .. code-block:: python
 
     def updateAttributes(self):
-        parent_cell = self.mitosisSteppable.parentCell
-        child_cell = self.mitosisSteppable.childCell
 
-        child_cell.targetVolume = parentCell.targetVolume
-        child_cell.lambdaVolume = parentCell.lambdaVolume
-        if parent_cell.type == self.CONDENSING:
-            child_cell.type = self.NONCONDENSING
+        self.child_cell.targetVolume = self.parent_ell.targetVolume
+        self.child_cell.lambdaVolume = self.parent_ell.lambdaVolume
+        if self.parent_cell.type == self.CONDENSING:
+            self.child_cell.type = self.NONCONDENSING
         else:
-            child_cell.type = self.CONDENSING
+            self.child_cell.type = self.CONDENSING
 
 .. note::
     It is important to divide cells outside the loop where we iterate over entire cell inventory. If we keep dividing cells in this loop we are adding elements to the list over which we iterate over and this might have unwanted side effects. The solution is to use use list of cells to divide as we did in the example.
