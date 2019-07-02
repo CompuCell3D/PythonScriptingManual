@@ -10,7 +10,7 @@ basis. Here let us concentrate on a situation where we apply force to
 individual cells and how change its value and the direction. You can
 check simulation code in ``Demos/CompuCellPythonTutorial/CellMotility``.
 To be able to use force in our simulation ( we need to include
-``ExternalPotential Plugin`` in the CC3DML:
+``ExternalPotential`` plugin in the CC3DML:
 
 .. code-block:: xml
 
@@ -23,35 +23,38 @@ Let us look at the steppable code:
     from random import uniform
 
     class CellMotilitySteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=10):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
 
         def start(self):
-            print "This function is called once before simulation"
 
             # iterating over all cells in simulation
-            for cell in self.cellList:
+            for cell in self.cell_list:
                 break
                 # Make sure ExternalPotential plugin is loaded
                 # negative lambdaVecX makes force point in the positive direction
-                cell.lambdaVecX = 10.1 * uniform(-0.5, 0.5)  # force component along X axis
-                cell.lambdaVecY = 10.1 * uniform(-0.5, 0.5)  # force component along Y axis
+                # force component along X axis
+                cell.lambdaVecX = 10.1 * uniform(-0.5, 0.5)
+                # force component along Y axis
+                cell.lambdaVecY = 10.1 * uniform(-0.5, 0.5)
                 #         cell.lambdaVecZ=0.0 # force component along Z axis
 
         def step(self, mcs):
 
-            for cell in self.cellList:
-                cell.lambdaVecX = 10.1 * uniform(-0.5, 0.5)  # force component along X axis
-                cell.lambdaVecY = 10.1 * uniform(-0.5, 0.5)  # force component along Y axis
+            for cell in self.cell_list:
+                # force component along X axis
+                cell.lambdaVecX = 10.1 * uniform(-0.5, 0.5)
+                # force component along Y axis
+                cell.lambdaVecY = 10.1 * uniform(-0.5, 0.5)
 
 
 Once ``ExternalPotential`` plugin has been loaded we assign a constant force
 in a given direction by initializing ``lambdaVecX``, ``lambdaVecY``, ``lambdaVecZ``
 cell attributes.
 
-**Remark**: when pushing cell along X axis toward higher X values (i.e.
-to the right) use ``lambdaVecX`` negative. When pushing to the left use
-positive values.
+.. note::
+
+    When pushing cell along X axis toward higher X values (i.e. to the right) use ``lambdaVecX`` negative. When pushing to the left use positive values.
 
 In the start function we assign random values of ``X`` and ``Y`` components of
 the force. The ``uniform(-0.5, 05)`` function from the Python random module
