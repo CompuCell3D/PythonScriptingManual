@@ -56,7 +56,7 @@ no functionality. Panel will have just 3 entries as show below:
 
 .. note::
 
-    You can add steering panel from multiple steppables. In such a case CC3D will gather all parametersyou defined  in the ``add_steering_panel`` function and display them in a single panel. For example, if our code has two  steppables and we add steering parameters in both of them:
+    You can add steering panel from multiple steppables. In such a case CC3D will gather all parameters you defined  in the ``add_steering_panel`` function and display them in a single panel. For example, if our code has two  steppables and we add steering parameters in both of them:
 
 .. code-block:: python
 
@@ -138,7 +138,7 @@ can create truly interactive simulations where you can have a direct control ove
 can be especially useful in the exploratory phases of your model building where you want to quickly see what impact a
 given parameter has on the overall simulation.
 
-**IMPORTANT** . You can simplify setting up of interactive steering using Twedit Python helpers menu.
+**Important** . You can simplify setting up of interactive steering using Twedit Python helpers menu.
 Simply, go to ``CC3D Python -> Steering Panel`` menu and choose ``1. Setup Steering Panel`` option:
 
 |twedit_steering_panel|
