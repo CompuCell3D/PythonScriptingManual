@@ -208,7 +208,7 @@ image.
 We construct file_name in such a way that it contains MCS in it.
 The image file will be written in the simulation outpt directory.
 Finally, for any plot we can output plotted data in the form of a text
-file. All we need to do is to call ``savePlotAsData`` from the plot windows
+file. All we need to do is to call ``save_plot_as_data`` from the plot windows
 object:
 
 .. code-block:: python
