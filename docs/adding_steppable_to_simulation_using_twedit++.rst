@@ -23,7 +23,7 @@ the main Python script:
 
 .. code-block:: python
 
-    from cellsortingSteppables import MyNewSteppable
+   from cellsortingSteppables import MyNewSteppable
    CompuCellSetup.register_steppable(steppable=MyNewSteppable(frequency=1))
 
 .. |image7| image:: images/image8.jpeg
