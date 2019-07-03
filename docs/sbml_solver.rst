@@ -32,59 +32,61 @@ Let us look at the example steppable that uses SBML Solver:
 
 .. code-block:: python
 
-    class SBMLSolverSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=1):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+   from cc3d.core.PySteppables import *
 
-        def start(self):
 
-            # adding options that setup SBML solver integrator - these are optional
-            options = {'relative': 1e-10, 'absolute': 1e-12, 'steps': 10, 'stiff':False}
-            self.setSBMLGlobalOptions(options)
+   class SBMLSolverSteppable(SteppableBasePy):
+       def __init__(self, frequency=1):
+           SteppableBasePy.__init__(self, frequency)
 
-            modelFile = 'Simulation/test_1.xml'
+       def start(self):
+           # adding options that setup SBML solver integrator
+           # these are optional but useful when encountering integration instabilities
 
-            initialConditions = {}
-            initialConditions['S1'] = 0.00020
-            initialConditions['S2'] = 0.000002
+           options = {'relative': 1e-10, 'absolute': 1e-12}
+           self.set_sbml_global_options(options)
 
-            self.addSBMLToCellIds(_modelFile=modelFile, _modelName='dp',
-                                  _ids=range(1, 11), _stepSize=0.5,
-                                  _initialConditions=initialConditions)
+           model_file = 'Simulation/test_1.xml'
 
-            self.addFreeFloatingSBML(_modelFile=modelFile, _modelName='Medium_dp',
-                                     _stepSize=0.5, _initialConditions=initialConditions)
+           initial_conditions = {}
+           initial_conditions['S1'] = 0.00020
+           initial_conditions['S2'] = 0.000002
 
-            self.addFreeFloatingSBML(_modelFile=modelFile, _modelName='Medium_dp1',
-                                     _stepSize=0.5, _initialConditions=initialConditions)
+           self.add_sbml_to_cell_ids(model_file=model_file, model_name='dp',
+           cell_ids=list(range(1, 11)), step_size=0.5, initial_conditions=initial_conditions)
 
-            self.addFreeFloatingSBML(_modelFile=modelFile, _modelName='Medium_dp2')
-            self.addFreeFloatingSBML(_modelFile=modelFile, _modelName='Medium_dp3')
-            self.addFreeFloatingSBML(_modelFile=modelFile, _modelName='Medium_dp4')
+           self.add_free_floating_sbml(model_file=model_file, model_name='Medium_dp', step_size=0.5,
+                                       initial_conditions=initial_conditions)
+           self.add_free_floating_sbml(model_file=model_file, model_name='Medium_dp1', step_size=0.5,
+                                       initial_conditions=initial_conditions)
 
-            cell20 = self.attemptFetchingCellById(20)
+           self.add_free_floating_sbml(model_file=model_file, model_name='Medium_dp2')
+           self.add_free_floating_sbml(model_file=model_file, model_name='Medium_dp3')
+           self.add_free_floating_sbml(model_file=model_file, model_name='Medium_dp4')
 
-            self.addSBMLToCell(_modelFile=modelFile, _modelName='dp', _cell=cell20)
+           cell_20 = self.fetch_cell_by_id(20)
 
-        def step(self, mcs):
+           self.add_sbml_to_cell(model_file=model_file, model_name='dp', cell=cell_20)
 
-            self.timestepSBML()
+       def step(self, mcs):
+           self.timestep_sbml()
 
-            cell10 = self.inventory.attemptFetchingCellById(10)
-            print 'cell=', cell10
+           cell_20 = self.fetch_cell_by_id(20)
+           print('cell_20, dp=', cell_20.sbml.dp.values())
 
-            speciesDict = self.getSBMLState(_modelName='Medium_dp2')
-            print 'speciesDict=', speciesDict.values()
+           print('Free Floating Medium_dp2', self.sbml.Medium_dp2.values())
+           if mcs == 3:
+               Medium_dp2 = self.sbml.Medium_dp2
+               Medium_dp2['S1'] = 10
+               Medium_dp2['S2'] = 0.5
 
-            state = {}
-            state['S1'] = 10
-            state['S2'] = 0.5
-            if mcs == 3:
-                self.setSBMLState('Medium_dp2', _state=state)
+           if mcs == 5:
+               self.delete_sbml_from_cell_ids(model_name='dp', cell_ids=list(range(1, 11)))
 
-            if mcs == 7:
-                cell25 = self.inventory.attemptFetchingCellById(25)
-                self.copySBMLs(_fromCell=cell10, _toCell=cell25)
+           if mcs == 7:
+               cell_25 = self.fetch_cell_by_id(25)
+               self.copy_sbml_simulators(from_cell=cell_20, to_cell=cell_25)
+
 
 
 In the start function we specify path to the SBML model (here we use
@@ -97,89 +99,89 @@ respectively:
 
 .. code-block:: python
 
-    modelFile = 'Simulation/test_1.xml'
-    initialConditions = {}
-    initialConditions['S1'] = 0.00020
-    initialConditions['S2'] = 0.000002
+   model_file = 'Simulation/test_1.xml'
+   initial_conditions = {}
+   initial_conditions['S1'] = 0.00020
+   initial_conditions['S2'] = 0.000002
 
 
-**Remark:** We can initialize each SBML Solver using different initial
-conditions. When we forget to specify initial conditions the SBML code
-usually has initial conditions defined and they will be used as starting
-values.
+.. note::
 
-Before we discuss ``addSBMLToCellIds`` function let us focus on statements
+   We can initialize each SBML Solver using different initial conditions. When we forget to specify initial conditions the SBML code usually has initial conditions defined and they will be used as starting values.
+
+Before we discuss ``add_sbml_to_cell_ids`` function let us focus on statements
 that open the start function:
 
 .. code-block:: python
 
-    options = {'relative': 1e-10, 'absolute': 1e-12, 'steps': 10,'stiff': False}
-    self.setSBMLGlobalOptions(options)
+   options = {'relative': 1e-10, 'absolute': 1e-12}
+   self.set_sbml_global_options(options)
 
 We set here SBML integrator options. These statements are optional,
 however when your SBML model crashes with e.g. CVODE error, it often
 means that your numerical tolerances (relative and absolute) or number
 of integration steps in each integration interval (steps) should be
 changed. Additionally you may want to enable stiff ODE solver by setting
-stiff to ``True``.
+stiff to ``True``:
 
-After we define options dictionary we inform CC3D to use these settings
+.. code-block:: python
+
+   options = {'relative': 1e-10, 'absolute': 1e-12, 'stiff': False}
+   self.set_sbml_global_options(options)
+
+
+After defining options dictionary we inform CC3D to use these settings
 . We do it by using as shown above. A thing to remember that new options
 will apply to all SBML model that were added after calling
-``setSBMLGlobalOptions``. This means that usually you want to ensure that
+``set_sbml_global_options``. This means that usually you want to ensure that
 SBML integration optin setting should be first thing you do in your
 Python steppable file. If you want ot retrieve options simply type:
 
 .. code-block:: python
 
-    options = self.getSBMLGlobalOptions()
+    options = self.get_sbml_global_options()
 
 notice that options can be None indicating that options have not been
 set (this is fine) and the default SBML integrator options will be
 applied.
 
-Let us see how we associate SBML model with several cells:
+Let us see how we associate SBML model with several cells using ``add_sbml_to_cell_ids``:
 
 .. code-block:: python
 
-    self.addSBMLToCellIds(_modelFile=modelFile, _modelName='dp',
-                          _ids=range(1, 11), _stepSize=0.5,
-                          _initialConditions=initialConditions)
-
+   self.add_sbml_to_cell_ids(model_file=model_file, model_name='dp',
+   cell_ids=list(range(1, 11)), step_size=0.5, initial_conditions=initial_conditions)
 
 This function looks relatively simple but it does quite a lot if you
 look under the hood. The first argument is path to SBML models file. The
-second one is model alias - it is a name you choose for model. It is
-arbitrary model identifier that you use to retrieve model values. The
-name of the function is ``addSBMLToCellIds`` and the third argument is a
+second one is model alias - it is a name you choose for model. It is an
+arbitrary model identifier that you use to retrieve model values. The third argument is a
 Python list that contains cell ids to which CC3D wil attach an instance
 of the SBML Solver.
 
-**Remark:** Each cell will get separate SBML solver object. SBML Solver
-objects associated with cells or free floating SBML Solvers are
-independent.
+.. note::
+   Each cell will get separate SBML solver object. SBML Solver objects associated with cells or free floating SBML Solvers are independent.
 
 The fourth argument specifies the size of the integration step – here we
-use value of 0.5 time unit. The fifth argument passes initial conditions
+use value of ``0.5`` time unit. The fifth argument passes initial conditions
 dictionary. Integration step size and initial conditions arguments are
 optional.
 
-Each SBML Solver function that associates models with a cell or adds
-free floating model calls RoadRunnerLib functions that parse SBML,
-translate it to C, compile generated C code to dynamically loaded
-library, load the library and make it ready for use. Everything happens
+Each SBMLSolver function that associates models with a cell or adds
+free floating model calls ``libroadrunner`` functions that parse SBML,
+translate it to to very fast LLVM code. Everything happens
 automatically and produces optimized solvers which are much faster than
 solvers that rely on some kind of interpreters.
 
-Next five function calls to ``self.addFreeFloatingSBML`` create instances of
-SBML Solvers which are not associated with cells but, as you can see,
+Next five function calls to ``self.add_free_floating_sbml`` create instances of
+SBML solvers which are not associated with cells but, as you can see,
 have distinct names. This is required because when we want to refer to
 such solver to extract model values we will do it using model name. The
 reason all models attached to cells have same name was that when we
 refer to such model we pass cell object and a name and this uniquely
 identifies the model. Free floating models need to have distinct names
 to be uniquely identified. Notice that last 3 calls to
-``self.addFreeFloatingSBML`` do not specify step size (we use default step
+``self.add_free_floating_sbml`` do not specify step size (we use default step
 size 1.0 time unit) nor initial conditions (we use whatever defaults are
 in the SBML code).
 
@@ -188,29 +190,24 @@ Solver object to a single cell:
 
 .. code-block:: python
 
-    cell20 = self.attemptFetchingCellById(20)
-    self.addSBMLToCell(_modelFile=modelFile, _modelName='dp', _cell=cell20)
+   cell_20 = self.fetch_cell_by_id(20)
+   self.add_sbml_to_cell(model_file=model_file, model_name='dp', cell=cell_20)
 
-
-Instead of passing list of cell ids we pass cell object (cell20).
+Instead of passing list of cell ids we pass cell object (``cell_20``).
 
 We can also associate SBML model with certain cell types using the
 following syntax:
 
 .. code-block:: python
 
-    self.addSBMLToCellTypes(_modelFile=modelFile,
-                            _modelName='dp',
-                            _types=[self.A,self.B],
-                            _stepSize=0.5,
-                            _initialConditions=initialConditions)
-
+   self.add_sbml_to_cell_types(model_file=model_file, model_name='dp', cell_types=[self.NONCONDENSING],
+                                    step_size=step_size, initial_conditions=initial_conditions)
 
 This time instead of passing list of cell ids we pass list of cell
 types.
 
 Let us move on to step function. First call we see there, is
-``self.timestepSBML``. This function carries out integration of all SBML
+``self.timestep_sbml``. This function carries out integration of all SBML
 Solver instances defined in the simulation. The integration step can be
 different for different SBML Solver instances (as shown in our example).
 
@@ -219,9 +216,7 @@ e.g.
 
 .. code-block:: python
 
-    state = self.getSBMLState(_modelName='Medium_dp2')
-    print 'state=',state.values()
-
+   print('Free Floating Medium_dp2', self.sbml.Medium_dp2.values())
 
 These functions check and print model variables for free floating model
 called ``Medium_dp2``.
@@ -230,30 +225,30 @@ The next set of function calls:
 
 .. code-block:: python
 
-    state = {}
-    state['S1'] = 10
-    state['S2'] = 0.5
-    if mcs == 3:
-        self.setSBMLState('Medium_dp2', _state=state)
-
+   if mcs == 3:
+      Medium_dp2 = self.sbml.Medium_dp2
+      Medium_dp2['S1'] = 10
+      Medium_dp2['S2'] = 0.5
 
 set new state for for free floating model called ``Medium_dp2``. If we
-wanted to retrieve state of the model dp belonging to cell object called
+wanted to print state of the model dp belonging to cell object called
 ``cell20`` we would use the following syntax:
 
 .. code-block:: python
 
-    state=self.getSBMLState(_modelName='dp', _cell=cell20)
+    print('cell_20, dp=', cell_20.sbml.dp.values())
 
 To assign new values to dp model variables for cell20 we use the
 following syntax:
 
 .. code-block:: python
 
-    state = {}
-    state['S1'] = 10
-    state['S2'] = 0.5
-    self.setSBMLState(_modelName='dp', _cell=cell20, _state=state)
+    cell_20.sbml.dp['S1'] = 10
+    cell_20.sbml.dp['S2'] = 0.5
+
+.. note::
+
+   We access free-floating SBML solved via ``self.sbml.MODEL_ALIAS`` syntax whereas SBML solvers associated with a particular cell are accessed using reference to cell objects e.g. ``cell_20.sbml.MODEL_ALIAS``
 
 Another useful operation within SBML Solver capabilities is deletion of
 models. This comes handy when at certain point in your simulation you no
@@ -263,30 +258,29 @@ syntax that deletes SBML from cell ids:
 
 .. code-block:: python
 
-    self.deleteSBMLFromCellIds(_modelName='dp', _ids=range(1,11))
+    self.delete_sbml_from_cell_ids(model_name='dp', cell_ids=list(range(1, 11)))
 
-As you probably suspect we can delete SBML Solver instance from cell
+As you probably suspect, we can delete SBML Solver instance from cell
 types:
 
 .. code-block:: python
 
-    self.deleteSBMLFromCellTypes(_modelName='dp' ,_types=range[self.A,self.B])
+    self.delete_sbml_from_cell_types(model_name='dp' ,cell_types=range[self.A,self.B])
 
 from single cell:
 
 .. code-block:: python
 
-    self.deleteSBMLFromCell(_modelName='dp',_cell=cell20)
+    self.delete_sbml_from_cell(model_name='dp',cell=cell20)
 
 or delete free floating SBML Solver object:
 
 .. code-block:: python
 
-    self.deleteFreeFloatingSBML(_modelName='Medium_dp2'))
+    self.delete_free_floating_sbml(model_name='Medium_dp2'))
 
-**Remark:** When cells get deleted all SBML Solver models are deleted
-automatically. You do not need to call deleteSBML functions in such a
-case.
+.. note::
+   When cells get deleted all SBML Solver models are deleted automatically. You do not need to call ``delete_sbml`` functions in such a case.
 
 Sometimes you may encounter a need to clone all SBML models from one
 cell to another (e.g. in the mitosis updateAttributes function where you
@@ -295,14 +289,13 @@ lets you do that very easily:
 
 .. code-block:: python
 
-    cell10 = self.inventory.attemptFetchingCellById(10)
-    cell25 = self.inventory.attemptFetchingCellById(25)
-    self.copySBMLs(_fromCell=cell10, _toCell=cell25)
+   cell_10 = self.fetch_cell_by_id(10)
+   cell_25 = self.fetch_cell_by_id(25)
+   self.copy_sbml_simulators(from_cell=cell_10, to_cell=cell_25)
 
-
-What happens here is that source cell (``_fromCell``) provides SBML Solver
+What happens here is that source cell (``from_cell``) provides SBML Solver
 object templates and based on these templates new SBML Solver objects
-are gets created and CC3D assigns them to target cell (``_toCell``). All
+are gets created and CC3D assigns them to target cell (``to_cell``). All
 the state variables in the target SBML Solver objects are the same as
 values in the source objects.
 
@@ -311,10 +304,10 @@ syntax:
 
 .. code-block:: python
 
-    cell10 = self.inventory.attemptFetchingCellById(10)
-    cell25 = self.inventory.attemptFetchingCellById(25)
-    self.copySBMLs(_fromCell=cell10, _toCell=cell25, _sbmlNames=['dp'])
 
+   cell_10 = self.fetch_cell_by_id(10)
+   cell_25 = self.fetch_cell_by_id(25)
+   self.copy_sbml_simulators(from_cell=cell_10, to_cell=cell_25, sbml_names=['dp'])
 
 As you can see there is third argument - a Python list that specifies
 which models to copy. Here we are copying only dp models. All other
@@ -367,53 +360,51 @@ Here is the code:
 
 .. code-block:: python
 
-    import random
+   from random import uniform
+   from cc3d.core.PySteppables import *
 
-    class DeltaNotchClass(SteppableBasePy):
-        def __init__(self, _simulator, _frequency):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
 
-        def start(self):
+   class DeltaNotchClass(SteppableBasePy):
+       def __init__(self, frequency=1):
+           SteppableBasePy.__init__(self, frequency)
 
-            modelFile = 'Simulation/DN_Collier.sbml'
-            self.addSBMLToCellTypes(_modelFile=modelFile, _modelName='DN',
-                                    _types=[self.TYPEA], _stepSize=0.2)
+       def start(self):
 
-            # Initial conditions
-            state = {}  # dictionary to store state veriables of the SBML model
+           # adding options that setup SBML solver integrator
+           # these are optional but useful when encounteting integration instabilities
+           options = {'relative': 1e-10, 'absolute': 1e-12}
+           self.set_sbml_global_options(options)
 
-            for cell in self.cellList:
-                state['D'] = random.uniform(0.9, 1.0)
-                state['N'] = random.uniform(0.9, 1.0)
-                self.setSBMLState(_modelName='DN', _cell=cell, _state=state)
+           model_file = 'Simulation/DN_Collier.sbml'
+           self.add_sbml_to_cell_types(model_file=model_file, model_name='DN', cell_types=[self.TYPEA], step_size=0.2)
 
-                cellDict = self.getDictionaryAttribute(cell)
-                cellDict['D'] = state['D']
-                cellDict['N'] = state['N']
+           for cell in self.cell_list:
+               dn_model = cell.sbml.DN
 
-        def step(self, mcs):
-            for cell in self.cellList:
-                D = 0.0
-                nn = 0
-                for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
-                    if neighbor:
-                        nn += 1
-                        state = self.getSBMLState(_modelName='DN', _cell=neighbor)
+               dn_model['D'] = uniform(0.9, 1.0)
+               dn_model['N'] = uniform(0.9, 1.0)
 
-                        D += state['D']
-                if nn > 0:
-                    D = D / nn
+               cell.dict['D'] = dn_model['D']
+               cell.dict['N'] = dn_model['N']
 
-                state = {}
-                state['Davg'] = D
-                self.setSBMLState(_modelName='DN', _cell=cell, _state=state)
+       def step(self, mcs):
 
-                state = self.getSBMLState(_modelName='DN', _cell=cell)
-                cellDict = self.getDictionaryAttribute(cell)
-                cellDict['D'] = D
-                cellDict['N'] = state['N']
-            self.timestepSBML()
+           for cell in self.cell_list:
+               delta_tot = 0.0
+               nn = 0
+               for neighbor, commonSurfaceArea in self.get_cell_neighbor_data_list(cell):
+                   if neighbor:
+                       nn += 1
 
+                       delta_tot += neighbor.sbml.DN['D']
+               if nn > 0:
+                   D_avg = delta_tot / nn
+
+               cell.sbml.DN['Davg'] = D_avg
+               cell.dict['D'] = D_avg
+               cell.dict['N'] = cell.sbml.DN['N']
+
+           self.timestep_sbml()
 
 In the start function we add SBML model (``Simulation/DN_Collier.sbml``) to
 all cells of type ``A`` (it is the only cell type in this simulation besides
@@ -424,9 +415,9 @@ visualization purposes – see full code in the
 ``Demos/SBMLSolverExamples/DeltaNotch``. In the step function for each
 cell we visit its neighbors and sum value of Delta in the neighboring
 cells. We divide this value by the number of neighbors (this gives
-average Delta concentration in the neighboring cells - ``Davg``). We pass
+average Delta concentration in the neighboring cells - ``D_avg``). We pass
 Davg to the SBML Solver for each cell and then carry out integration for
-the new time step. Before calling ``self.timestepSBML`` function we store
+the new time step. Before calling ``self.timestep_sbm`` function we store
 values of Delta and Notch concentration in the cell dictionary, but we
 do it for the visualization purposes only. As you can see from this
 example SBML Solver programing interface is convenient to use, not to
