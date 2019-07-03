@@ -112,6 +112,6 @@ modify your code to account for the fact that start functions of
 steppables are not called during restart.
 
 
-.. |image_saving_snapshots| image:: images/saving_snapshots.png
+.. |image_saving_snapshots| image:: images/saving_snapshot.png
    :width: 3.85655in
    :height: 3.65027in
