@@ -213,7 +213,7 @@ object:
 
 .. code-block:: python
 
-    outout_path = "HistPlots_"+str(mcs)+".txt"
+    output_path = "HistPlots_"+str(mcs)+".txt"
     self.plot_win.save_plot_as_data(output_path, CSV_FORMAT)
 
 This file will be written in the simulation output directory. You can
