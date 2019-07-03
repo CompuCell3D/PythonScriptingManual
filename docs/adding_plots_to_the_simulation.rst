@@ -191,20 +191,19 @@ code:
 When we look at the code in the ``start`` function we will see that this
 data series will be displayed using green bars.
 
-
 At the end of the steppable we output histogram plot as a png image file
 using:
 
 .. code-block:: python
-    self.plot_win.save_plot_as_png(png_output_path,1000, 1000)
 
+    self.plot_win.save_plot_as_png(png_output_path,1000, 1000)
 
 two last arguments of this function represent ``x`` and ``y`` sizes of the
 image.
 
-**Imnportant:** as of writing this manual we do not support scaling of the plot image output.
-This might change in the future releases, however we strongly recommend that you save all the data you plot
-in a separate file and post-process it in the full-featured plotting program
+.. note::
+
+   As of writing this manual we do not support scaling of the plot image output. This might change in the future releases, however we strongly recommend that you save all the data you plot in a separate file and post-process it in the full-featured plotting program
 
 We construct file_name in such a way that it contains MCS in it.
 The image file will be written in the simulation outpt directory.
@@ -213,6 +212,7 @@ file. All we need to do is to call ``savePlotAsData`` from the plot windows
 object:
 
 .. code-block:: python
+
     outout_path = "HistPlots_"+str(mcs)+".txt"
     self.plot_win.save_plot_as_data(output_path, CSV_FORMAT)
 
