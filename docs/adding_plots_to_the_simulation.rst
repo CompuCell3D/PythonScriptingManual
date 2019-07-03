@@ -205,7 +205,7 @@ image.
 
    As of writing this manual we do not support scaling of the plot image output. This might change in the future releases, however we strongly recommend that you save all the data you plot in a separate file and post-process it in the full-featured plotting program
 
-We construct file_name in such a way that it contains MCS in it.
+We construct ``file_name`` in such a way that it contains MCS in it.
 The image file will be written in the simulation outpt directory.
 Finally, for any plot we can output plotted data in the form of a text
 file. All we need to do is to call ``save_plot_as_data`` from the plot windows
