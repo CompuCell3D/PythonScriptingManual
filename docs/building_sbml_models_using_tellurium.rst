@@ -144,7 +144,7 @@ write simple export code at the end of our code:
 .. code-block:: python
 
     sbml_file = open('d:\CC3DProjects\oscilator_relax.sbml','w')
-    print >> sbml_file,r.getSBML()
+    print(sbml_file,r.getSBML())
     sbml_file.close()
 
 
