@@ -5,105 +5,98 @@ In this appendix we present alphabetical list of member functions and
 objects of the SteppableBasePy class from which all steppables should
 inherit:
 
-**addFreeFloatingSBML** - adds free floating SBML solver object to the
+``add_free_floating_sbml`` - adds free floating SBML solver object to the
 simulation
 
-**addNewPlotWindow** - adds new plot windows to the Player display
+``add_new_plot_window`` - adds new plot windows to the Player display
 
-**addSBMLToCell** - attaches SBML solver object to individual cell
+``add_sbml_to_cell`` - attaches SBML solver object to individual cell
 
-**addSBMLToCellIds** - attaches SBML solver object to individual cells with
+``add_sbml_to_cell_ids`` - attaches SBML solver object to individual cells with
 specified ids
 
-**addSBMLToCellTypes** - attaches SBML solver object to cells with specified
+``add_sbml_to_cell_types`` - attaches SBML solver object to cells with specified
 types
 
-**adhesionFlexPlugin** - a reference to C++ AdhesionFlexPlugin object. None
+``adhesionFlexPlugin`` - a reference to C++ AdhesionFlexPlugin object. None
 if plugin not used.
 
-**areCellsDifferent** - function determining if two cell objects are indeed
+``are_cells_different`` - function determining if two cell objects are indeed
 different objects
 
-**attemptFetchingCellById** - fetches cell from cell inventory with
+``fetch_cell_by_id`` - fetches cell from cell inventory with
 specified id. Returns None if cell cannot be found.
 
-**boundaryMonitorPlugin** - a reference to C++ BoundaryMonitorPlugin object.
+``boundaryMonitorPlugin`` - a reference to C++ BoundaryMonitorPlugin object.
 None if plugin not used
 
-**boundaryPixelTrackerPlugin** - a reference to C++
+``boundaryPixelTrackerPlugin`` - a reference to C++
 BoundaryPixelTrackerPlugin object. None if plugin not used
 
-**buildWall** - builds wall of cells (They have to be of cell type which has
+``build_wall`` - builds wall of cells (They have to be of cell type which has
 Freeze attribute set in the Cell Type Plugin) around the lattice
 
-**cellField** - reference to cell field.
+``cell_field`` - reference to cell field.
 
-**cellList** - cell list. Allows iteration over all cells in the simulation
+``cell_list`` - cell list. Allows iteration over all cells in the simulation
 
-**cellListByType** - function that creates on the fly a list of cells of
+``cell_list_by_type`` - function that creates on the fly a list of cells of
 given cell types.
 
-**cellOrientationPlugin** - a reference to C++ CellOrientationPlugin object.
+``cellOrientationPlugin`` - a reference to C++ CellOrientationPlugin object.
 None if plugin not used
 
-**cellTypeMonitorPlugin** - a reference to C++ CellTypeMonitorPlugin object.
+``cellTypeMonitorPlugin`` - a reference to C++ CellTypeMonitorPlugin object.
 None if plugin not used
 
-**centerOfMassPlugin** - a reference to C++ CenterOfMassPlugin object. None
+``centerOfMassPlugin`` - a reference to C++ CenterOfMassPlugin object. None
 if plugin not used
 
-**changeNumberOfWorkNodes** - function that allows changing number of
+``change_number_of_work_nodes`` - function that allows changing number of
 worknodes use dby the simulation
 
-**checkIfInTheLattice** - convenience function that determines if 3D point
+``check_if_in_the_lattice`` - convenience function that determines if 3D point
 is within lattice boundaries
 
-**chemotaxisPlugin** - a reference to C++ ChemotaxisPlugin object. None if
+``chemotaxisPlugin`` - a reference to C++ ChemotaxisPlugin object. None if
 plugin not used
 
-**cleanDeadCells** - function that calls step function from
-VolumetrackerPlugin to remove dead cell. Advanced use only.
+``cleanDeadCells`` - function that calls step function from
+VolumetrackerPlugin to remove dead cell. Advanced use only. Deprecated in CC3D 4.x
 
-**cleaverMeshDumper** - a reference to C++ CleaverMeshDumper object. None if
-module not used. Experimental
+``cleaverMeshDumper`` - a reference to C++ CleaverMeshDumper object. None if
+module not used. Experimental. Deprecated in CC3D 4.0.0
 
-**cloneAttributes** - copies all attributes from source cell to target cell.
+``clone_attributes`` - copies all attributes from source cell to target cell.
 Typically used in mitosis. Allows specification of attributes that
 should not be copied.
 
-**cloneParent2Child** - used in mitosis plugin. Copies all parent cell
+``clone_parent_2_child`` - used in mitosis plugin. Copies all parent cell
 attributes to the child cell.
 
-**cloneClusterAttributes** - typically used in mitosis with
+``clone_cluster_attributes`` - typically used in mitosis with
 compartmentalized cells. Copies attributes from cell in a source cluster
 to corresponging cell in the target cluster. Allows specification of
 attributes that should not be copied
 
-**cloneParentCluster2ChildCluster** - used in mitosis with compartmentalized
+``clone_parent_cluster_2_child_cluster`` - used in mitosis with compartmentalized
 cells. Copies all attributes from cell in a parent cluster to
 corresponging cell in the child cluster
 
-**clusterInventory** - reference to C++ that serves as inventory of clusters
+``cluster_list - Python-iterable list of clusters. Obsolete
 
-**clusterList** - Python-iterable list of clusters. Obsolete
-
-**clusterSurfacePlugin** - a reference to C++ ClusterSurfacePlugin object.
+``clusterSurfacePlugin`` - a reference to C++ ClusterSurfacePlugin object.
 None if module not used.
 
-**clusterSurfaceTrackerPlugin** - a reference to C++
+``clusterSurfaceTrackerPlugin`` - a reference to C++
 ClusterSurfaceTrackerPlugin object. None if module not used.
 
-**clusters** - Python-iterable list of clusters.
+``clusters`` - Python-iterable list of clusters.
 
-**compilerExeFile** - name of C compiler used by SBML Solver.
-
-**compilerSupportPath** - path to C compiler working directory - used by
-SBML Solver
-
-**connectivityGlobalPlugin** - a reference to C++ ConnectivityGlobalPlugin
+``connectivityGlobalPlugin`` - a reference to C++ ConnectivityGlobalPlugin
 object. None if module not used.
 
-**connectivityLocalFlexPlugin** - a reference to C++
+``connectivityLocalFlexPlugin`` - a reference to C++
 ConnectivityLocalFlexPlugin object. None if module not used.
 
 **contactLocalFlexPlugin** - a reference to C++ ContactLocalFlexPlugin
