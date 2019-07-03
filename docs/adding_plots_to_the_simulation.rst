@@ -186,7 +186,7 @@ code:
 
 .. code-block:: python
 
-    self.pW.addHistogram(plot_name='Hist 1' , value_array = gauss ,number_of_bins=10)
+    self.plot_win.add_histogram(plot_name='Hist 1' , value_array = gauss ,number_of_bins=10)
 
 When we look at the code in the ``start`` function we will see that this
 data series will be displayed using green bars.
@@ -203,7 +203,7 @@ image.
 
 .. note::
 
-   As of writing this manual we do not support scaling of the plot image output. This might change in the future releases, however we strongly recommend that you save all the data you plot in a separate file and post-process it in the full-featured plotting program
+   As of writing this manual we do not support scaling of the plot image output. This might change in the future releases. However, we strongly recommend that you save all the data you plot in a separate file and post-process it in the full-featured plotting program
 
 We construct ``file_name`` in such a way that it contains MCS in it.
 The image file will be written in the simulation outpt directory.
