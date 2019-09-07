@@ -203,19 +203,19 @@ either clicking the icon or using keyboard shortcut (Alt+F8). note that keyboard
 different operating systems:
 
 .. figure:: images/pycharm_win_23.png
-    :alt: Evaluate expression
+    :alt: Evaluate expression 1
 
 Once ``Evaluate Expression`` window opens up you can evaluate variables in the current code frame. Let us evaluate
 the content of ``cell`` variable by typing ``cell`` in the line of the ``Evaluate Expression`` window:
 
 .. figure:: images/pycharm_win_23.png
-    :alt: Evaluate expression
+    :alt: Evaluate expression 2
 
 As you can see this displays attributes of cell object and we can inspect every single attribute of this particular
 cell object:
 
 .. figure:: images/pycharm_win_24.png
-    :alt: Evaluate expression
+    :alt: Evaluate expression 3
 
 We can advance code execution by one line by hitting F8 or clicking ``Step Over`` from the debug menu. This
 will advance us to the next line of steppable. At this point we may open second ``Evaluate Expression`` window and
@@ -224,16 +224,44 @@ this time type ``concentration`` to check the value of concentration variable an
 evaluate full expressions:
 
 .. figure:: images/pycharm_win_25.png
-    :alt: Evaluate expression
+    :alt: Evaluate expression 4
 
 A very important feature of a breakpoint is the ability to enable them if certain condition is met. For example
 we want to break when concentration is greater than 0.5. To do so we right-click on the breakpoint red-circle
 
-and in the line below we enter ``concentration > 0.5``
+.. figure:: images/pycharm_win_26.png
+    :alt: Conditional Breakpoint
 
 
+and in the line below we enter ``concentration > 0.5`` and click ``Done`` :
 
-Full manual of how to use debugger in PyCharm can be found here:
+.. figure:: images/pycharm_win_27.png
+    :alt: Conditional Breakpoint 1
+
+Next we resume stopped program by clicking Resume program in the lower-left corner:
+
+.. figure:: images/pycharm_win_28.png
+    :alt: Resume
+
+and we also need to press ``Play` on the Player because the Player code is resumed but the simulation may still be
+paused in the Player so by pressing ``Play`` on the player we will resume it.
+
+.. figure:: images/pycharm_win_29.png
+    :alt: Resume Player
+
+After a brief moment the PyCharm
+debugger will pause the execution of the program and if we inspect the value of the ``concentration`` variable
+we will see that indeed its value is greater than 0.5:
+
+.. figure:: images/pycharm_win_30.png
+    :alt: Conditional stop
+
+This technique of adding conditional breakpoints is quite useful when debugging simulations. If you have a lot of cells
+you do not want to step every single line of the loop by hitting F8. you want to press ``Play`` on the player and
+then have debugger inspect stop condition and stop once the condition has been satisfied.
+
+This isa brief introduction and tutorial for using PyCharm debugger with CC3D simulation. There is more to debugging
+but we will not cover it here. You can find more complete PyCharm Debugging tutorial here:
 https://www.jetbrains.com/help/pycharm/debugging-your-first-python-application.html
 
 
