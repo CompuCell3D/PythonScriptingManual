@@ -29,7 +29,7 @@ To open CC3D code in Pycharm,  navigate to ``File->Open...`` and go to the folde
 open the following subfolder <CC3D_install_folder>/lib/site-packages. In my case CC3D is installed in ``c:\CompuCell3D-py3-64bit\``
 so I am opening ``c:\CompuCell3D-py3-64bit\lib\site-packages\``
 
-.. figure:: |pycharm_win_01|
+.. figure:: images/pycharm_win_01.png
     :alt: Opening ``site-packages`` subfolder from CC3D installation directory
 
 .. figure:: images/wizard_twedit.png
