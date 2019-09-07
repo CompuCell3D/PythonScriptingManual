@@ -32,6 +32,14 @@ so I am opening ``c:\CompuCell3D-py3-64bit\lib\site-packages\``
 .. figure:: images/pycharm_win_01.png
     :alt: Opening ``site-packages`` subfolder from CC3D installation directory
 
+After you choose ``site-packages`` folder to open you may get another prompt that will ask you whether to open this
+folder in new window or attach to current window. Choose ``New Window`` option:
+
+.. figure:: images/pycharm_win_21.png
+    :alt: Opening ``site-packages`` subfolder in New Window
+
+
+
 .. figure:: images/wizard_twedit.png
     :alt: Figure 1 Invoking the CompuCell3D Simulation Wizard from Twedit++.
 
@@ -41,3 +49,7 @@ so I am opening ``c:\CompuCell3D-py3-64bit\lib\site-packages\``
 .. |pycharm_win_01| image:: images/pycharm_win_01.png
    :width: 4.2in
    :height: 4.8in
+
+.. |pycharm_win_02| image:: images/pycharm_win_02.png
+   :width: 4.in
+   :height: 0.6in
