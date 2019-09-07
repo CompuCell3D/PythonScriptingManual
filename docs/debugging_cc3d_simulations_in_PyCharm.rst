@@ -182,9 +182,59 @@ and in particular I would like to step through every single line of the steppabl
 ``c:\CompuCell3D-py3-64bit\lib\site-packages\Demos\Models\cellsort\cellsort_2D_growing_cells_mitosis_using_steppable\Simulation\cellsort_2D_field_modules.py``
 in PyCharm editor.
 
+.. figure:: images/pycharm_win_20.png
+    :alt: Steppable in editor
+
+Next, we put a breakpoint (red circle) by clicking on the left margin of the editor. Breakpoint is the place in the
+code where the debugger will stop execution of the code and give you options to examine variables of the simulation:
+
+.. figure:: images/pycharm_win_21.png
+    :alt: Steppable in editor
+
+After we places our breakpoint(s) let's hit ``Step`` button on the player. The execution of the code will resume and will
+be stopped exactly at teh place where we placed our breakpoint. The debug console will open up in the PyCharm (see
+bottom panel) and the blue line across editor line next to red circle indicates current position of code execution:
+
+.. figure:: images/pycharm_win_22.png
+    :alt: At the breakpoint
+
+Once the code is stopped we typically want to inspect values of variables. To do so we open "Evaluate Expression" by
+either clicking the icon or using keyboard shortcut (Alt+F8). note that keyboard shortcuts can be different on
+different operating systems:
+
+.. figure:: images/pycharm_win_23.png
+    :alt: Evaluate expression
+
+Once ``Evaluate Expression`` window opens up you can evaluate variables in the current code frame. Let us evaluate
+the content of ``cell`` variable by typing ``cell`` in the line of the ``Evaluate Expression`` window:
+
+.. figure:: images/pycharm_win_23.png
+    :alt: Evaluate expression
+
+As you can see this displays attributes of cell object and we can inspect every single attribute of this particular
+cell object:
+
+.. figure:: images/pycharm_win_24.png
+    :alt: Evaluate expression
+
+We can advance code execution by one line by hitting F8 or clicking ``Step Over`` from the debug menu. This
+will advance us to the next line of steppable. At this point we may open second ``Evaluate Expression`` window and
+this time type ``concentration`` to check the value of concentration variable and in another window we type
+``cell.targetVolume + 0.1 * concentration`` to show that not only we can check values of single variables but also
+evaluate full expressions:
+
+.. figure:: images/pycharm_win_25.png
+    :alt: Evaluate expression
+
+A very important feature of a breakpoint is the ability to enable them if certain condition is met. For example
+we want to break when concentration is greater than 0.5. To do so we right-click on the breakpoint red-circle
+
+and in the line below we enter ``concentration > 0.5``
 
 
-Next,
+
+Full manual of how to use debugger in PyCharm can be found here:
+https://www.jetbrains.com/help/pycharm/debugging-your-first-python-application.html
 
 
 
@@ -264,3 +314,46 @@ Next,
    :width: 7.7n
    :height: 5.3in
 
+.. |pycharm_win_20| image:: images/pycharm_win_20.png
+   :width: 6.6n
+   :height: 3.5in
+
+.. |pycharm_win_21| image:: images/pycharm_win_21.png
+   :width: 4.8n
+   :height: 3.2in
+
+.. |pycharm_win_22| image:: images/pycharm_win_22.png
+   :width: 5.1n
+   :height: 3.7in
+
+.. |pycharm_win_23| image:: images/pycharm_win_23.png
+   :width: 5.1n
+   :height: 3.7in
+
+.. |pycharm_win_24| image:: images/pycharm_win_24.png
+   :width: 4.1n
+   :height: 2.0in
+
+.. |pycharm_win_25| image:: images/pycharm_win_25.png
+   :width: 6.1n
+   :height: 4.1in
+
+.. |pycharm_win_26| image:: images/pycharm_win_26.png
+   :width: 2.35n
+   :height: 1.35in
+
+.. |pycharm_win_27| image:: images/pycharm_win_27.png
+   :width: 2.2n
+   :height: 1.1in
+
+.. |pycharm_win_28| image:: images/pycharm_win_28.png
+   :width: 2.2n
+   :height: 0.9in
+
+.. |pycharm_win_29| image:: images/pycharm_win_29.png
+   :width: 4.0n
+   :height: 1.3in
+
+.. |pycharm_win_30| image:: images/pycharm_win_30.png
+   :width: 5.0n
+   :height: 2.6in
