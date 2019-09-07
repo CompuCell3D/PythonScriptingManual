@@ -101,74 +101,40 @@ File: ``C:\CC3DProjects\cellsorting\Simulation\cellsorting.py``
 .. code-block:: python
     :linenos:
 
-        import sys
-        from os import environ
-        from os import getcwd
-        import string
+        from cc3d import CompuCellSetup
+        from cellsortingSteppables import cellsortingSteppable
 
-        sys.path.append(environ["PYTHON\_MODULE\_PATH"])
+        CompuCellSetup.register_steppable(steppable=cellsortingSteppable(frequency=1))
 
-        import CompuCellSetup
+        CompuCellSetup.run()
 
-        sim, simthread = CompuCellSetup.getCoreSimulationObjects()
+At the top of simulation main Python script we import ``CompuCellSetup`` module from ``cc3d`` package.
+The ``CompuCellSetup`` module has few helpful functions that are used in setting up the simulation
+and starting execution of the CC3D model.
 
-        CompuCellSetup.initializeSimulationObjects(sim, simthread)
 
-        # Add Python steppables here
+Next, we import newly generated steppable
 
-        steppableRegistry = CompuCellSetup.getSteppableRegistry()
+.. code-block:: python
 
         from cellsortingSteppables import cellsortingSteppable
 
-        steppableInstance = cellsortingSteppable(sim, _frequency=1)
+.. note::
 
-        steppableRegistry.registerSteppable(steppableInstance)
+    If the the module from which we import steppable (here ``cellsortingSteppables``) or the steppable class (here ``cellsortingSteppable``) itself contains word ``steppable`` (capitalization is not important) we can put ``.`` in front of the module: ``from .cellsortingSteppables import cellsortingSteppable``. This is not necessary but some development environments (e.g. PyCharm) will autocomplete syntax. This is quite helpful and speeds up development process.
 
-        CompuCellSetup.mainLoop(sim, simthread, steppableRegistry)
+Subsequently we register steppable by instantiating it using the constructor and specifying frequency with
+which it will be called
 
-The first line line provides access to standard functions and variables
-needed to manipulate the Python runtime environment. The next two lines (2, 3),
-import environ and getcwd housekeeping functions into the current
-**namespace** (*i.e.*, current script) and are included in all our Python
-programs. In the next three lines,
+.. code-block::
 
-.. code-block:: python
+    CompuCellSetup.register_steppable(steppable=cellsortingSteppable(frequency=1))
 
-        import string
-
-        sys.path.append(environ["PYTHON\_MODULE\_PATH"])
-        import CompuCellSetup
-
-we import the ``string`` module, which contains convenience functions for
-performing operations on strings of characters, set the search path for
-Python modules and import the ``CompuCellSetup`` module, which provides a
-set of convenience functions that simplify initialization of CompuCell3D
-simulations.
-
-Next, we create and initialize the core CompuCell3D modules:
+Finally we start simulation using
 
 .. code-block:: python
 
-        sim, simthread = CompuCellSetup.getCoreSimulationObjects()
-
-        CompuCellSetup.initializeSimulationObjects(sim,simthread)
-
-We then create a steppable **registry** (a Python **container** that
-stores steppables, *i.e.*, a list of all steppables that the Python code
-can access) and pass it to the function that runs the simulation. We
-also create and register cellsortingSteppable:
-
-.. code-block:: python
-
-        steppableRegistry=CompuCellSetup.getSteppableRegistry()
-
-        from cellsortingSteppables import cellsortingSteppable
-
-        steppableInstance=cellsortingSteppable(sim,_frequency=1)
-
-        steppableRegistry.registerSteppable(steppableInstance)
-
-        CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+    CompuCellSetup.run()
 
 Once we open .cc3d file in CompuCell3D the simulation begins to run. When
 you look at he console output from this simulation it will look
@@ -184,34 +150,38 @@ file, it becomes obvious:
 
 .. code-block:: python
 
-        from PySteppables import *
-        import CompuCell
-        import sys
+    from cc3d.core.PySteppables import *
 
+    class cellsortingSteppable(SteppableBasePy):
 
-        class cellsortingSteppable(SteppableBasePy):
-            def __init__(self, _simulator, _frequency=1):
-                SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self,frequency=1):
+            SteppableBasePy.__init__(self,frequency)
 
-            def start(self):
-                # any code in the start function runs before MCS=0
-                pass
+        def start(self):
+            """
+            any code in the start function runs before MCS=0
+            """
 
-            def step(self, mcs):
-                # type here the code that will run every _frequency MCS
-                for cell in self.cellList:
-                    print "cell.id=", cell.id
+        def step(self,mcs):
+            """
+            type here the code that will run every frequency MCS
+            :param mcs: current Monte Carlo step
+            """
 
-            def finish(self):
-                # Finish Function gets called after the last MCS
-                pass
+            for cell in self.cell_list:
+                print("cell.id=",cell.id)
+
+        def finish(self):
+            """
+            Finish Function is called after the last MCS
+            """
 
 Inside step function we have the following code snippet:
 
 .. code-block:: python
 
-        for cell in self.cellList:
-            print "cell.id=",cell.id
+        for cell in self.cell_list:
+            print("cell.id=",cell.id)
 
 which prints to the screen id of every cell in the simulation. The step
 function is called every Monte Carlo Step (MCS) and therefore after
@@ -227,25 +197,19 @@ effect on the simulation.
 Let’s rephrase it again because this is the essence of Python scripting
 inside CC3D - each steppable will contain by default 3 functions:
 
-1) start(self)
+#. ``start(self)``
 
-2) step(self,mcs)
+#. ``step(self,mcs)``
 
-3) finish(self)
+#. ``finish(self)``
 
-Those 3 functions are imported , via inheritance, from ``SteppableBasePy``
-(which in turn imports ``SteppablePy``). The nice feature of inheritance is
+Those 3 functions are imported , via inheritance, from ``SteppableBasePy``.
+The nice feature of inheritance is
 that once you import functions from base class you are free to redefine
 their content in the child class. We can redefine any combination of
 these functions. Had we not redefined *e.g.* finish functions then at the
 end simulation the implementation from ``SteppableBasePy`` of finish
 function would get called (which as you can see is an empty function).
-
-.. math::
-
-   (a + b)^2 = a^2 + 2ab + b^2
-
-   (a - b)^2 = a^2 - 2ab + b^2
 
 
 .. [1]

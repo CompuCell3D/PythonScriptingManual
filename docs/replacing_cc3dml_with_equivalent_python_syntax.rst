@@ -46,11 +46,11 @@ And then at equivalent Python code:
 
 .. code-block:: python
 
-    def configureSimulation(sim):
-        import CompuCellSetup
-        from XMLUtils import ElementCC3D
+    def configureSimulation():
 
-        CompuCell3DElmnt = ElementCC3D("CompuCell3D", {"version": "3.6.2"})
+        from cc3d.core.XMLUtils import ElementCC3D
+
+        CompuCell3DElmnt = ElementCC3D("CompuCell3D", {"version": "4.0.0"})
         PottsElmnt = CompuCell3DElmnt.ElementCC3D("Potts")
         PottsElmnt.ElementCC3D("Dimensions", {"x": "100", "y": "100", "z": "1"})
         PottsElmnt.ElementCC3D("Steps", {}, "10000")
@@ -71,7 +71,7 @@ top level element CompuCell3D:
 
 .. code-block:: python
 
-    CompuCell3DElmnt = ElementCC3D("CompuCell3D", {"version": "3.6.2"})
+    CompuCell3DElmnt = ElementCC3D("CompuCell3D", {"version": "4.0.0"})
 
 We attach a child element (``Potts``) to CompuCell3D element and a return
 value of this call is object representing Potts element:
@@ -130,36 +130,24 @@ working code:
 
 .. code-block:: python
 
-    def configureSimulation(sim):
-        import CompuCellSetup
-        from XMLUtils import ElementCC3D
+   from cc3d import CompuCellSetup
 
-        cc3d = ElementCC3D("CompuCell3D")
-        potts = cc3d.ElementCC3D("Potts")
-        potts.ElementCC3D("Dimensions", {"x": 100, "y": 100, "z": 1})
 
-    …
-    CompuCellSetup.setSimulationXMLDescription(cc3d)
+   def configure_simulation():
+       from cc3d.core.XMLUtils import ElementCC3D
 
-    import sys
-    from os import environ
-    import string
+       cc3d = ElementCC3D("CompuCell3D")
+       potts = cc3d.ElementCC3D("Potts")
+       potts.ElementCC3D("Dimensions", {"x": 100, "y": 100, "z": 1})
 
-    sys.path.append(environ["PYTHON_MODULE_PATH"])
+       ...
 
-    import CompuCellSetup
+       CompuCellSetup.setSimulationXMLDescription(cc3d)
 
-    sim, simthread = CompuCellSetup.getCoreSimulationObjects()
 
-    configureSimulation(sim)
+   configure_simulation()
 
-    CompuCellSetup.initializeSimulationObjects(sim, simthread)
-
-    from PySteppables import SteppableRegistry
-
-    steppableRegistry = SteppableRegistry()
-
-    CompuCellSetup.mainLoop(sim, simthread, steppableRegistry)
+   CompuCellSetup.run()
 
 
 The actual placement of configureSimulation function in the main script
@@ -167,7 +155,7 @@ matters. It has to be called right before
 
 .. code-block:: python
 
-    CompuCellSetup.initializeSimulationObjects(sim,simthread)
+    CompuCellSetup.run()
 
 **Finally, one important remark:** Twedit++ has CC3DML helper menu which
 pastes ready-to-use CC3DML code for all available modules. This means that

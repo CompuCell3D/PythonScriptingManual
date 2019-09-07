@@ -16,86 +16,102 @@ mean "blob shaped" clusters:
 
 .. code-block:: python
 
+    from cc3d.core.PySteppables import *
+
+
     class MitosisSteppableClusters(MitosisSteppableClustersBase):
-        def __init__(self, _simulator, _frequency=1):
-            MitosisSteppableClustersBase.__init__(self, _simulator, _frequency)
+
+        def __init__(self, frequency=1):
+            MitosisSteppableClustersBase.__init__(self, frequency)
 
         def step(self, mcs):
 
-            for cell in self.cellList:
-                clusterCellList = self.getClusterCells(cell.clusterId)
-                for cellLocal in clusterCellList:
+            for cell in self.cell_list:
+                cluster_cell_list = self.get_cluster_cells(cell.clusterId)
+                print("DISPLAYING CELL IDS OF CLUSTER ", cell.clusterId, "CELL. ID=", cell.id)
+                for cell_local in cluster_cell_list:
+                    print("CLUSTER CELL ID=", cell_local.id, " type=", cell_local.type)
 
-            mitosisClusterIdList = []
-            for compartmentList in self.clusterList:
-                clusterId = 0
-                clusterVolume = 0
-                for cell in CompartmentList(compartmentList):
-                    clusterVolume += cell.volume
-                    clusterId = cell.clusterId
+            mitosis_cluster_id_list = []
+            for compartment_list in self.clusterList:
+                # print( "cluster has size=",compartment_list.size())
+                cluster_id = 0
+                cluster_volume = 0
+                for cell in CompartmentList(compartment_list):
+                    cluster_volume += cell.volume
+                    cluster_id = cell.clusterId
 
-                if clusterVolume > 250:
-                    mitosisClusterIdList.append(clusterId)
-            for clusterId in mitosisClusterIdList:
-                # to change mitosis mode uncomment one of the lines below
-                self.divideClusterRandomOrientation(clusterId)
-                # self.divideClusterOrientationVectorBased(clusterId,1,0,0)
-                # self.divideClusterAlongMajorAxis(clusterId)
-                # self.divideClusterAlongMinorAxis(clusterId)
+                # condition under which cluster mitosis takes place
+                if cluster_volume > 250:
+                    # instead of doing mitosis right away we store ids for clusters which should be divide.
+                    # This avoids modifying cluster list while we iterate through it
+                    mitosis_cluster_id_list.append(cluster_id)
 
-        def updateAttributes(self):
-            compartmentListParent = self.getClusterCells(self.parentCell.clusterId)
+            for cluster_id in mitosis_cluster_id_list:
 
-            for i in xrange(compartmentListParent.size()):
-                compartmentListParent[i].targetVolume /= 2.0
-            self.cloneParentCluster2ChildCluster()
+                self.divide_cluster_random_orientation(cluster_id)
+
+                # # other valid options - to change mitosis mode leave one of the below lines uncommented
+                # self.divide_cluster_orientation_vector_based(cluster_id, 1, 0, 0)
+                # self.divide_cluster_along_major_axis(cluster_id)
+                # self.divide_cluster_along_minor_axis(cluster_id)
+
+        def update_attributes(self):
+            # compartments in the parent and child clusters are
+            # listed in the same order so attribute changes require simple iteration through compartment list
+            compartment_list_parent = self.get_cluster_cells(self.parent_cell.clusterId)
+
+            for i in range(len(compartment_list_parent)):
+                compartment_list_parent[i].targetVolume /= 2.0
+            self.clone_parent_cluster_2_child_cluster()
+
 
 The steppable is quite similar to the mitosis steppable which works for
 non-compartmental cell. This time however, after mitosis happens you
 have to reassign properties of ``children`` compartments and of ``parent``
 compartments which usually means iterating over list of compartments.
 Conveniently this iteration is quite simple and ``SteppableBasePy`` class
-has a convenience function ``getClusterCells`` which returns a list of cells
+has a convenience function ``get_cluster_cells`` which returns a list of cells
 belonging to a cluster with a given cluster id:
 
 .. code-block:: python
 
-    compartmentListParent = self.getClusterCells(self.parentCell.clusterId)
+    compartment_list_parent = self.get_cluster_cells(self.parent_cell.clusterId)
 
-The call above returns a list of cells in a cluster with ``clusterID``
-specified by ``self.parentCell.clusterId``. In the subsequent for loop we
+The call above returns a list of cells in a cluster with ``clusterId``
+specified by ``self.parent_cell.clusterId``. In the subsequent for loop we
 iterate over list of cells in the parent cluster and assign appropriate
 values of volume constraint parameters. Notice that
-compartmentListParent is indexable (ie. we can access directly any
+``compartment_list_parent`` is indexable (ie. we can access directly any
 element of the list provided our index is not out of bounds).
 
 .. code-block:: python
 
-    for i in xrange(compartmentListParent.size()):
-        compartmentListParent[i].targetVolume /= 2.0
+    for i in range(len(compartment_list_parent)):
+        compartment_list_parent[i].targetVolume /= 2.0
 
 Notice that nowhere in the update attribute function we have modified
 cell types. This is because, by default, cluster mitosis module assigns
 cell types to all the cells of child cluster and it does it in such a
 way so that child cell looks like a quasi-clone of parent cell.
 
-The next call in the ``updateAttributes`` function is
-``self.cloneParentCluster2ChildCluster()``. This copies all the attributes
+The next call in the ``update_attributes`` function is
+``self.clone_parent_cluster_2_child_cluster()``. This copies all the attributes
 of the cells in the parent cluster to the corresponding cells in the
 child cluster. If you would like to copy attributes from parent to child
 cell skipping select ones you may use the following code:
 
 .. code-block:: python
 
-    compartmentListParent = self.getClusterCells(self.parentCell.clusterId)
+    compartment_list_parent = self.get_cluster_cells(self.parent_cell.clusterId)
 
-    compartmentListChild = self.getClusterCells(self.childCell.clusterId)
+    compartment_lis_child = self.get_cluster_cells(self.child_cell.clusterId)
 
-    self.cloneClusterAttributes(self, sourceCellCluster=compartmentListParent,
-                                targetCellCluster=compartmentListChild,
+    self.clone_cluster_attributes(source_cell_cluster=compartment_list_parent,
+                                target_cell_cluster=compartment_list_child,
                                 no_clone_key_dict_list=['ATTR_NAME_1', 'ATTR_NAME_2'])
 
-where ``cloneClusterAttributes`` function allows specification of this
+where ``clone_cluster_attributes`` function allows specification of this
 attributes are not to be copied (in our case ``cell.dict`` members
 ``ATTR_NAME_1`` and ``ATTR_NAME_2`` will not be copied).
 
@@ -105,46 +121,55 @@ would use the flowing code:
 .. code-block:: python
 
     class MitosisSteppableClusters(MitosisSteppableClustersBase):
-        def __init__(self, _simulator, _frequency=1):
-            MitosisSteppableClustersBase.__init__(self, _simulator, _frequency)
+
+        def __init__(self, frequency=1):
+            MitosisSteppableClustersBase.__init__(self, frequency)
 
         def step(self, mcs):
 
-            mitosisClusterIdList = []
-            for compartmentList in self.clusterList:
-                clusterId = 0
-                clusterVolume = 0
-                for cell in CompartmentList(compartmentList):
-                    clusterVolume += cell.volume
-                    clusterId = cell.clusterId
+            for cell in self.cell_list:
+                cluster_cell_list = self.get_cluster_cells(cell.clusterId)
+                print("DISPLAYING CELL IDS OF CLUSTER ", cell.clusterId, "CELL. ID=", cell.id)
+                for cell_local in cluster_cell_list:
+                    print("CLUSTER CELL ID=", cell_local.id, " type=", cell_local.type)
 
-                if clusterVolume > 250:
-                    mitosisClusterIdList.append(clusterId)
+            mitosis_cluster_id_list = []
+            for compartment_list in self.clusterList:
+                # print( "cluster has size=",compartment_list.size())
+                cluster_id = 0
+                cluster_volume = 0
+                for cell in CompartmentList(compartment_list):
+                    cluster_volume += cell.volume
+                    cluster_id = cell.clusterId
 
-            for clusterId in mitosisClusterIdList:
-                # to change mitosis mode uncomment one of the lines below
-                self.divideClusterRandomOrientation(clusterId)
-                # self.divideClusterOrientationVectorBased(clusterId,1,0,0)
-                # self.divideClusterAlongMajorAxis(clusterId)
-                # self.divideClusterAlongMinorAxis(clusterId)
+                # condition under which cluster mitosis takes place
+                if cluster_volume > 250:
+                    # instead of doing mitosis right away we store ids for clusters which should be divide.
+                    # This avoids modifying cluster list while we iterate through it
+                    mitosis_cluster_id_list.append(cluster_id)
+
+            for cluster_id in mitosis_cluster_id_list:
+
+                self.divide_cluster_random_orientation(cluster_id)
+
+                # # other valid options - to change mitosis mode leave one of the below lines uncommented
+                # self.divide_cluster_orientation_vector_based(cluster_id, 1, 0, 0)
+                # self.divide_cluster_along_major_axis(cluster_id)
+                # self.divide_cluster_along_minor_axis(cluster_id)
 
         def updateAttributes(self):
 
-            parentCell = self.mitosisSteppable.parentCell
-            childCell = self.mitosisSteppable.childCell
+            parent_cell = self.mitosisSteppable.parentCell
+            child_cell = self.mitosisSteppable.childCell
 
-            compartmentListChild \
-                = self.getClusterCells(childCell.clusterId)
-            compartmentListParent \
-                = self.getClusterCells(parentCell.clusterId)
+            compartment_list_child = self.get_cluster_cells(child_ell.clusterId)
+            compartment_list_parent = self.get_cluster_cells(parent_cell.clusterId)
 
-            for i in xrange(compartmentListChild.size()):
-                compartmentListParent[i].targetVolume /= 2.0
+            for i in range(len(compartment_list_child)):
+                compartment_list_parent[i].targetVolume /= 2.0
 
-                compartmentListChild[i].targetVolume \
-                    = compartmentListParent[i].targetVolume
-                compartmentListChild[i].lambdaVolume \
-                    = compartmentListParent[i].lambdaVolume
+                compartment_list_child[i].targetVolume = compartment_list_parent[i].targetVolume
+                compartment_list_child[i].lambdaVolume = compartment_list_parent[i].lambdaVolume
 
 
 Python helper for mitosis is available from Twedit++

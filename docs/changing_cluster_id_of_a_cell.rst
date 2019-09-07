@@ -7,14 +7,14 @@ it currently does. You might think that statement like:
 
 .. code-block:: python
 
-    cell.clusterId=550
+    cell.clusterId = 550
 
 is a good way of accomplishing it. This could have worked with CC3D
 versions prior to 3.4.2 . However, this is not the case anymore and in
 fact this is an easy recipe for hard to find bugs that will crash your
-simulation with very enigmatic messages. So what is wrong here? First of
+simulation nd display very enigmatic messages. So what is wrong here? First of
 all you need to realize that all the cells (strictly speaking pointers
-to CellG objects) in the CompuCell3D are stored in a sorted container
+to ``CellG`` objects) in the CompuCell3D are stored in a sorted container
 called inventory. The ordering of the cells in the inventory is based on
 cluster id and cell id. Thus when a cell is created it is inserted to
 inventory and positioned according to cluster id and cell id. When you
@@ -36,7 +36,5 @@ of the cell:
 
 .. code-block:: python
 
-    reassignIdFlag = self.inventory.reassignClusterId(cell,550)
+    reassignIdFlag = self.reassign_cluster_id(cell, 550)
 
-When you attempt to use former syntax CC3D will throw an exception and
-inform you that you need to chang the syntax.

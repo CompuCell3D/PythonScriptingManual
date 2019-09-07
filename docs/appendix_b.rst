@@ -3,89 +3,89 @@ Appendix B
 
 In this appendix we present alphabetical list of CellG attributes:
 
-**clusterId** - cluster id
+clusterId`` - cluster id
 
-**clusterSurface** - total surface of a cluster that a given cell belongs
+``clusterSurface`` - total surface of a cluster that a given cell belongs
 to. Needs ClusterSurface Plugin
 
-**ecc** - eccentricity of cell . Needs MomentOfInertia plugin
+``ecc`` - eccentricity of cell . Needs MomentOfInertia plugin
 
-**extraAttribPtr** - a C++ pointer to Python dictionary attached to each
+``extraAttribPtr`` - a C++ pointer to Python dictionary attached to each
 cell
 
-**flag** - integer **variable** - unused. Can be used from Python
+``flag`` - integer ``variable`` - unused. Can be used from Python
 
-**fluctAmpl** - fluctuation amplitude. Default value **is** -1
+``fluctAmpl`` - fluctuation amplitude. Default value ``is`` -1
 
-**iXX** - xx component of inertia tensor. Needs MomentOfInertia Plugin
+``iXX`` - xx component of inertia tensor. Needs MomentOfInertia Plugin
 
-iXY- xy component of inertia tensor. Needs MomentOfInertia Plugin
+``iXY``- xy component of inertia tensor. Needs MomentOfInertia Plugin
 
-iXZ- xz component of inertia tensor. Needs MomentOfInertia Plugin
+``iXZ``- xz component of inertia tensor. Needs MomentOfInertia Plugin
 
-iYY- yy component of inertia tensor. Needs MomentOfInertia Plugin
+``iYY``- yy component of inertia tensor. Needs MomentOfInertia Plugin
 
-iYZ- yz component of inertia tensor. Needs MomentOfInertia Plugin
+``iYZ``- yz component of inertia tensor. Needs MomentOfInertia Plugin
 
-iZZ- zz component of inertia tensor. Needs MomentOfInertia Plugin
+``iZZ``- zz component of inertia tensor. Needs MomentOfInertia Plugin
 
-**id** - cell id
+``id`` - cell id
 
-lX- x component of orientation vector. Set by MomentOfInertia
+``lX`` - x component of orientation vector. Set by MomentOfInertia
 
-lY- y component of orientation vector. Set by MomentOfInertia
+``lY`` - y component of orientation vector. Set by MomentOfInertia
 
-lZ- z component of orientation vector. Set by MomentOfInertia
+``lZ`` - z component of orientation vector. Set by MomentOfInertia
 
-**lambdaClusterSurface** - lambda (constraint strength) of cluster surface
+``lambdaClusterSurface`` - lambda (constraint strength) of cluster surface
 constraint.Needs ClusterSurface Plugin
 
-**lambdaSurface** - lambda (constraint strength) of surface constraint.
+``lambdaSurface`` - lambda (constraint strength) of surface constraint.
 Needs Surface Plugin
 
-**lambdaVecX** - x component of force applied to cell. Needs
+``lambdaVecX`` - x component of force applied to cell. Needs
 ExternalPotential Plugin
 
-**lambdaVecY** - y component of force applied to cell. Needs
+``lambdaVecY`` - y component of force applied to cell. Needs
 ExternalPotential Plugin
 
-**lambdaVecZ** - z component of force applied to cell. Needs
+``lambdaVecZ`` - z component of force applied to cell. Needs
 ExternalPotential Plugin
 
-**lambdaVolume** - lambda (constraint strength) of volume constraint. Needs
+``lambdaVolume`` - lambda (constraint strength) of volume constraint. Needs
 Volume Plugin
 
-**subtype** - currently unused
+``subtype`` - currently unused
 
-**surface** - instantaneous cell surface. Needs Surface or SurfaceTracker
+``surface`` - instantaneous cell surface. Needs Surface or SurfaceTracker
 plugin
 
-**targetClusterSurface** - target value of cluster surface constraint.Needs
+``targetClusterSurface`` - target value of cluster surface constraint.Needs
 ClusterSurface Plugin
 
-**targetSurface** - target value of surface constraint. Needs Surface Plugin
+``targetSurface`` - target value of surface constraint. Needs Surface Plugin
 
-**targetVolume** - target value of volume constraint. Needs Volume Plugin
+``targetVolume`` - target value of volume constraint. Needs Volume Plugin
 
-**type** - cell type
+``type`` - cell type
 
-**volume** - instantaneous cell volume. Needs VolumeTracker plugin which is
+``volume`` - instantaneous cell volume. Needs VolumeTracker plugin which is
 loaded by default by every CC3D simulation.
 
-**xCM** - numerator of x-component expression for cell centroid
+``xCM`` - numerator of x-component expression for cell centroid
 
-**xCOM** - x component of cell centroid
+``xCOM`` - x component of cell centroid
 
-**xCOMPrev** - x component of cell centroid from previous MCS
+``xCOMPrev`` - x component of cell centroid from previous MCS
 
-**yCM** - numerator of y-component expression for cell centroid
+``yCM`` - numerator of y-component expression for cell centroid
 
-**yCOM** - y component of cell centroid
+``yCOM`` - y component of cell centroid
 
-**yCOMPrev** - y component of cell centroid from previous MCS
+``yCOMPrev`` - y component of cell centroid from previous MCS
 
-**zCM** - numerator of z-component expression for cell centroid
+``zCM`` - numerator of z-component expression for cell centroid
 
-**zCOM** - z component of cell centroid
+``zCOM`` - z component of cell centroid
 
-**zCOMPrev** - z component of cell centroid from previous MCS
+``zCOMPrev`` - z component of cell centroid from previous MCS

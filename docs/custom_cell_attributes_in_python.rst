@@ -1,7 +1,7 @@
 Custom Cell Attributes in Python
 ================================
 
-As you have already seen each cell object has a several attributes
+As you have already seen, each cell object has a several attributes
 describing properties of model cell (e.g. volume, surface, target
 surface, type, id *etc...*). However, in almost every simulation that you
 develop, you need to associate additional attributes with the cell
@@ -30,11 +30,11 @@ take a look at the following implementation of the step function:
 
     def step(self,mcs):
 
-        for cell in self.cellList:
-            cell.dict["Double_MCS_ID"]=mcs*2*cell.id
+        for cell in self.cell_list:
+            cell.dict["Double_MCS_ID"] = mcs*2*cell.id
 
-        for cell in self.cellList:
-            print 'cell.id=',cell.id,' dict=',cell.dict
+        for cell in self.cell_list:
+            print('cell.id=', cell.id,' dict=', cell.dict)
 
 
 We have two loops that iterate over list of all cells. In the first loop
@@ -48,7 +48,7 @@ and then insert into a dictionary a product of 2, mcs and cell id:
 
 .. code-block:: python
 
-    cell.dict["Double_MCS_ID"]=mcs*2*cell.id
+    cell.dict["Double_MCS_ID"] = mcs*2*cell.id
 
 In the second loop we access the dictionary and print its content to the
 screen. The result will look something like:
@@ -63,8 +63,8 @@ Python list as one of the elements of the dictionary e.g.:
 
 .. code-block:: python
 
-    for cell in self.cellList:
-        cell.dict["MyList"]=list()
+    for cell in self.cell_list:
+        cell.dict["MyList"] = list()
 
 
 Thus all you really need to store additional cell attributes is the

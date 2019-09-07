@@ -27,20 +27,25 @@ deal with lattice resize in the presence of wall:
 
 .. code-block:: python
 
+    from cc3d.core.PySteppables import *
+
     class BuildWall3DSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=1):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+
+        def __init__(self, frequency=1):
+            SteppableBasePy.__init__(self, frequency)
 
         def start(self):
-            self.buildWall(self.WALL)
+            self.build_wall(self.WALL)
 
         def step(self, mcs):
+            print('MCS=', mcs)
             if mcs == 4:
-                self.destroyWall()
-                self.resizeAndShiftLattice(_newSize=(80, 80, 80), _shiftVec=(10, 10, 10))
-                self.buildWall(self.WALL)
+                self.destroy_wall()
+                self.resize_and_shift_lattice(new_size=(80, 80, 80), shift_vec=(10, 10, 10))
+            if mcs == 6:
+                self.build_wall(self.WALL)
 
-In the step function, during ``MCS=4`` we first destroy the wall (we have
+In the step function, during ``MCS = 4`` we first destroy the wall (we have
 built it in the start function), resize the lattice to dimension
 ``x, y, z = 80, 80, 80`` and shift content of the old lattice (but without the
 wall , because we have just destroyed it) by a vector ``x, y, z = 10, 10, 10``.

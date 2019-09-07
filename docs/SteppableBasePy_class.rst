@@ -6,17 +6,17 @@ sufficient to type:
 
 .. code-block:: python
 
-        for cell in self.cellList:
+        for cell in self.cell_list:
 
 to iterate over a list of all cells in the simulation. Where does
-self.cellList come from and how it acceses/stores information about all
+``self.cell_list`` come from and how it accesses/stores information about all
 cells? The full answer to this question is beyond the scope of this
 manual so we will give you only a hint what happens here. The
-self.cellList is a member of a SteppableBasePy class. All CC3D Python
-steppable inherit this class and consequently self.cellList is a member
+``self.cell_list`` is a member of a ``SteppableBasePy`` class. All CC3D Python
+steppable inherit this class and consequently ``self.cell_list`` is a member
 of all steppables (please see a chapter on class inheritance from any
 Python manual if this looks unfamiliar). Under the hood the
-self.cellList is a handle, or a “pointer”, if you prefer this
+``self.cell_list`` is a handle, or a “pointer”, if you prefer this
 terminology, to the C++ object that stores all cells in the simulation.
 The content of cell inventory, and cell ordering of cells there is fully
 managed by C++ code. We use self.cellList to access C++ cell objects
@@ -24,14 +24,18 @@ usually iterating over entire list of cells. The cell in the
 
 .. code-block:: python
 
-        for cell in self.cellList:
+        for cell in self.cell_list:
+
+.. note::
+
+   old syntax ``self.cellList`` is still supported
 
 is a pointer to C++ cell object. You can easily see what members C++
 cell object has by modifying the step function as follows:
 
 .. code-block:: python
 
-        def step(self,mcs):
+        def step(self, mcs):
             for cell in self.cellList:
                 print dir(cell)
                 break
@@ -57,12 +61,12 @@ again:
 .. code-block:: python
 
     def step(self,mcs):
-        print 'Members of SteppableBasePy class'
+        print ('Members of SteppableBasePy class')
         print dir(self)
 
 You should know from Python programing manual that ``self`` refers to the
 class object. Therefore by printing ``dir(self)`` we are actually printing
-Python list of all members of cellsortingSteppable class. Because
+Python list of all members of ``cellsortingSteppable`` class. Because
 ``cellsortingSteppable`` class contains all the functions of ``SteppableBasePy``
 class we can inspect this way base class ``SteppableBasePy``. The output of
 the above simulation should look as follows:

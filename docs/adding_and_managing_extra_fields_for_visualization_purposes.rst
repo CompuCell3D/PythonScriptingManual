@@ -6,16 +6,16 @@ field, vector fields or simply create your own scalar or vector fields
 which are fully managed by you from the Python level. CC3D allows you to
 create four kinds of fields:
 
-1. Scalar Field – to display scalar quantities associated with single
+#. Scalar Field – to display scalar quantities associated with single
    pixels
 
-2. Cell Level Scalar Field – to display scalar quantities associated
+#. Cell Level Scalar Field – to display scalar quantities associated
    with cells
 
-3. Vector Field - to display vector quantities associated with single
+#. Vector Field - to display vector quantities associated with single
    pixels
 
-4. Cell Level Vector Field - to display vector quantities associated
+#. Cell Level Vector Field - to display vector quantities associated
    with cells
 
 You can take look at ``CompuCellPythonTutorial/ExtraFields`` to see an
@@ -33,67 +33,77 @@ Numpy functions to manipulate this field.
 
 .. code-block:: python
 
-    from math import *
+    from cc3d.core.PySteppables import *
+    from random import random
+    from math import sin
+
 
     class ExtraFieldVisualizationSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=10):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
-            self.scalarField = CompuCellSetup.createScalarFieldPy(self.dim, "ExtraField")
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
+            self.create_scalar_field_py("ExtraField")
 
         def step(self, mcs):
 
-            self.scalarField[:, :, :] = 0.0  # clear field
+            cell = self.field.Cell_Field[20, 20, 0]
+            print('cell=', cell)
 
-            for x in xrange(self.dim.x):
-                for y in xrange(self.dim.y):
-                    for z in xrange(self.dim.z):
+            # clear field
+            self.field.ExtraField[:, :, :] = 10.0
 
-                        if (not mcs % 20):
-                            self.scalarField[x, y, z] = x * y
+            for x, y, z in self.every_pixel(4, 4, 1):
+                if not mcs % 20:
+                    self.field.ExtraField[x, y, z] = x * y
+                else:
+                    self.field.ExtraField[x, y, z] = sin(x * y)
 
-                        else:
-                            self.scalarField[x, y, z] = sin(x * y)
-
-
-The scalar field (we called it ExtraField) is created in the
+The scalar field (we called it ``ExtraField``) is declared in the
 ``__init__`` function of the steppable using
 
 .. code-block:: python
 
-    self.createScalarFieldPy(self.dim,"ExtraField").
+    self.create_scalar_field_py("ExtraField")
 
-**Important:** Make sure that all calls to functions creating fields are
-in the ``__init__`` functions so that the Player can display them
-correctly.
+.. note::
 
-In the step function we initialize self.scalarField using slicing
-operation:
+    Ideally you would declare exrta fields in the ``__init__`` function but if you create them elsewhere they will work as well. HOwever in certain situations you may notice that fields declared outside ``__init__`` may be missing
+from e.g. player menus. Normally it is not a big deal but if you want to have full functionality associated with the fields declare them inside ``__init__``
+
+
+In the step function we initialize ``ExtraField`` using slicing operation:
 
 .. code-block:: python
 
-    self.scalarField[:, :, :]
+    self.field.ExtraField[:, :, :] = 10.0
 
 In Python slicing convention, a single colon means all indices – here we
 put three colons for each axis which is equivalent to selecting all
-pixels.
+pixels. Notice how we use ``self.field.ExtraField`` construct to access the field.
+
+It is perfectly fine (and faster too if you acces field repeatedly) to split this int two lines:
+
+.. code-block:: python
+
+    extra_field = self.field.ExtraField
+    extra_field[:, :, :] = 10
+
 
 Following lines in the step functions iterate over every pixel in the
 simulation and if MCS is divisible by 20 then self.scalarField is
 initialized with ``x*y`` value if MCS is not divisible by 20 than we
 initialize scalar field with ``sin(x*y)`` function. Notice, that we
-imported all functions from the math Python module so that we can get
+imported all functions from the ``math`` Python module so that we can get
 sin function to work.
 
-SteppableBasePy has convenience function called self.everyPixel (``CC3D Python->Visit->All Lattice Pixels``)
-which allows us to compact triple loop to just one line:
+``SteppableBasePy`` provides convenience function called ``self.every_pixel`` (``CC3D Python->Visit->All Lattice Pixels``) that facilitates compacting triple loop to just one line:
 
 .. code-block:: python
 
-    for x,y,z in self.everyPixel():
-        if (not mcs%20):
-            self.scalarField[x,y,z]=x*y
+    for x,y,z in self.every_pixel():
+        if not mcs % 20:
+            self.field.ExtraField[x, y, z]=x*y
         else:
-            self.scalarField[x,y,z]=sin(x*y)
+            self.field.ExtraField[x, y, z]=sin(x*y)
 
 
 If we would like to iterate over x axis indices with step 5, over y
@@ -102,7 +112,7 @@ replace first line in the above snippet with.
 
 .. code-block:: python
 
-    for x,y,z in self.everyPixel(5,10,4):
+    for x, y, z in self.every_pixel(5,10,4):
 
 You can still use triple loops if you like but shorter syntax leads to a
 cleaner code.
@@ -116,22 +126,25 @@ look at the example code:
 .. code-block:: python
 
     class VectorFieldVisualizationSteppable(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=10):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
-            self.vectorField = self.createVectorFieldPy("VectorField")
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
+            self.create_vector_field_py("VectorField")
 
         def step(self, mcs):
-            self.vectorField[:, :, :, :] = 0.0  # clear vector field
+            vec_field = self.field.VectorField
+
+            # clear vector field
+            vec_field[:, :, :, :] = 0.0
 
             for x, y, z in self.everyPixel(10, 10, 5):
-                self.vectorField[x, y, z] = [x * random(), y * random(), z * random()]
+                vec_field[x, y, z] = [x * random(), y * random(), z * random()]
 
 Th code is very similar to the previous steppable. In the ``__init__``
 function we create pixel based vector field , in the step function we
 initialize it first to with zero vectors and later we iterate over
 pixels using steps ``10``, ``10``, ``5`` for ``x``, ``y``, ``z``
 axes respectively and to these select lattice pixels we assign ``[x*random(), y*random(), z*random()]``
-vector. Internally, ``self.vectorField`` is implemented as ``Numpy`` array:
+vector. Internally, ``self.field.VectorField`` is implemented as ``numpy`` array:
 
 .. code-block:: python
 
@@ -155,22 +168,37 @@ example code:
 .. code-block:: python
 
     class IdFieldVisualizationSteppable(SteppableBasePy):
-        def __init__(self,_simulator,_frequency=10):
-            SteppableBasePy.__init__(self,_simulator,_frequency)
-            self.scalarCLField=self.createScalarFieldCellLevelPy("IdField")
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
 
-        def step(self,mcs):
-            self.scalarCLField.clear()
-            for cell in self.cellList:
-                self.scalarCLField[cell]=cell.id*random()
+        def start(self):
+            # note if you create field outside constructor this field will not be properly
+            # initialized if you are using restart snapshots. It is OK as long as you are aware of this limitation
+            self.create_scalar_field_cell_level_py("IdFieldNew")
+
+        def step(self, mcs):
+
+
+            # clear id field
+            try:
+                id_field = self.field.IdFieldNew
+                id_field.clear()
+            except KeyError:
+                # an exception might occur if you are using restart snapshots to restart simulation
+                # because field has been created outside constructor
+                self.create_scalar_field_cell_level_py("IdFieldNew")
+                id_field = self.field.IdFieldNew
+
+            for cell in self.cell_list:
+                id_field[cell] = cell.id * random()
 
 As it was the case with other fields we create cell level scalar field
-in the ``__init__`` function using self.createScalarFieldCellLevelPy. In
+in the ``__init__`` function using ``self.create_scalar_field_cell_level_py``. In
 the step function we first clear the field – this simply removes all
 entries from the dictionary. If you forget to clean dictionary before
 putting new values you may end up with stray values from the previous
 step. Inside the loop over all cells we assign random value to each cell.
-When we plot ``IdField`` in the player we will see that cells have different
+When we plot ``IdFieldNew`` in the player we will see that cells have different
 color labels. If we used pixel-based field to accomplish same task we
 would have to manually assign same value to all pixels belonging to a
 given cell. Using cell level fields we save ourselves a lot of work and
@@ -185,21 +213,25 @@ the previous example:
 .. code-block::python
 
     class VectorFieldCellLevelVisualizationSteppable(SteppableBasePy):
-        def __init__(self,_simulator,_frequency=10):
-            SteppableBasePy.__init__(self,_simulator,_frequency)
+        def __init__(self, frequency=10):
+            SteppableBasePy.__init__(self, frequency)
 
-            self.vectorCLField=self.createVectorFieldCellLevelPy("VectorFieldCellLevel")
+            self.create_vector_field_cell_level_py("VectorFieldCellLevel")
 
-        def step(self,mcs):
-            self.vectorCLField.clear()
-            for cell in self.cellList:
+        def step(self, mcs):
+            vec_field = self.field.VectorFieldCellLevel
 
-                if cell.type==1:
-                    self.vectorCLField[cell]=[cell.id*random(),cell.id*random(),0]
+            vec_field.clear()
+            for cell in self.cell_list:
 
+                if cell.type == 1:
+                    vec_field[cell] = [cell.id * random(), cell.id * random(), 0]
+                    vec = vec_field[cell]
+                    vec *= 2.0
+                    vec_field[cell] = vec
 
 Inside ``__init__`` function we create cell-level vector field using
-self.createVectorFieldCellLevelPy function. In the step function we
+``self.create_vector_field_cell_level_py`` function. In the step function we
 clear field and then iterate over all cells and assign random vector to
 each cell. When we plot this field on top cell borders you will see that
 vectors are anchored in “cells’ corners” and not at the COM. This is

@@ -5,17 +5,20 @@ Just like the secretion is typically defined for cell types the same
 applies to chemotaxis. And similarly as in the case of the secretion
 there is an easy way to implement chemotaxis on a cell-by-cell basis.
 You can find relevant example in ``Demos/PluginDemos/chemotaxis_by_cell_id``.
- Let us look at the code:
+Let us look at the code:
 
 .. code-block:: python
 
+    from cc3d.core.PySteppables import *
+
+
     class ChemotaxisSteering(SteppableBasePy):
-        def __init__(self, _simulator, _frequency=100):
-            SteppableBasePy.__init__(self, _simulator, _frequency)
+        def __init__(self, frequency=100):
+            SteppableBasePy.__init__(self, frequency)
 
         def start(self):
 
-            for cell in self.cellList:
+            for cell in self.cell_list:
                 if cell.type == self.MACROPHAGE:
                     cd = self.chemotaxisPlugin.addChemotaxisData(cell, "ATTR")
                     cd.setLambda(30.0)
@@ -24,7 +27,7 @@ You can find relevant example in ``Demos/PluginDemos/chemotaxis_by_cell_id``.
 
         def step(self, mcs):
             if mcs > 100 and not mcs % 100:
-                for cell in self.cellList:
+                for cell in self.cell_list:
                     if cell.type == self.MACROPHAGE:
 
                         cd = self.chemotaxisPlugin.getChemotaxisData(cell, "ATTR")
@@ -33,13 +36,14 @@ You can find relevant example in ``Demos/PluginDemos/chemotaxis_by_cell_id``.
                             cd.setLambda(lm)
                         break
 
+
 Before we start analyzing this code let’s look at CC3DML declaration of
 the chemotaxis plugin:
 
 .. code-block:: xml
 
     <Plugin Name="Chemotaxis">
-       <ChemicalField Source="FlexibleDiffusionSolverFE" Name="ATTR">
+       <ChemicalField Name="ATTR">
     <!--     <ChemotaxisByType Type="Macrophage" Lambda="20"/>   	 -->
        </ChemicalField>
      </Plugin>
@@ -47,7 +51,7 @@ the chemotaxis plugin:
 
 As you can see we have commented out ``ChemotaxisByType`` but leaving
 information about fields so that chemotaxis plugin can fetch pointers to
-the fields. Clearly leaving such definition of chemotaxis in the CC3DML
+the fields. Clearly, leaving such definition of chemotaxis in the CC3DML
 would have no effect on the simulation. However, as you can see in the
 Python steppable code we define chemotaxis on a cell-by-cell basis.We
 loop over all cells and when we encounter cell of type Macrophage we
@@ -87,7 +91,7 @@ The Python code would look like:
 
 .. code-block:: python
 
-    for cell in self.cellList:
+    for cell in self.cell_list:
         if cell.type == self.MACROPHAGE:
             cd = self.chemotaxisPlugin.addChemotaxisData(cell, "ATTR")
             cd.setLambda(30.0)
@@ -105,7 +109,7 @@ we would use the following Python snippet:
 
 .. code-block:: python
 
-    for cell in self.cellList:
+    for cell in self.cell_list:
         if cell.type == self.MACROPHAGE:
             cd = self.chemotaxisPlugin.addChemotaxisData(cell, "ATTR")
             cd.setLambda(30.0)

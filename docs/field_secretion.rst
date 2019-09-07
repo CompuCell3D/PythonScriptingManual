@@ -12,24 +12,30 @@ understand what kind of capabilities CC3D offers in this regard (see
 .. code-block:: python
 
     class SecretionSteppable(SecretionBasePy):
-        def __init__(self,_simulator,_frequency=1):
-            SecretionBasePy.__init__(self,_simulator, _frequency)
+        def __init__(self, frequency=1):
+            SecretionBasePy.__init__(self, frequency)
 
-        def step(self,mcs):
-            attrSecretor=self.getFieldSecretor("ATTR")
-            for cell in self.cellList:
-                if cell.type==3:
-                    attrSecretor.secreteInsideCell(cell,300)
-                    attrSecretor.secreteInsideCellAtBoundary(cell,300)
-                    attrSecretor.secreteOutsideCellAtBoundary(cell,500)
-                    attrSecretor.secreteInsideCellAtCOM(cell,300)
+        def step(self, mcs):
+            attr_secretor = self.get_field_secretor("ATTR")
+            for cell in self.cell_list:
+                if cell.type == self.WALL:
+                    attr_secretor.secreteInsideCellAtBoundaryOnContactWith(cell, 300, [self.WALL])
+                    attr_secretor.secreteOutsideCellAtBoundaryOnContactWith(cell, 300, [self.MEDIUM])
+                    attr_secretor.secreteInsideCell(cell, 300)
+                    attr_secretor.secreteInsideCellAtBoundary(cell, 300)
+                    attr_secretor.secreteOutsideCellAtBoundary(cell, 500)
+                    attr_secretor.secreteInsideCellAtCOM(cell, 300)
+
+.. note::
+
+    As we mentioned in the introductory section we switched Python functions capitalization conventions. For example we use ``get_field_secretor`` and not getFieldSecretor. However, there are function calls in the above snippet that do not follow this convention - e.g. ``secreteInsideCell``. This is because those functions belong to a C++ object (here, ``attr_secretor``) that is accessed through Python. We decided to keep those two conventions (snake-case for pure Python functions) and Pascal-case for C++ functions. It should help users with identification of where various functions come from.
 
 In the step function we obtain a handle to field secretor object that
 operates on diffusing field ``ATTR``. In the for loop where we go over all
 cells in the simulation we pick cells which are of type 3 (notice we use
 numeric value here instead of an alias). Inside the loop we use
-secreteInsideCell, secreteInsideCellAtBoundary,
-secreteOutsideCellAtBoundary, and secreteInsideCellAtCOM member
+``secreteInsideCell``, ``secreteInsideCellAtBoundary``,
+``secreteOutsideCellAtBoundary``, and ``secreteInsideCellAtCOM`` member
 functions of the secretor object to carry out secretion in the region
 occupied by a given cell. ``secreteInsideCell`` increases concentration by a
 given amount (here ``300``) in every pixel occupied by a cell.
@@ -50,9 +56,9 @@ definition of ``SecretionBasePy`` we will see that it inherits from
 .. code-block:: python
 
     class SecretionBasePy(SteppableBasePy):
-        def __init__(self,_simulator,_frequency=1):
-            SteppableBasePy.__init__(self,_simulator,_frequency)
-            self.runBeforeMCS=1
+        def __init__(self,frequency=1):
+            SteppableBasePy.__init__(self,frequency)
+            self.runBeforeMCS = 1
 
 Direct (but somewhat naive) Implementation
 ---------------------
@@ -61,24 +67,24 @@ the COM using alternative code:
 
 .. code-block:: python
 
-    self.field = self.getConcentrationField('ATTR')
-    lmfLength = 1.0;
-    xScale = 1.0
-    yScale = 1.0
-    zScale = 1.0
+    field = self.field.ATTR
+    lmf_length = 1.0;
+    x_scale = 1.0
+    y_scale = 1.0
+    z_scale = 1.0
     # FOR HEX LATTICE IN 2D
-    #         lmfLength=sqrt(2.0/(3.0*sqrt(3.0)))*sqrt(3.0)
-    #         xScale=1.0
-    #         yScale=sqrt(3.0)/2.0
-    #         zScale=sqrt(6.0)/3.0
+    #         lmf_length = sqrt(2.0/(3.0*sqrt(3.0)))*sqrt(3.0)
+    #         x_scale = 1.0
+    #         y_scale = sqrt(3.0)/2.0
+    #         z_scale = sqrt(6.0)/3.0
 
-    for cell in self.cellList:
+    for cell in self.cell_list:
         # converting from real coordinates to pixels
-        xCM = int(cell.xCOM / (lmfLength * xScale))
-        yCM = int(cell.yCOM / (lmfLength * yScale))
+        x_cm = int(cell.xCOM / (lmf_length * x_scale))
+        y_cm = int(cell.yCOM / (lmf_length * y_scale))
 
         if cell.type == 3:
-            self.field[xCM, yCM, 0] = self.field[xCM, yCM, 0] + 10.0
+            field[x_cm, y_cm, 0] = field[x_cm, y_cm, 0] + 10.0
 
 
 As you can tell, it is significantly more work than our original
@@ -88,7 +94,7 @@ Lattice Conversion Factors
 ---------------------------
 
 In the code where we manually implement secretion at the cell’sCOM we use
-strange looking variables lmfLength, xScale and yScale. CC3D allows
+strange looking variables ``lmf_length``, ``x_scale`` and ``y_scale``. CC3D allows
 users to run simulations on square (Cartesian) or hexagonal lattices.
 Under the hood these two lattices rely on the Cartesian lattice. However
 distances between neighboring pixels are different on Cartesian and hex
@@ -98,14 +104,14 @@ lattice coordinates we need to use converting factors. Please see
 writeup **“Hexagonal Lattices in CompuCell3D”**
 (http://www.compucell3d.org/BinDoc/cc3d_binaries/Manuals/HexagonalLattice.pdf)
 for more information. To convert between hex and Cartesian lattice
-coordinates we can use PySteppableBase built-in functions
-(``self.cartesian2Hex``, ``and self.hex2Cartesian``) – see also Twedit++ CC3D
+coordinates we can use ``SteppableBasePy`` built-in functions
+(``self.cartesian_2_hex``, ``and self.hex_2_cartesian``) – see also Twedit++ CC3D
 Python menu Distances, Vectors, Transformations:
 
 .. code-block:: python
 
-    hex_coords = self.cartesian2Hex(_in=[10, 20, 11])
-    pt = self.hex2Cartesian(_in=[11.2, 13.1, 21.123])
+    hex_coords = self.cartesian_2_hex(coords=[10, 20, 11])
+    pt = self.hex_2_cartesian(coords=[11.2, 13.1, 21.123])
 
 
 Tracking Amount of Secreted (Uptaken) Chemical
@@ -122,22 +128,22 @@ chemical that was added:
 .. code-block:: python
 
     class SecretionSteppable(SecretionBasePy):
-        def __init__(self,_simulator,_frequency=1):
-            SecretionBasePy.__init__(self,_simulator, _frequency)
+        def __init__(self,frequency=1):
+            SecretionBasePy.__init__(self,frequency)
 
         def step(self,mcs):
-            attrSecretor=self.getFieldSecretor("ATTR")
-            for cell in self.cellList:
-                if cell.type==3:
+            attr_secretor = self.get_field_secretor("ATTR")
+            for cell in self.cell_list:
+                if cell.type == 3:
 
-                    res = attrSecretor.secreteInsideCellTotalCount(cell,300)
-                    print 'secreted  ', res.tot_amount, ' inside cell'
-                    res = attrSecretor.secreteInsideCellAtBoundaryTotalCount(cell,300)
-                    print 'secreted  ', res.tot_amount, ' inside cell at the boundary'
-                    res = attrSecretor.secreteOutsideCellAtBoundaryTotalCount(cell,500)
-                    print 'secreted  ', res.tot_amount, ' outside the cell at the boundary'
-                    res = attrSecretor.secreteInsideCellAtCOMTotalCount(cell,300)
-                    print 'secreted  ', res.tot_amount, ' inside the cell at the COM'
+                    res = attr_secretor.secreteInsideCellTotalCount(cell,300)
+                    print('secreted  ', res.tot_amount, ' inside cell')
+                    res = attr_secretor.secreteInsideCellAtBoundaryTotalCount(cell,300)
+                    print('secreted  ', res.tot_amount, ' inside cell at the boundary')
+                    res = attr_secretor.secreteOutsideCellAtBoundaryTotalCount(cell,500)
+                    print('secreted  ', res.tot_amount, ' outside the cell at the boundary')
+                    res = attr_secretor.secreteInsideCellAtCOMTotalCount(cell,300)
+                    print('secreted  ', res.tot_amount, ' inside the cell at the COM')
 
 As you can see the calls to that return the total amount of chemical added/uptaked are the same calls as we
 used in our previous example except we add ``TotalCount`` to the name of the function. The new function e.g.
@@ -148,10 +154,10 @@ member of the ``res`` object we get the total amount that was added/uptaken from
 
 .. code-block:: python
 
-    res = attrSecretor.secreteInsideCellTotalCount(cell,300)
-    print 'secreted  ', res.tot_amount, ' inside cell'
+    res = attr_secretor.secreteInsideCellTotalCount(cell,300)
+    print('secreted  ', res.tot_amount, ' inside cell')
 
-For cmpleteness we present a complete list of C++ signatures of all the functions that can be used to fine-control
+For completeness we present a complete list of C++ signatures of all the functions that can be used to fine-control
 how uptake/secretion happens in CC3D. All those functions are members of the ``secretor`` object and are
 accessible from Python
 
@@ -222,8 +228,8 @@ from python we would use the following code:
 
 .. code-block:: python
     ...
-    res = attrSecretor.uptakeInsideCellAtCOMTotalCount(cell,3,0.1)
-    print 'uptaken ', res.tot_amount, ' inside cell and the COM'
+    res = attr_secretor.uptakeInsideCellAtCOMTotalCount(cell,3,0.1)
+    print('uptaken ', res.tot_amount, ' inside cell and the COM')
 
 In this case  ``_cell`` is a ``cell`` object that we normally deal with in Python, ``_maxUptake`` has value of ``3``
 and ``_relativeUptake`` is set to ``0.1``
