@@ -35,7 +35,7 @@ so I am opening ``c:\CompuCell3D-py3-64bit\lib\site-packages\``
 After you choose ``site-packages`` folder to open you may get another prompt that will ask you whether to open this
 folder in new window or attach to current window. Choose ``New Window`` option:
 
-.. figure:: images/pycharm_win_21.png
+.. figure:: images/pycharm_win_02.png
     :alt: Opening ``site-packages`` subfolder in New Window
 
 
