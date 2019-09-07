@@ -20,6 +20,7 @@ or simply purchase a book on introductory Python programming.
    introduction
    transition_to_cc3d_4
    how_to_use_python_in_cc3d
+   debugging_cc3d_simulations_in_PyCharm
    SteppableBasePy_class
    adding_steppable_to_simulation_using_twedit++
    passing_information_between_steppables
