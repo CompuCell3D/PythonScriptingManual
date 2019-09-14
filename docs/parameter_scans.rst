@@ -3,7 +3,7 @@ Parameter Scans
 
 .. note::
 
-   Specification of parameter scans in version 4.0.0 is different than in earlier versions. In particular old parameter scan simulations will not run in 4.x but as you will see the new way of specifying paramter scans is much simpler and less laborious than in previous implementations.
+   Specification of parameter scans in version 4.x.x is different than in earlier versions. In particular old parameter scan simulations will not run in 4.x but as you will see the new way of specifying paramter scans is much simpler and less laborious than in previous implementations.
 
 When building biomedical simulations it is a common practice to explore
 parameter space to search for optimal solution or to study the
@@ -115,11 +115,52 @@ and run it in a separate terminal or simply run the scan directly from the Playe
 
     We recommend that you always run parameter scan from a separate terminal. This is because it is easier to kill it (by closing terminal) than accomplishing the same task from Player.
 
+To run a parameter scan you open up a parameter scan ``.cc3d`` project in the Player:
 
-To run parameter scan you need to use ``paramScan.bat`` (windows), ``paramScan.sh`` (linux) or ``paramScan.command``
-(osx) run script.
+.. figure:: images/param_scan_01.png
+    :alt: param_scan_01
 
-You typically run it like that
+Next, when you click "Play" or "Step" buttons on the PLayer's tool bar you will get the following po-pup dialog:
+
+.. figure:: images/param_scan_02.png
+    :alt: param_scan_02
+
+This dialog gives you options to configure how parameter scan gets executed:
+
+``Param Scan Simulation`` - here you specify the full path to the ``.cc3d`` project that is in fact a parameter scan
+
+``Output Dir`` -  you can manually select a folder where the output of the parameter scan gets written. By default
+CC3D will choose a path that is based on globally-configured simulation output folder and the name of the parameter
+scan ``.cc3d`` project
+
+``Snapshot Output Frequency`` - specifies how ofter snapshots (vtk files that you can replay in the Player later)
+will be taken. The check box next to the spin-box disables snapshot taking altogether.
+
+``Screenshot Output Frequency`` - specifies how ofter screenshots will be taken (provided you configured screenshots
+for your param scan project). The check box next to the spin-box disables screenshot taking altogether.
+
+``Use Gui`` -  this checkbox will cause that every simulation that is part of the parameter scan will be executed in
+the Player.
+
+``CC3D Installation Dir`` - specifies where CC3D is installed. this field is populated by CC3D but you can modify it
+if you really want to use a different installation folder for CC3D
+
+Once you are happy with your configurations you press "Display Command Line" button and in the text box below you will
+see the command line text for ``paramScan`` script. At this point you have two options
+
+1. Copy the command line text and paste it in the terminal
+
+2. Press ``Run`` button at the bottom of the dialog
+
+In both cases parameter scan will start running
+
+.. warning::
+
+    Pasting long command lines on Windows may not work as expected. For historical reasons some terminals on windows limit the total size of the pasted text to 255 characteers. In this situation you probably want to run parameter scan from the Player or try to find console application on windows that does not have such limitation. For example if you install Miniconda or Anaconda on windows and use Anaconda Prompt it will open a console that will behave correctly
+
+Although it is easiest to use Player to launch parameter scans, we also present the options that ``paramScan`` script
+takes. Just remember to use appropriate script ending for you operating system - ``paramScan.bat`` (windows),
+``paramScan.sh`` (linux) or ``paramScan.command`` (osx):
 
 .. code-block:: console
 
@@ -167,4 +208,14 @@ The structure of the file looks the same but when we replace ``values`` with ``c
 actual numpy statement and it will be evaluated by CC3D. Clearly , as shown above, you can mix-and-match
 which parameters are specified using numpy statement and which ones are specified using simple Python lists.
 
+.. |param_scan_01| image:: images/param_scan_01.png
+   :width: 5.3n
+   :height: 1.8in
 
+.. |param_scan_02| image:: images/param_scan_02.png
+   :width: 4.3n
+   :height: 2.0in
+
+.. |param_scan_03| image:: images/param_scan_03.png
+   :width: 4.3n
+   :height: 2.0in
