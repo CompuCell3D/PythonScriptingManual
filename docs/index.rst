@@ -1,7 +1,7 @@
 .. python_scripting_manual documentation master file, created by
 
 
-Python Scripting Manual for CompuCell3D - version 3.7.9
+Python Scripting Manual for CompuCell3D - version 4.0.0
 =======================================================
 
 The focus of this manual is to teach you how to use Python 2
