@@ -146,7 +146,12 @@ the Player.
 if you really want to use a different installation folder for CC3D
 
 Once you are happy with your configurations you press "Display Command Line" button and in the text box below you will
-see the command line text for ``paramScan`` script. At this point you have two options
+see the command line text for ``paramScan`` script.
+
+.. figure:: images/param_scan_03.png
+    :alt: param_scan_03
+
+At this point you have two options
 
 1. Copy the command line text and paste it in the terminal
 
