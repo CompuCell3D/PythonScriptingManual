@@ -264,6 +264,30 @@ This isa brief introduction and tutorial for using PyCharm debugger with CC3D si
 but we will not cover it here. You can find more complete PyCharm Debugging tutorial here:
 https://www.jetbrains.com/help/pycharm/debugging-your-first-python-application.html
 
+Step 4 - writing steppable code with PyCharm code auto completion
+-----------------------------------------------------------------
+
+While debugging features provide a strong argument for using this IDE in CC3D development, "regular" users can
+also benefit a lot by using code autocompletion capabilities. So far we have been showing fairly advanced features
+but what if you just want to write CC3D steppable and run your simulation. PyCharm provides excellent auto auompletion
+capabilities. For example if we are inside steppable and woud like to add function that creates new cell. In Twedit++
+we know that in such situation we go to CC3D Python menu and search for appropriate function. PyCharm offers actually
+
+
+Perspective
+------------
+
+In this chapter we presented PyCharm features that make it an ideal IDE for CC3D code and simulation development.
+The question that you may have at this point is what is the role of Twedit++. Clearly, if we could port all Twedit++
+wizards and helpers to PyCharm would would probably be recommending using PyCharm. However, for the time being Twedit++
+still offers a lot of time-saving tools. It can generate a template of functional simulation, it can generate
+C++ plugins and steppables (if you are working at the C++ level), it provides XML and Python helpers and overall
+it is a functional , rudimentary programmer's editor. We think that it is best to combine Twedit++ and PyCharm when
+you are developing your simulation. Ideally you would create simulation in Twedit++, you could manage .cc3d project in
+Twedit++ but when you want nice syntax auto-completion, and debugging capabilities you would switch to PyCharm. Obviously,
+you can have the two tools open at the same time and choose features from any of them that best fit your programing
+style.
+
 
 
 .. |pycharm_win_01| image:: images/pycharm_win_01.png
