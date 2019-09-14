@@ -99,6 +99,23 @@ The remaining two parameters ``MYVAR`` and ``MYVAR1`` will be used to make subst
 
 When the parameter scan runs CC3D keeps track of which combinations of parameters to apply at a given moment.
 
+Running Parameter Scans
+------------------------
+
+To run parameter scans you typically need to execute a command that calls ``paramScan`` script. Those commands
+are not the easiest things to type because thy can be lengthy. For this reason Player has a very convenient tool
+that let's you open simulation with parameter scan directly from the Player and then you can either copy command
+and run it in a separate terminal or simply run the scan directly from the Player.
+
+.. note::
+
+    Parameter scan can execute in parallel. To do so open multiple terminals and execute THE SAME parameter scan command in all o them. ``paramScan`` script will take care of distributing runs tasks properly.
+
+.. note::
+
+    We recommend that you always run parameter scan from a separate terminal. This is because it is easier to kill it (by closing terminal) than accomplishing the same task from Player.
+
+
 To run parameter scan you need to use ``paramScan.bat`` (windows), ``paramScan.sh`` (linux) or ``paramScan.command``
 (osx) run script.
 
