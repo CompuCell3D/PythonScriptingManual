@@ -268,11 +268,38 @@ Step 4 - writing steppable code with PyCharm code auto completion
 -----------------------------------------------------------------
 
 While debugging features provide a strong argument for using this IDE in CC3D development, "regular" users can
-also benefit a lot by using code autocompletion capabilities. So far we have been showing fairly advanced features
-but what if you just want to write CC3D steppable and run your simulation. PyCharm provides excellent auto auompletion
-capabilities. For example if we are inside steppable and woud like to add function that creates new cell. In Twedit++
+also benefit a lot by using code auto-completion capabilities. So far we have been showing fairly advanced features
+but what if you just want to write CC3D steppable and run your simulation. PyCharm provides excellent auto-completion
+capabilities. To motivate why this feature is useful, imagine a simple example where you are inside a steppable
+that you are writing and would like to add function that creates new cell. In Twedit++
 we know that in such situation we go to CC3D Python menu and search for appropriate function. PyCharm offers actually
+on-line auto-completion based on available modules that are installed in the configured Python environment.
+This is precisely why we spent a little bit of time at the beginning of this chapter setting up PyCharm, in particular,
+setting Python environment. Let us come back to our example of adding new cell. We suspect that a function
+that adds new cell has a word "new" and "cell" in it. We will use this knowledge and start typing ``self.cell`` in
+the Steppable editor we will get a pop-up selectable options for the most closely matched function candidadates,
+a function awe are looking for is ``self.new_cell`` and is listed somewhere in the middle:
 
+.. figure:: images/pycharm_win_31.png
+    :alt: auto-completion 1
+
+When we start typing ``self.new`` we will get different ordering of candidate functions with  ``self.new_cell``
+listed at the top of the list:
+
+.. figure:: images/pycharm_win_32.png
+    :alt: auto-completion 1
+
+Finally when we select this  ``self.new_cell`` option from the pop-up list PyCharm will also display a signature
+of the function:
+
+.. figure:: images/pycharm_win_33.png
+    :alt: auto-completion 1
+
+The auto-completion pop-up lists have also another benefit. They allow you to check out what other functions are
+available and if you see something interesting you can always lookup documentation to see if indeed this function
+matches your needs. MOst importantly you can always suggest additional functions to be added to the steppables
+The best way to do it is to open up a ticket at https://github.com/CompuCell3D/CompuCell3D/issues. All you need
+is github account (those are free) nad you are ready to be part of CC3D development team.
 
 Perspective
 ------------
@@ -409,3 +436,17 @@ style.
 .. |pycharm_win_30| image:: images/pycharm_win_30.png
    :width: 5.0n
    :height: 2.6in
+
+.. |pycharm_win_31| image:: images/pycharm_win_31.png
+   :width: 4.0n
+   :height: 2.9in
+
+.. |pycharm_win_32| image:: images/pycharm_win_32.png
+   :width: 3.0n
+   :height: 1.55in
+
+.. |pycharm_win_33| image:: images/pycharm_win_33.png
+   :width: 2.0n
+   :height: 0.9in
+
+
