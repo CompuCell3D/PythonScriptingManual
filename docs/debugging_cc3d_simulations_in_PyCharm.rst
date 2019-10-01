@@ -44,8 +44,8 @@ Next, you should see the following window
     :alt: Opened site-packages folder
 
 In order to be able to debug CC3D simulations it is best if the ``Demos`` folder (or any folder where you keep your
-simulations) also resides under ``site-packages``. Simply copy ``Demos`` folder to ``site-packages folder so that your
-you PyCharm Project Explorer looks as follows (left panel in PyCharm) - see ``Demos`` directory listed under ``cc3d``:
+simulations) also resides under ``site-packages``. Simply copy ``Demos`` folder to ``site-packages`` folder
+so that your you PyCharm Project Explorer looks as follows (left panel in PyCharm) - see ``Demos`` directory listed under ``cc3d``:
 
 .. figure:: images/pycharm_win_04.png
     :alt: Copying ``Demos`` folder to ``site-packages``
@@ -157,6 +157,82 @@ We click ``OK`` buttons and retry running CC3D again. This time Player should op
 We are done with configuring PyCharm. This section seem a bit long due to number of screenshots we present
 but once you perform those tasks 2-3 times they will become a second nature and you will be ready to explore what
 PyCharm has to offer and it does offer quite a lot. Time for next section
+
+Configuration of OSX (applies to linux as well)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Most of the steps outlined above apply to configuring PyCharm on OSX however if we do not set up all
+environment variables we might end up with cryptic looking error like the one below:
+
+.. figure:: images/pycharm_osx_01.png
+    :alt: PyCharm Error
+
+This happens because besides setting ``PREFIX_CC3D`` we need to set other environment variables within PyCharm.
+What are those additional environment variables? To answer this question it is best to look inside run script
+that CC3D shipt with. On OSX we open up in editor ``compucell3d.command`` and we see the following code:
+
+.. code-block:: bash
+
+    #!/bin/bash
+
+    # echo " "
+    # echo " dollar-zero AKA the first argument to this .command script is: "
+    # echo $0
+    # echo " "
+    export PYTHON_MINOR_VERSION=
+    cd "${0%/*}"
+
+
+
+    # language settings
+    export LANG=en_EN
+    export __CF_USER_TEXT_ENCODING=""
+
+    export COMPUCELL3D_MAJOR_VERSION=4
+    export COMPUCELL3D_MINOR_VERSION=0
+    export COMPUCELL3D_BUILD_VERSION=0
+
+
+    echo " "
+    echo "---- ---- ---- ---- ---- ---- ---- ---- "
+    echo "  CompuCell3D version $COMPUCELL3D_MAJOR_VERSION.$COMPUCELL3D_MINOR_VERSION.$COMPUCELL3D_BUILD_VERSION"
+    echo "     (OS X 10.8 x86_64 build) "
+    echo "---- ---- ---- ---- ---- ---- ---- ---- "
+
+
+    export PREFIX_CC3D=$(pwd)
+
+    export PYTHON_EXEC_FILE=${PREFIX_CC3D}/python37/bin/python
+
+    export QT_QPA_PLATFORM_PLUGIN_PATH=${PREFIX_CC3D}/python37/plugins
+
+    export CC3D_PYTHON_APP=${PREFIX_CC3D}/python37/compucell3d.app/Contents/MacOS/python
+
+    export DYLD_LIBRARY_PATH=${PREFIX_CC3D}/lib:${DYLD_LIBRARY_PATH}
+
+    ...
+
+All the lines that begin with ``export`` ar used to set local environment variables that are necessary to
+to get CC3D to run. in our case we need to set ``PREFIX_CC3D``, ``QT_QPA_PLATFORM_PLUGIN_PATH`` and
+``DYLD_LIBRARY_PATH``. For runs within PyCharm we may skip ``PYTHON_EXEC_FILE`` and  ``CC3D_PYTHON_APP``
+
+in my case I had CC3D installed into ``/Users/j/Demo/CC3D_4.1.0`` and therefore the environment variable
+configuration screen looks as follows:
+
+.. figure:: images/pycharm_osx_01.png
+    :alt: PyCharm Error
+
+where I set :
+
+.. code-block:: bash
+
+    PREFIX_CC3D=/Users/j/Demo/CC3D_4.1.0
+    QT_QPA_PLATFORM_PLUGIN_PATH=/Users/j/Demo/CC3D_4.1.0/python37/plugins
+    DYLD_LIBRARY_PATH=/Users/j/Demo/CC3D_4.1.0/lib
+
+After making those changes you should be able to open CC3D within PyCharm and start debugging your simulations
+
+
 
 Step 3 - Debugging (stepping through) CC3D simulation and exploring other PyCharm features
 -------------------------------------------------------------------------------------------
@@ -448,5 +524,13 @@ style.
 .. |pycharm_win_33| image:: images/pycharm_win_33.png
    :width: 2.0n
    :height: 0.9in
+
+.. |pycharm_osx_01| image:: images/pycharm_osx_01.png
+   :width: 5.0in
+   :height: 3.0in
+
+.. |pycharm_osx_02| image:: images/pycharm_osx_02.png
+   :width: 3.7in
+   :height: 2.3in
 
 
