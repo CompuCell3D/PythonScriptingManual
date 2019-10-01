@@ -158,7 +158,7 @@ We are done with configuring PyCharm. This section seem a bit long due to number
 but once you perform those tasks 2-3 times they will become a second nature and you will be ready to explore what
 PyCharm has to offer and it does offer quite a lot. Time for next section
 
-Configuration of OSX (applies to linux as well)
+Configuration of PyCharm on Macs (applies to linux as well)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Most of the steps outlined above apply to configuring PyCharm on OSX however if we do not set up all
@@ -219,8 +219,8 @@ to get CC3D to run. in our case we need to set ``PREFIX_CC3D``, ``QT_QPA_PLATFOR
 in my case I had CC3D installed into ``/Users/j/Demo/CC3D_4.1.0`` and therefore the environment variable
 configuration screen looks as follows:
 
-.. figure:: images/pycharm_osx_01.png
-    :alt: PyCharm Error
+.. figure:: images/pycharm_osx_02.png
+    :alt: PyCharm OSX Environment variables
 
 where I set :
 
