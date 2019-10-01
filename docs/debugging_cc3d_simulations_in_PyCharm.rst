@@ -232,6 +232,9 @@ where I set :
 
 After making those changes you should be able to open CC3D within PyCharm and start debugging your simulations
 
+**Linux Users:** You may follow analogous process on your linux machines - simply check in the ``compucell3d.sh``
+script what are environment variables that are set there and make sure to set them in the PyCharm environment variable
+panel.
 
 
 Step 3 - Debugging (stepping through) CC3D simulation and exploring other PyCharm features
