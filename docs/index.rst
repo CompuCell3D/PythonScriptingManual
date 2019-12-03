@@ -51,6 +51,7 @@ or simply purchase a book on introductory Python programming.
    changing_cluster_id_of_a_cell
    sbml_solver
    building_sbml_models_using_tellurium
+   building_SBML_models_efficiently_with_Antimony_and_CellML
    configuring_multiple_screenshots
    parameter_scans
    restarting_simulations
