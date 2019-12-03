@@ -6,6 +6,9 @@ the way you describe your simulations. The good news is that the new way of spec
 much simpler than before. However we did make some changes that will require you to update your existing code
 to work with CC3D 4.x. We tried as much as possible to keep old API to limit the number of changes you need to make.
 
+**As a translation method we recommend starting a new CompuCell3D model with twedit++ and copying over parts of your
+old 3.x code into this new CompuCell3D 4.x model.**
+
 The list below summarizes key API and coding convention changes. Later we are providing step-by-step guide on how to
 port your simulations to CC3D 4.x .
 
