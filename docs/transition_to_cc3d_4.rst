@@ -19,7 +19,7 @@ underscore from function arguments ``self.addSBMLToCell(_cell)`` -> ``self.add_s
 
 3. Changes how we declare ``Steppable`` class
 
-4. changes in main Python script
+4. Changes in main Python script
 
 Main Python Script
 ------------------
