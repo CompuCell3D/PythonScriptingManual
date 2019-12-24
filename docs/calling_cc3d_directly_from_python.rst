@@ -299,3 +299,13 @@ In your output you should see the following lines
     return values [{'tag': 0, 'result': 200.8033875687598}, {'tag': 1, 'result': 200.6628249954859}, {'tag': 2, 'result': 200.6617630355885}, {'tag': 3, 'result': 200.30450775355195}]
 
 
+Mac
+~~~
+
+To run script from ``Step 2`` you would follow described in the Linux section above. The only difference is that
+you will be using ``cc3d_caller_env_var_set_mac.command`` environment variable setter script instead of
+``cc3d_caller_env_var_set_mac.sh``. As before, all you need to set is the Path to Where CC3D is installed and path
+to the folder where Python interpreter resides. The remaining steps are analogous as those for linux i.e.
+modify environment setter script, run ``source cc3d_caller_env_var_set_mac.command`` to set environment variables
+and modify script from ``Step 2`` to include direct path to the simulation
+
