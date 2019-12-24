@@ -260,6 +260,10 @@ In my case I changed the script as follows and saved it under ``/home/m/411_auto
 
     ...
 
+.. note::
+
+    My ``PYTHON_INSTALL_PATH`` points to Python installation folder that is outside CC3D installation folder. This is because I compiled CC3D on linux. If you do not compile but want to use Python that is bundled with the distribution you would type ``export PYTHON_INSTALL_PATH=$PREFIX_CC3D/Python37/bin``. Regardless of what your configuration is make sure that you are specifying here a path to the folder in which Python interpreter resides.
+
 Next, in the open console I execute path setting script :
 
 .. code-block:: console
@@ -288,5 +292,10 @@ to
     cd /home/m/411_auto/Demos/CC3DCaller/cc3d_call_single_cpu
     python cc3d_call_single_cpu.py
 
+In your output you should see the following lines
+
+.. code-block:: console
+
+    return values [{'tag': 0, 'result': 200.8033875687598}, {'tag': 1, 'result': 200.6628249954859}, {'tag': 2, 'result': 200.6617630355885}, {'tag': 3, 'result': 200.30450775355195}]
 
 
