@@ -188,14 +188,14 @@ console and execute this script by typing:
 
 .. code-block:: console
 
-    cd \CompuCell3D-py3-64bit\Demos\CC3DCaller\environment_var_setters
+    cd c:\CompuCell3D-py3-64bit\Demos\CC3DCaller\environment_var_setters
     win_set_path.bat
 
 Next I navigate to location where my script from ``Step 2`` is installed
 
 .. code-block:: console
 
-    cd ..\cc3d_call_single_cpu
+    cd c:\CompuCell3D-py3-64bit\Demos\CC3DCaller\cc3d_call_single_cpu
 
 I replace the line 11 of the script from ``Step 2``
 
@@ -237,11 +237,56 @@ Running simulation on Linux is very similar to running on Windows. We start by m
     # export PREFIX_CC3D=/home/m/411_auto
     export PREFIX_CC3D=<path to where cc3d is installed>
 
-    # export PYTHON_INSTALL_PATHC=/home/m/miniconda3/envs/cc3d_2021/bin/python
+    # export PYTHON_INSTALL_PATH=/home/m/miniconda3/envs/cc3d_2021/bin
     export PYTHON_INSTALL_PATH=<path to where python executable is. Make sure it is same python as used by cc3d>
 
     ...
 
 and in the line that says ``export PREFIX_CC3D`` we specify where CC3D is installed in your linux system and in line
 with ``export PYTHON_INSTALL_PATH`` we specify path to where python interpreter used in CC3D is installed
+
+In my case I changed the script as follows and saved it under ``/home/m/411_auto/pathset.sh``
+
+.. code-block:: bash
+
+    #!/bin/sh
+    current_directory=$(pwd)
+
+    # necessary to enforce standard convention for numeric values specification on non-English OS
+    export LC_NUMERIC="C.UTF-8"
+
+    export PREFIX_CC3D=/home/m/411_auto
+    export PYTHON_INSTALL_PATH=/home/m/miniconda3/envs/cc3d_2021/bin
+
+    ...
+
+Next, in the open console I execute path setting script :
+
+.. code-block:: console
+
+    source /home/m/411_auto/pathset.sh
+
+Note, it is essential to call ``source`` to ensure that the paths you set in the ``pathset.sh`` script will "carry over"
+to your open console. On windows we did not have to do it.
+
+Next, I go to  ``/home/m/411_auto/Demos/CC3DCaller\cc3d_call_single_cpu`` and execute the script from ``Step 2``.
+It is also useful to change line 11 of the script from
+
+.. code-block:: python
+
+        simulation_fname = join(dirname(dirname(__file__)), 'cellsort_2D', 'cellsort_2D.cc3d')
+
+to
+
+.. code-block:: python
+
+        simulation_fname = '/home/m/411_auto/Demos/CC3DCaller/cellsort_2D/cellsort_2D.cc3d'
+
+
+.. code-block:: console
+
+    cd /home/m/411_auto/Demos/CC3DCaller/cc3d_call_single_cpu
+    python cc3d_call_single_cpu.py
+
+
 
