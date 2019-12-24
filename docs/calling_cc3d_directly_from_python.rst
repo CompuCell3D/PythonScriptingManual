@@ -137,5 +137,82 @@ Notice that a single simulation returns a dictionary as a result. For example si
 Notice that in this example ``ret_values[1]['result']`` is a floating point number but you can write your simulation
 in such a way that the result can be another dictionary where you could return multiple values.
 
+Applications
+~~~~~~~~~~~~
+
+We mentioned it at the beginning , but the examples we are showing here are only to illustrate a technique of how to
+call CC3D engine from Python script. Executing several simulations inside a Python loop is not that exciting but
+coupling it to an optimization algorithm or sensitivity analysis script is actually more practical. We will add those
+more advanced capabilities top CC3D in upcoming releases but for now we want to give you ability explore those avenues
+on your own without worrying too much about technical details of calling  CC3D from a script. Simply, use above script
+and modify it according to your needs.
+
+Step 3
+~~~~~~
+
+In order to run above script you need to set up few environment variables and, in particular, specify location of
+appropriate Python interpreter. This must be a Python interpreter that is either shipped with CC3D binary distribution
+or a one that you used to compile CC3D against. Let's get started. We will walk you steps necessary to run above scripts on
+various platforms. For your convenience we provide simple scripts where you specify two paths (CC3D installation path
+and Path to Python interpreter) and then the script takes care of setting your environment
+
+Let's start with windows.
+
+Windows
+~~~~~~~
+
+Go to ``CompuCell3D/core/Demos/CallableCC3D/environment_var_setters/cc3d_caller_env_var_set_windows.bat`` and open it
+in your editor and you will see the following content:
+
+.. code-block:: console
+
+    @ECHO OFF
+    @SET PREFIX_CC3D=<path to where cc3d is installed>
+    @SET PYTHON_INSTALL_PATH=<path to where python used for cc3d is installed>
+    @SET PYTHONPATH=%PREFIX_CC3D%\lib\site-packages
+
+Replace it with actual paths to where CC3D is installed and to location where python interpreter used with CC#D resides
+
+For example in my case CC3D is installed to ``c:\CompuCell3D-py3-64bit\`` so I modify the script as follows:
+
+.. code-block:: console
+
+    @ECHO OFF
+    @SET PREFIX_CC3D=`c:\CompuCell3D-py3-64bit
+    @SET PYTHON_INSTALL_PATH=`c:\CompuCell3D-py3-64bit\python36
+    @SET PYTHONPATH=%PREFIX_CC3D%\lib\site-packages
 
 
+I save this script as ``c:\CompuCell3D-py3-64bit\Demos\CC3DCaller\environment_var_setters\win_set_path.bat``. I open
+console and execute this script by typing:
+
+.. code-block:: console
+
+    cd \CompuCell3D-py3-64bit\Demos\CC3DCaller\environment_var_setters
+    win_set_path.bat
+
+Next I navigate to location where my script from ``Step 2`` is installed
+
+.. code-block:: console
+
+    cd ..\cc3d_call_single_cpu
+
+I replace the line 11 of the script from ``Step 2``
+
+.. code-block:: python
+
+        simulation_fname = join(dirname(dirname(__file__)), 'cellsort_2D', 'cellsort_2D.cc3d')
+
+with
+
+.. code-block:: python
+
+        simulation_fname = r'c:\CompuCell3D-py3-64bit\Demos\CallableCC3D\cellsort_2D\cellsort_2D.cc3d'
+
+Finally, in the console I execute the following:
+
+.. code-block:: console
+
+    python cc3d_call_single_cpu.py
+
+Make sure that you are in the correct directory when you run the last command.
