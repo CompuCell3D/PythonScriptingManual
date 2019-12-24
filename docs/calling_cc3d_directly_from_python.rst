@@ -209,6 +209,9 @@ with
 
         simulation_fname = r'c:\CompuCell3D-py3-64bit\Demos\CallableCC3D\cellsort_2D\cellsort_2D.cc3d'
 
+The reason I am doing it because in real application you probably have to do it anyway. You specify directly
+what simulation you want to run
+
 Finally, in the console I execute the following:
 
 .. code-block:: console
@@ -216,3 +219,29 @@ Finally, in the console I execute the following:
     python cc3d_call_single_cpu.py
 
 Make sure that you are in the correct directory when you run the last command.
+
+Linux
+~~~~~
+
+Running simulation on Linux is very similar to running on Windows. We start by modifying script
+``Demos/CallableCC3D/environment_var_setters/cc3d_caller_env_var_set_linux.sh``:
+
+.. code-block:: bash
+
+    #!/bin/sh
+    current_directory=$(pwd)
+
+    # necessary to enforce standard convention for numeric values specification on non-English OS
+    export LC_NUMERIC="C.UTF-8"
+
+    # export PREFIX_CC3D=/home/m/411_auto
+    export PREFIX_CC3D=<path to where cc3d is installed>
+
+    # export PYTHON_INSTALL_PATHC=/home/m/miniconda3/envs/cc3d_2021/bin/python
+    export PYTHON_INSTALL_PATH=<path to where python executable is. Make sure it is same python as used by cc3d>
+
+    ...
+
+and in the line that says ``export PREFIX_CC3D`` we specify where CC3D is installed in your linux system and in line
+with ``export PYTHON_INSTALL_PATH`` we specify path to where python interpreter used in CC3D is installed
+
