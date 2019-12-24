@@ -94,4 +94,48 @@ simulation in a list. Here is the code:
     if __name__ == '__main__':
         main()
 
-In the first
+In line 1 we import functions from ``os.path`` package that will be used to create paths to files. In line 2 we
+import ``CC3DCaller`` class. ``CC3DCaller`` object runs single simulation and returns simulation return value.
+
+.. note::
+
+    Simulation return value is a dictionary. This allows for quite a lot of flexibility. In particular, you are not limited to a single return value but can use multiple return values.
+
+in line 11 we construct a path to to a simulation that returns value This is a simulation that is bundled with CC3D. If
+you want to run different simulation you would replace code in line 11 with a direct path to your simulation.
+Line 12 defines location where we will write simulation output files (think of it as custom version of
+``CC3DWorkspace`` folder that CC3D normally uses for simulation output)
+
+.. note::
+
+    When you rerun your multiple simulations using script above you may want to make sure that simulation output folders are empty to avoid overwriting output from previous runs
+
+In line 16 we construct a lit of simulations we want to run. Notice that we use Pythonic syntax to create a list with
+multiple copies of the same element. ``[simulation_fname] * number_of_runs`` constructs a list where ``simulation_fname``
+is repeated ``number_of_runs`` times.
+
+in line 18 we create a list that will hold results. Line 19 starts a loop where we iterate over simulation paths we
+stored in ``sim_fnames`` list.
+
+In line 20 we create ``CC3DCaller`` object where we pass simulation name, screenshot output frequency, output directory
+for this specific simulation and a tag (identifier) that is used to identify return results. In our case we we use
+integer number ``i`` as identifier but you can be more creative. Finally in line 27 we execute simulation and get
+return value of the simulation and in line 28 is appended to ``ret_values``.
+Line 30 prints return values.
+
+If we run this script the output of print statement in line 30 will look something like (because we use ``random()``
+function we do not know exact outputs):
+
+.. code-block:: console
+
+    return values [{'tag': 0, 'result': 200.8033875687598}, {'tag': 1, 'result': 200.6628249954859}, {'tag': 2, 'result': 200.6617630355885}, {'tag': 3, 'result': 200.30450775355195}]
+
+Notice that a single simulation returns a dictionary as a result. For example simulation with tag ``1`` returned
+``{'tag': 1, 'result': 200.6628249954859}``. By "consuming" this dictionary in Python we can extract identifier using
+``ret_values[1]['tag']`` syntax and if we want to get the result we would use ``ret_values[1]['result']``.
+
+Notice that in this example ``ret_values[1]['result']`` is a floating point number but you can write your simulation
+in such a way that the result can be another dictionary where you could return multiple values.
+
+
+
