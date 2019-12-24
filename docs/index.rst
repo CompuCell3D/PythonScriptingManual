@@ -55,6 +55,7 @@ or simply purchase a book on introductory Python programming.
    configuring_multiple_screenshots
    parameter_scans
    restarting_simulations
+   calling_cc3d_directly_from_python
    implementing_energy_functions_in_python
    appendix_a
    appendix_b
