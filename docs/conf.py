@@ -136,8 +136,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'python_scripting_manual.tex', u'python\\_scripting\\_manual Documentation',
-     u'Maciej Swat, Julio Belmonte', 'manual'),
+    (master_doc, 'python_scripting_manual.tex', u'Python Scripting Manual for CC3D',
+     u'Maciej Swat, Julio Belmonte, James A. Glazier', 'manual'),
 ]
 
 
@@ -146,7 +146,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'python_scripting_manual', u'python_scripting_manual Documentation',
+    (master_doc, 'python_scripting_manual', u'Python Scripting Manual for CC3D',
      [author], 1)
 ]
 
@@ -157,7 +157,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'python_scripting_manual', u'python_scripting_manual Documentation',
+    (master_doc, 'python_scripting_manual', u'Python Scripting Manual for CC3D',
      author, 'python_scripting_manual', 'One line description of project.',
      'Miscellaneous'),
 ]
