@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python_scripting_manual'
-copyright = u'2017, Maciej Swat, Julio Belmonte'
-author = u'Maciej Swat, Julio Belmonte'
+copyright = u'2017, Maciej H. Swat, Julio Belmonte, James A. Glazier'
+author = u'Maciej H. Swat, Julio Belmonte, James A. Glazier'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
