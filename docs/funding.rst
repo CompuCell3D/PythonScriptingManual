@@ -1,7 +1,7 @@
 Funding
 =======
 
-Development of CC3D was funded by the following awards. The list of funding entities include
+From early days CompUCell3D was funded by science grants. The list of funding entities include
 
 - National Institutes of Health (NIH)
 - US Environmental Protection Agency (EPA)
