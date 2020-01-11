@@ -17,6 +17,7 @@ or simply purchase a book on introductory Python programming.
 .. toctree::
    :maxdepth: 2
 
+   funding
    introduction
    transition_to_cc3d_4
    how_to_use_python_in_cc3d
