@@ -114,6 +114,7 @@ as shown in the figure above and request in a screenshot is a matter of writing 
 in your steppable code. Do not worry if you request same screenshot multiple times. CC3D will process only first
 request and ignore the other identical requests. You can safely call this function from anywhere in the steppable
 
+You can find this example in ``Demos/SimulationSettings/ScreenshotsSteppable``
 
 .. |screenshots_config_1| image:: images/screenshots_config_1.png
    :width: 3.5000in
