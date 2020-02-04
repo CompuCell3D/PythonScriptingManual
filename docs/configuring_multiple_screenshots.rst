@@ -82,7 +82,7 @@ go to ``Tools->Open Screenshot Description Browser`` and the following window wi
 
 |screenshot_browser_1|
 
-**Fig. ** Screenshots configurations can be viewed using simple browser accessible via
+**Fig** Screenshots configurations can be viewed using simple browser accessible via
 ``Tools->Open Screenshot Description Browser``
 
 In the upper window we see 4 names of screenshot configurations. We will have to use exactly those names
@@ -146,8 +146,8 @@ request and ignore the other identical requests. You can safely call this functi
    :height: 2.85in
 
 .. |screenshot_browser_1| image:: images/screenshot_browser_1.png
-   :width: 2.7in
-   :height: 2.85in
+   :width: 4.2in
+   :height: 3.4in
 
 
 
