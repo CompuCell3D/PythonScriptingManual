@@ -5,6 +5,30 @@ In this appendix we present alphabetical list of member functions and
 objects of the SteppableBasePy class from which all steppables should
 inherit:
 
+``add_antimony_to_cell`` - translates Antimony model to SBML and forwards it
+to ``add_sbml_to_cell``
+
+``add_antimony_to_cell_ids`` - translates Antimony model to SBML and forwards it
+to ``add_sbml_to_cell_ids``
+
+``add_antimony_to_cell_types`` - translates Antimony model to SBML and forwards it
+to ``add_sbml_to_cell_types``
+
+``add_cellml_to_cell`` - translates CellML model to SBML and forwards it
+to ``add_sbml_to_cell``
+
+``add_cellml_to_cell_ids`` - translates CellML model to SBML and forwards it
+to ``add_sbml_to_cell_ids``
+
+``add_cellml_to_cell_types`` - translates CellML model to SBML and forwards it
+to ``add_sbml_to_cell_types``
+
+``add_free_floating_antimony`` - translates Antimony model to SBML and forwards it
+to ``add_free_floating_sbml``
+
+``add_free_floating_cellml`` - translates CellML model to SBML and forwards it
+to ``add_free_floating_sbml``
+
 ``add_free_floating_sbml`` - adds free floating SBML solver object to the
 simulation
 
@@ -176,6 +200,9 @@ FocalPointPlasticityPlugin object. None if module not used.
 
 ``get_anchor_focal_point_plasticity_data_list`` -  returns a list anchored links
 
+``get_box_coordinates`` - returns the two points defining the smallest box containing
+all cells in simulation.
+
 ``get_cell_boundary_pixel_list`` - function returning list of boundary pixels
 
 ``get_cell_neighbor_data_list`` - function returning Python-iterable list of
@@ -205,6 +232,22 @@ implementation of secretion in a cell-by-cell fashion.
 ``get_focal_point_plasticity_data_list`` - function returning Python-iterable
 list of C++ FocalPointPlasticityData objects. Used in conjunction with
 FocalPointPlasticityPlugin.
+
+``get_focal_point_plasticity_neighbor_list`` - function returning a
+Python-iterable list of all cell objects linked to a cell. Used in conjunction
+with FocalPointPlasticityPlugin.
+
+``get_focal_point_plasticity_num_neighbors`` - function returning the
+number of links attached to a cell. Used in conjunction with
+FocalPointPlasticityPlugin.
+
+``get_focal_point_plasticity_is_linked`` - function returning a Boolean
+signifying whether two cells are linked. Used in conjunction with
+FocalPointPlasticityPlugin.
+
+``get_focal_point_plasticity_initiator`` - function returning which of
+two linked cells initiated the link, or None if two cells are not linked.
+Used in conjunction with FocalPointPlasticityPlugin.
 
 ``get_internal_focal_point_plasticity_data_list`` - function returning
 Python-iterable list of C++ InternalFocalPointPlasticityData objects.
@@ -261,6 +304,10 @@ system
 
 ``numpy_to_point_3d`` - converts numpy vector to Point3D object
 
+``open_file_in_simulation_output_folder`` - function returning the file
+handle and output path of a file in the simulation output folder. Returns
+None, None if the file cannot be opened.
+
 ``pixelTrackerPlugin`` - a reference to C++ PixelTrackerPlugin object. None
 if module not used.
 
@@ -294,6 +341,10 @@ value is 0.
 ``secretionPlugin`` - a reference to C++ SecretionPlugin object. None if
 module not used.
 
+``set_focal_point_plasticity_parameters`` - convenience function for setting
+various focal point plasticity parameters for a cell. Used in conjunction with
+FocalPointPlasticityPlugin.
+
 ``set_max_mcs`` - sets maximum MCS. Used to increase or decrease number of MCS
 that simulation shuold complete.
 
@@ -313,6 +364,9 @@ object in cells of specified types
 ``set_step_size_for_free_floating_sbml`` - sets integration step for a given free
 floating SBML Solver object
 
+``shared_steppable_vars`` - reference to a global dictionary shared by all
+steppables.
+
 ``simulator`` - a reference to C++ Simulator object
 
 ``start`` - core function of the steppable. Users provide implementation of
@@ -331,6 +385,9 @@ models in the free floating SBML Solver objects
 
 ``timestep_sbml`` - function carrying out integration of all SBML models in
 all SBML Solver objects
+
+``translate_to_sbml_string`` - function returning a string of SBML model specification
+translated from Antimony or CellML model specification file or string
 
 ``typeIdTypeNameDict`` - internal use only - translates type id to type name
 
