@@ -308,6 +308,8 @@ system
 handle and output path of a file in the simulation output folder. Returns
 None, None if the file cannot be opened.
 
+``output_dir`` - simulation output directory
+
 ``pixelTrackerPlugin`` - a reference to C++ PixelTrackerPlugin object. None
 if module not used.
 
