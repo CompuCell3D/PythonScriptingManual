@@ -268,6 +268,8 @@ model.
 
 ``get_sbml_value`` - gets numerical value of the SBML model parameter
 
+``get_type_name_by_cell`` - gets string name of cell type
+
 ``init`` - internal use only
 
 ``invariant_distance`` - calculates invariant distance between two 3D points
