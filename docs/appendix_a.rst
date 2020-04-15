@@ -226,6 +226,11 @@ cell.
 ``get_elasticity_data_list`` - function returning Python-iterable list of C++
 ElasticityData objects. Used in conjunction with ElasticityPlugin
 
+``get_energy_calculations`` - function returning iterator of flip result
+and dictionary of effective energies by energy function for all flip attempts
+of the most recent Monte Carlo step. Requires ``EnergyFunctionCalculator`` with
+Type "Statistics".
+
 ``get_field_secretor`` - function returning Secretor object that allows
 implementation of secretion in a cell-by-cell fashion.
 
