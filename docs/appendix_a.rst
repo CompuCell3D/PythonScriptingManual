@@ -104,7 +104,7 @@ attributes that should not be copied
 cells. Copies all attributes from cell in a parent cluster to
 corresponging cell in the child cluster
 
-``cluster_list - Python-iterable list of clusters. Obsolete
+``cluster_list`` - Python-iterable list of clusters. Obsolete
 
 ``clusterSurfacePlugin`` - a reference to C++ ClusterSurfacePlugin object.
 None if module not used.
