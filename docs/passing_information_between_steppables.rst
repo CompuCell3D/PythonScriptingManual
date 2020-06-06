@@ -80,9 +80,9 @@ with a volume greater than 75 undergo mitosis:
 
 We see that ``MitosisSteppable`` initializes the key ``cells_to_divide`` with an empty list in
 the shared dictionary. ``CheckMitosisSteppable`` populates that same list every step with
-cell objects according to results of our imaginary function ``check_for_mitosis``, each of
+cell objects according to results of our test for mitosis, each of
 which ``MitosisSteppable`` then passes to the built-in method ``divide_cell_random_orientation``
 for randomly-oriented mitosis. After processing all mitosis results, ``MitosisSteppable``
 then returns the shared list to an empty list, so that each positive result of
-``check_for_mitosis`` corresponds to one division of a mitotic cell (otherwise a cell in
+our check for mitosis corresponds to one division of a mitotic cell (otherwise a cell in
 ``shared_steppable_vars['cells_to_divide']`` would divide every step!).
