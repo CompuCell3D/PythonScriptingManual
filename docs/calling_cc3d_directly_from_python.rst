@@ -3,23 +3,25 @@ Direct Call to CompuCell3D from Python
 
 In a typical situation, you will most often run CC3D using GUI. You create simulation, run it, look at the results,
 modify parameters, run again and the process continues. But what if you would like to be more "methodical" in
-finding optimal parameters? The new CC3D comes with a convenience module that allows you to directly call CC3D as
-a Python function and get return value(s) from your simulations. As you can tell already, functionality like this
-allows you to use various optimization packages and be able to find desired set of parameters for your simulation
-- assuming you know how to define a proper metrics.
+finding optimal parameters? CC3D comes with a convenience module that allows you to directly call CC3D as a Python
+function, pass information to your simulations, and get return value(s) from them. As you can tell already,
+functionality like this allows you to use CC3D as a black box that takes inputs and returns outputs in advanced,
+integrated workflows (*e.g.*, integration with various optimization packages to find desired set of parameters for your
+simulation).
 
 How does it work?
 -----------------
 
 .. note::
 
-    All examples from this section can be found in ``Demos/CallableCC3D``
+    All examples from this section can be found in ``CompuCell3D/core/Demos/CallableCC3D``
 
 Step 1
 ~~~~~~
 
-If you want to call CC3D engine from a Python function and get return value you need to modify your existing
-simulation to return such value. This is a very easy step - take a look at he code below:
+If you want to call CC3D engine from a Python function, pass information to it and/or get information from it, then you
+need to modify your existing simulation to process incoming information and/or return outgoing information. This is a
+very easy step - take a look at the code below:
 
 .. code-block:: python
 
@@ -33,7 +35,8 @@ simulation to return such value. This is a very easy step - take a look at he co
             SteppableBasePy.__init__(self, frequency)
 
         def start(self):
-            pass
+            pg = CompuCellSetup.persistent_globals
+            input_val = pg.input_object
 
         def step(self, mcs):
             if mcs == 100:
@@ -41,20 +44,22 @@ simulation to return such value. This is a very easy step - take a look at he co
                 pg.return_object = 200.0 + random()
 
 
-This is a "regular" steppable. The only new part is the line where we modify
-``CompuCellSetup.persistent_globals.return_object``. This variable that will persist even after simulation is finished
-is the way we pass simulation return value to the caller. Here, our return value is set to be a sum of number ``200.0``
-and a random number between 0 and 1. This return value can be set at any point in the simulation.
-In particular it often makes sense to set it in the ``finish`` function, but for illustration purposes we set it in
+This is a "regular" steppable. There are two new parts of interest. The first new part is where we retrieve a value
+from ``CompuCellSetup.persistent_globals.input_object``. This variable is set in Python *before* CC3D is called and is
+passed to CC3D during instantiation of a simulation through a Python function. The second new part is the line where we
+modify ``CompuCellSetup.persistent_globals.return_object``. This variable that will persist even after simulation is
+finished is the way we set what is returned by our simulation. Here, our return value is set to be a sum of number
+``200.0`` and a random number between 0 and 1. This return value can be set at any point in the simulation. In
+particular it often makes sense to set it in the ``finish`` function, but for illustration purposes we set it in
 ``step`` function. When accessing persistent_globals object , do not forget to include necessary import:
-``from cc3d import CompuCellSetup``
+``from cc3d import CompuCellSetup``.
 
 Step 2
 ~~~~~~
 
 Once we have a simulation we need to write a Python script from which we will call our value-returning simulations.
-We will first show a minimal example where we call CC3D from Python script few times and store return values of each
-simulation in a list. Here is the code:
+We will first show a minimal example where we call CC3D a few times from a Python script, pass a value to each
+simulation and store the return value of each simulation in a list. Here is the code:
 
 .. code-block:: python
     :linenos:
@@ -82,6 +87,7 @@ simulation in a list. Here is the code:
                 cc3d_sim_fname=sim_fname,
                 screenshot_output_frequency=10,
                 output_dir=join(root_output_folder,f'cellsort_{i}'),
+                sim_input=i,
                 result_identifier_tag=i
             )
 
@@ -101,29 +107,32 @@ import ``CC3DCaller`` class. ``CC3DCaller`` object runs single simulation and re
 
     Simulation return value is a dictionary. This allows for quite a lot of flexibility. In particular, you are not limited to a single return value but can use multiple return values.
 
-in line 11 we construct a path to to a simulation that returns value This is a simulation that is bundled with CC3D. If
-you want to run different simulation you would replace code in line 11 with a direct path to your simulation.
-Line 12 defines location where we will write simulation output files (think of it as custom version of
-``CC3DWorkspace`` folder that CC3D normally uses for simulation output)
+In line 11 we construct a path to a simulation that takes inputs and returns a value. This is a simulation that is
+bundled with CC3D. If you want to run different simulation you would replace code in line 11 with a direct path to your
+simulation. Line 12 defines location where we will write simulation output files (think of it as custom version of
+``CC3DWorkspace`` folder that CC3D normally uses for simulation output).
 
 .. note::
 
     When you rerun your multiple simulations using script above you may want to make sure that simulation output folders are empty to avoid overwriting output from previous runs
 
-In line 16 we construct a lit of simulations we want to run. Notice that we use Pythonic syntax to create a list with
+In line 16 we construct a list of simulations we want to run. Notice that we use Pythonic syntax to create a list with
 multiple copies of the same element. ``[simulation_fname] * number_of_runs`` constructs a list where ``simulation_fname``
 is repeated ``number_of_runs`` times.
 
-in line 18 we create a list that will hold results. Line 19 starts a loop where we iterate over simulation paths we
-stored in ``sim_fnames`` list.
+In line 18 we create a list that will hold results. Line 19 starts a loop where we iterate over the simulation paths we
+stored in the list ``sim_fnames``.
 
 In line 20 we create ``CC3DCaller`` object where we pass simulation name, screenshot output frequency, output directory
-for this specific simulation and a tag (identifier) that is used to identify return results. In our case we we use
-integer number ``i`` as identifier but you can be more creative. Finally in line 27 we execute simulation and get
-return value of the simulation and in line 28 is appended to ``ret_values``.
-Line 30 prints return values.
+for this specific simulation, input to the simulation and a tag (identifier) that is used to identify return results.
+In our case we use integer number ``i`` as an input and identifier but you can be more creative. In general,
+whatever is passed to the keyword argument ``sim_input`` is available to our steppables as
+``CompuCellSetup.persistent_globals.input_object``, and whatever we set
+``CompuCellSetup.persistent_globals.return_object`` to in our steppables will be returned. Finally in line 28 we
+execute simulation and get return value of the simulation and in line 29 is appended to ``ret_values``. Line 31 prints
+return values.
 
-If we run this script the output of print statement in line 30 will look something like (because we use ``random()``
+If we run this script the output of print statement in line 31 will look something like (because we use ``random()``
 function we do not know exact outputs):
 
 .. code-block:: console
@@ -140,12 +149,11 @@ in such a way that the result can be another dictionary where you could return m
 Applications
 ~~~~~~~~~~~~
 
-We mentioned it at the beginning , but the examples we are showing here are only to illustrate a technique of how to
+We mentioned it at the beginning, but the examples we are showing here are only to illustrate a technique of how to
 call CC3D engine from Python script. Executing several simulations inside a Python loop is not that exciting but
-coupling it to an optimization algorithm or sensitivity analysis script is actually more practical. We will add those
-more advanced capabilities top CC3D in upcoming releases but for now we want to give you ability explore those avenues
-on your own without worrying too much about technical details of calling  CC3D from a script. Simply, use above script
-and modify it according to your needs.
+coupling it to an optimization algorithm or sensitivity analysis script is actually more practical. We include a
+simple example of integrating CC3D with the SciPy optimization module to do model calibration in
+``CompuCell3D/core/Demos/CallableCC3D/ChemotaxisCalibrateDemo``.
 
 Step 3
 ~~~~~~
