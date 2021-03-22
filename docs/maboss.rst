@@ -306,7 +306,7 @@ The module ``cc3d.cpp.MaBoSSCC3DPy`` contains the following relevant API,
         # Integrates the simulation one step
         def step(self, _stepSize=-1.0) -> None
         # Gets the network state
-        def getNetwork(self) -> NetworkState
+        def getNetworkState(self) -> NetworkState
         # Loads an existing network state
         def loadNetworkState(self, _networkState: NetworkState) -> None
         # Get a node by node name
