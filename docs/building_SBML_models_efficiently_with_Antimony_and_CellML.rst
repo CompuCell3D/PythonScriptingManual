@@ -5,9 +5,10 @@ Now that we know how to write an Antimony model in Tellurium and use it with SBM
 let's explore some built-in functionality to efficiently write and use reaction-kinetics
 models in Antimony and CellML [1]_ model definition languages. Antimony and CellML models can be
 be attached to simulation objects exactly like SBML models, using variations in function naming
-conventions corresponding to the choice in model specification (*e.g.*, for SBML model function
-``add_sbml_to_cell`` there are corresponding functions ``add_antimony_to_cell`` and
-``add_cellml_to_cell``). For Antimony and CellML model specification, models are translated to SBML using the libAntimony
+conventions corresponding to the choice in model specification (*e.g.*, for SBML model functions
+``add_sbml_to_cell`` and ``add_sbml_to_link`` there are corresponding functions ``add_antimony_to_cell``,
+``add_cellml_to_cell``, ``add_antimony_to_link`` and ``add_cellml_to_link``).
+For Antimony and CellML model specification, models are translated to SBML using the libAntimony
 library developed by Lucian Smith and Herbert Sauro. Furthermore, models can be specified in
 external files and imported by CC3D steppables *or* within CC3D steppables as Python
 multi-line strings.
@@ -115,6 +116,15 @@ as a Python multi-line string, or as a path to a file containing the model. One 
 must be accomplished, where a multi-line string is passed to the keyword argument
 ``model_string``, or a path to a file is passed to the keyword argument ``model_file``. These
 are true for SBML, Antimony, and CellML built-in functions.
+
+For attaching Antimony and CellML models to links, steppables have the functions ``add_antimony_to_link`` and
+``add_cellml_to_link``. Their usage is the exact same as their cell-based counterparts, with the exception that
+a link is passed to the keyword argument ``link``, rather than passing a cell to the keyword argument ``cell``,
+
+.. code-block:: python
+
+    self.add_antimony_to_link(link=link, ...)
+    self.add_cellml_to_link(link=link, ...)
 
 .. [1]
    Cuellar, A.A., Lloyd, C.M., Nielsen, P.F., Bullivant, D.P., Nickerson, D.P. and Hunter, P.J. An overview of CellML 1.1, a biological model description language. SIMULATION: Transactions of The Society for Modeling and Simulation International. 2003 Dec;79(12):740-747.
