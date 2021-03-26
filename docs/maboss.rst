@@ -303,7 +303,7 @@ The module ``cc3d.cpp.MaBoSSCC3DPy`` contains the following relevant API,
         time: float
         # Current default step size
         step_size: float
-        # Integrates the simulation one step
+        # Integrates the simulation one step; passing no argument integrates over current value of step_size
         def step(self, _stepSize=-1.0) -> None
         # Gets the network state
         def getNetworkState(self) -> NetworkState
@@ -334,6 +334,7 @@ The ``SteppableBasePy`` class contains the following relevant API,
 
     class SteppableBasePy:
         # Adds a MaBoSS simulation instance to a cell
+        @staticmethod
         def add_maboss_to_cell(cell: CellG,
                                model_name: str,
                                bnd_file: str = None,
@@ -357,6 +358,8 @@ The ``SteppableBasePy`` class contains the following relevant API,
                          time_tick: float = 1.0,
                          discrete_time: bool = False,
                          seed: int = 0) -> MaBoSSCC3DPy.CC3DMaBoSSEngine
+        # Steps all existing MaBoSS simulations
+        def timestep_maboss(self) -> None:
 
 .. [1]
     Stoll, Gautier, et al. "MaBoSS 2.0: an environment for stochastic Boolean modeling." Bioinformatics 33.14 (2017): 2226-2228.
