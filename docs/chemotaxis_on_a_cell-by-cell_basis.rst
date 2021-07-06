@@ -110,7 +110,7 @@ we would use the following Python snippet:
 .. code-block:: python
 
     for cell in self.cell_list:
-        if cell.type == self.Macrophage:
+        if cell.type == self.cell_type.Macrophage:
             cd = self.chemotaxisPlugin.addChemotaxisData(cell, "ATTR")
             cd.setLambda(1.0)
             cd.setSaturationLinearCoef(10.1)
