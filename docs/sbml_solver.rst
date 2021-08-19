@@ -194,7 +194,7 @@ Solver object to a single cell and select a non-default SBML Solver integrator:
 Instead of a passing list of cell ids we pass a cell object (``cell_20``). All integrators
 supported by libRoadRunner are available using the keyword ``integrator``, which includes
 CVODE (default), Gillespie (``integrator='gillespie'``), Euler (``integrator='euler'``),
-Runge-Kutta (``integrator='rk4'``) and Gillesipe Direct Method (``integrator='rk45'``).
+Runge-Kutta (``integrator='rk4'``) and Gillespie Direct Method (``integrator='rk45'``).
 For more information on the details of available integrators, visit the
 `libRoadRunner online documentation <https://libroadrunner.readthedocs.io/en/latest/PythonAPIReference/cls_Integrator.html?highlight=integrator#rk4>`_.
 The ``integrator`` keyword argument is optional to, and available in, all functions
