@@ -237,6 +237,22 @@ and ``_relativeUptake`` is set to ``0.1``
 In similar fashion we could use remaining functions listed above
 
 
+Obtaining how much chemical the cell is exposed to (sampling)
+-------------------------------------------------------------
+
+To fetch the total amount of chemical a cell is exposed to we can simpli call ``secretor_object.amountSeenByCell(cell)``. In more detail
+
+.. code-block:: python
+
+    class SecretionSteppable(SecretionBasePy):
+        def __init__(self,frequency=1):
+            SecretionBasePy.__init__(self,frequency)
+
+        def step(self,mcs):
+            attr_secretor = self.get_field_secretor("ATTR")
+            for cell in self.cell_list:
+                res = attr_secretor.secreteInsideCellTotalCount(cell,300)
+                print('Cell exposed to  ', attr_secretor.amountSeenByCell(cell), 'units of ATTR')
 
 
 
