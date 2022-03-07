@@ -251,7 +251,6 @@ To fetch the total amount of chemical a cell is exposed to we can simpli call ``
         def step(self,mcs):
             attr_secretor = self.get_field_secretor("ATTR")
             for cell in self.cell_list:
-                res = attr_secretor.secreteInsideCellTotalCount(cell,300)
                 print('Cell exposed to  ', attr_secretor.amountSeenByCell(cell), 'units of ATTR')
 
 
