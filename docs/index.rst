@@ -58,6 +58,7 @@ or simply purchase a book on introductory Python programming.
    parameter_scans
    restarting_simulations
    calling_cc3d_directly_from_python
+   cc3d_python
    implementing_energy_functions_in_python
    appendix_a
    appendix_b
