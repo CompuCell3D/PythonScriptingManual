@@ -165,6 +165,8 @@ All provided functions to create MaBoSS simulations in CC3D can also take option
 -   ``seed`` takes an integer value (default is 0) as the seed for the random generator of the MaBoSS
     simulation.
 
+-   ``istate`` a dictionary of string names and corresponding initial state values.
+
 .. note::
 
     A ``time_step`` value less than a ``time_tick`` value is only valid when using the default Gillespie
@@ -267,6 +269,8 @@ The module ``cc3d.cpp.MaBoSSCC3DPy`` contains the following relevant API,
         ref_state: bool
         # Current state
         state: bool
+        # MaBoSS Node "mutate" method
+        def mutate(self, value: float) -> None
 
     # External variable value container
     class SymbolTable:
@@ -326,7 +330,8 @@ The module ``cc3d.core.MaBoSSCC3D`` contains the following relevant API,
                      time_step: float = 1.0,
                      time_tick: float = 1.0,
                      discrete_time: bool = False,
-                     seed: int = None) -> MaBoSSCC3DPy.CC3DMaBoSSEngine
+                     seed: int = None,
+                     istate: Dict[str, bool] = None) -> MaBoSSCC3DPy.CC3DMaBoSSEngine
 
 The ``SteppableBasePy`` class contains the following relevant API,
 
@@ -344,7 +349,8 @@ The ``SteppableBasePy`` class contains the following relevant API,
                                time_step: float = 1.0,
                                time_tick: float = 1.0,
                                discrete_time: bool = False,
-                               seed: int = 0) -> None
+                               seed: int = 0,
+                               istate: Dict[str, bool] = None) -> None
         # Removes a MaBoSS simulation instance from a cell
         @staticmethod
         def delete_maboss_from_cell(cell: CellG, model_name: str) -> None
@@ -357,9 +363,12 @@ The ``SteppableBasePy`` class contains the following relevant API,
                          time_step: float = 1.0,
                          time_tick: float = 1.0,
                          discrete_time: bool = False,
-                         seed: int = 0) -> MaBoSSCC3DPy.CC3DMaBoSSEngine
+                         seed: int = 0,
+                         istate: Dict[str, bool] = None) -> MaBoSSCC3DPy.CC3DMaBoSSEngine
         # Steps all existing MaBoSS simulations
         def timestep_maboss(self) -> None:
+        # Returns a dictionary with summary statistics of a node of a model
+        def maboss_stats(self, model_name: str, node_name: str) -> dict:
 
 .. [1]
     Stoll, Gautier, et al. "MaBoSS 2.0: an environment for stochastic Boolean modeling." Bioinformatics 33.14 (2017): 2226-2228.
