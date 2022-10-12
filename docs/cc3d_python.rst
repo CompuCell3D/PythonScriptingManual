@@ -524,8 +524,40 @@ which returns an ``ipywidgets`` toggle button that pauses and resumes a simulati
     cc3d_sim.visualize()                    # Show a visualization frame
     display(cc3d_sim.jupyter_run_button())  # Show a toggle button to pause/resume simulation
 
-HERE: how to add a graphics frame
+CC3D Python in Jupyter Notebook has some additional support for controlling a simulation.
+The ``CC3DSimService.visualize`` function returns the visualization frame, which can be put into a
+``CC3DJupyterGraphicsFrameGrid``. The FrameGrid can hold any number of visualization frames, which 
+is useful for watching multiple different fields as the simulation runs.
+The FrameGrid also has a method ``control_panel()``, which will display a graphical interface for
+controlling simulation settings during runtime.
 
-HERE: how to add and use a control panel
+.. code-block:: python
 
-HERE: how to add multiple graphics frames
+    from cc3d.core.GraphicsUtils.JupyterGraphicsFrameWidget import CC3DJupyterGraphicsFrameGrid
+
+    frame_field1 = cc3d_sim.visualize()
+    frame_field2 = cc3d_sim.visualize()
+    frame_field1.set_field_name('MyField1')  # optional; field can also be set through the control panel
+    frame_field2.set_field_name('MyField2')  # optional; field can also be set through the control panel
+
+    frame_grid = CC3DJupyterGraphicsFrameGrid(rows=1, cols=2) # 1x2 grid
+    frame_grid.set_frame(frame_cells, 0, 0)   #  left frame
+    frame_grid.set_frame(frame_glucose, 0, 1) # right frame
+
+    frame_grid.control_panel()  # optional; show graphical interface for interacting with simulation
+
+    frame_grid.show() # show the frame grid widget (and control panel if it was called)
+
++-----+-----+-----+-----+-----+
+|    Frame Grid Coordinates   |
++=====+=====+=====+=====+=====+
+| 0,0 | 0,1 | 0,2 | ... | 0,n |
++-----+-----+-----+-----+-----+
+| 1,1 | 1,1 | 1,2 | ... | 1,n |
++-----+-----+-----+-----+-----+
+| 2,0 | 2,1 | 2,2 | ... | 2,n |
++-----+-----+-----+-----+-----+
+| ... | ... | ... | ... | ... |
++-----+-----+-----+-----+-----+
+| n,0 | n,1 | n,2 | ... | n,n |
++-----+-----+-----+-----+-----+
