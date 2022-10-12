@@ -563,6 +563,7 @@ controlling simulation settings during runtime.
     frame_grid.show() # show the frame grid widget
 
 Here is an example screenshot of the control panel and frame grid based on the ``bacterium_macrophage`` demo:
+
 .. image:: images/jupyter_control_panel.png
     :alt: Screenshot of control_panel in Jupyter Notebook
 
