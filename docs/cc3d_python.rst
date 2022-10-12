@@ -529,6 +529,7 @@ Within Jupyter Notebook, CC3D provides functionality for viewing and controlling
 The ``CC3DJupyterGraphicsFrameGrid`` can hold any number of visualization frames (returned by the ``visualize`` function).
 This FrameGrid is useful for watching multiple different fields as the simulation runs.
 Set the position of frames inside FrameGrid using coordinates starting at 0,0 at the top left corner.
+
 +-----+-----+-----+-----+-----+
 |    Frame Grid Coordinates   |
 +=====+=====+=====+=====+=====+
@@ -542,6 +543,7 @@ Set the position of frames inside FrameGrid using coordinates starting at 0,0 at
 +-----+-----+-----+-----+-----+
 | n,0 | n,1 | n,2 | ... | n,n |
 +-----+-----+-----+-----+-----+
+
 The FrameGrid also has a method ``control_panel()``, which will display a graphical interface for
 controlling simulation settings during runtime.
 
