@@ -524,30 +524,11 @@ which returns an ``ipywidgets`` toggle button that pauses and resumes a simulati
     cc3d_sim.visualize()                    # Show a visualization frame
     display(cc3d_sim.jupyter_run_button())  # Show a toggle button to pause/resume simulation
 
-CC3D Python in Jupyter Notebook has some additional support for controlling a simulation.
-The ``CC3DSimService.visualize`` function returns the visualization frame, which can be put into a
-``CC3DJupyterGraphicsFrameGrid``. The FrameGrid can hold any number of visualization frames, which 
-is useful for watching multiple different fields as the simulation runs.
-The FrameGrid also has a method ``control_panel()``, which will display a graphical interface for
-controlling simulation settings during runtime.
-
-.. code-block:: python
-
-    from cc3d.core.GraphicsUtils.JupyterGraphicsFrameWidget import CC3DJupyterGraphicsFrameGrid
-
-    frame_field1 = cc3d_sim.visualize()
-    frame_field2 = cc3d_sim.visualize()
-    frame_field1.set_field_name('MyField1')  # optional; field can also be set through the control panel
-    frame_field2.set_field_name('MyField2')  # optional; field can also be set through the control panel
-
-    frame_grid = CC3DJupyterGraphicsFrameGrid(rows=1, cols=2) # 1x2 grid
-    frame_grid.set_frame(frame_cells, 0, 0)   #  left frame
-    frame_grid.set_frame(frame_glucose, 0, 1) # right frame
-
-    frame_grid.control_panel()  # optional; show graphical interface for interacting with simulation
-
-    frame_grid.show() # show the frame grid widget (and control panel if it was called)
-
+Within Jupyter Notebook, CC3D provides functionality for viewing and controlling  a simulation interactively.
+.. The ``CC3DSimService.visualize`` function returns the visualization frame, which can be put into a
+The ``CC3DJupyterGraphicsFrameGrid`` can hold any number of visualization frames (returned by the ``visualize`` function).
+This FrameGrid is useful for watching multiple different fields as the simulation runs.
+Set the position of frames inside FrameGrid using coordinates starting at 0,0 at the top left corner.
 +-----+-----+-----+-----+-----+
 |    Frame Grid Coordinates   |
 +=====+=====+=====+=====+=====+
@@ -561,3 +542,29 @@ controlling simulation settings during runtime.
 +-----+-----+-----+-----+-----+
 | n,0 | n,1 | n,2 | ... | n,n |
 +-----+-----+-----+-----+-----+
+The FrameGrid also has a method ``control_panel()``, which will display a graphical interface for
+controlling simulation settings during runtime.
+
+.. code-block:: python
+
+    from cc3d.core.GraphicsUtils.JupyterGraphicsFrameWidget import CC3DJupyterGraphicsFrameGrid
+
+    frame_field1 = cc3d_sim.visualize()
+    frame_field2 = cc3d_sim.visualize()
+    frame_field1.set_field_name('MyField1')  # optional; field can also be set through the control panel
+    frame_field2.set_field_name('MyField2')  # optional; field can also be set through the control panel
+
+    frame_grid = CC3DJupyterGraphicsFrameGrid(rows=1, cols=2) # 1x2 grid
+    frame_grid.set_frame(frame_field1, 0, 0)  #  left frame
+    frame_grid.set_frame(frame_field2, 0, 1)  # right frame
+
+    frame_grid.control_panel()  # optional; show graphical interface for interacting with simulation
+
+    frame_grid.show() # show the frame grid widget
+
+Here is an example screenshot of the control panel and frame grid based on the ``bacterium_macrophage`` demo:
+.. image:: images/jupyter_control_panel.png
+    :alt: Screenshot of control_panel in Jupyter Notebook
+
+The settings on the control panel will only apply to active `selected frames`.
+Use the buttons to toggle which frames are active.
