@@ -85,7 +85,7 @@ Let us look at the example steppable that uses SBML Solver:
 
            if mcs == 7:
                cell_25 = self.fetch_cell_by_id(25)
-               self.copy_sbml_simulators(from_cell=cell_20, to_cell=cell_25)
+               self.clone_sbml_simulators(from_obj=cell_20, to_obj=cell_25)
 
 
 
@@ -194,6 +194,14 @@ Solver object to a single cell:
    self.add_sbml_to_cell(model_file=model_file, model_name='dp', cell=cell_20)
 
 Instead of passing list of cell ids we pass cell object (``cell_20``).
+We can do the same with link objects using the same keyword arguments, except
+for passing a link to the keyword argument ``link``:
+
+.. code-block:: python
+
+   cell_21 = self.fetch_cell_by_id(21)
+   link = self.get_fpp_link_by_cells(cell_20, cell_21)
+   self.add_sbml_to_link(model_file=model_file, model_name='dp', link=link)
 
 We can also associate SBML model with certain cell types using the
 following syntax:
@@ -246,6 +254,14 @@ following syntax:
     cell_20.sbml.dp['S1'] = 10
     cell_20.sbml.dp['S2'] = 0.5
 
+The operations are the same for assigning values to dp model
+variables for a link:
+
+.. code-block:: python
+
+    link.sbml.dp['S1'] = 10
+    link.sbml.dp['S2'] = 0.5
+
 .. note::
 
    We access free-floating SBML solved via ``self.sbml.MODEL_ALIAS`` syntax whereas SBML solvers associated with a particular cell are accessed using reference to cell objects e.g. ``cell_20.sbml.MODEL_ALIAS``
@@ -273,6 +289,12 @@ from single cell:
 
     self.delete_sbml_from_cell(model_name='dp',cell=cell20)
 
+from a link:
+
+.. code-block:: python
+
+    self.delete_sbml_from_link(model_name='dp', link=link)
+
 or delete free floating SBML Solver object:
 
 .. code-block:: python
@@ -280,7 +302,7 @@ or delete free floating SBML Solver object:
     self.delete_free_floating_sbml(model_name='Medium_dp2'))
 
 .. note::
-   When cells get deleted all SBML Solver models are deleted automatically. You do not need to call ``delete_sbml`` functions in such a case.
+   When cells and links get deleted all SBML Solver models are deleted automatically. You do not need to call ``delete_sbml`` functions in such a case.
 
 Sometimes you may encounter a need to clone all SBML models from one
 cell to another (e.g. in the mitosis updateAttributes function where you
@@ -291,13 +313,14 @@ lets you do that very easily:
 
    cell_10 = self.fetch_cell_by_id(10)
    cell_25 = self.fetch_cell_by_id(25)
-   self.copy_sbml_simulators(from_cell=cell_10, to_cell=cell_25)
+   self.clone_sbml_simulators(from_obj=cell_10, to_obj=cell_25)
 
-What happens here is that source cell (``from_cell``) provides SBML Solver
+What happens here is that source cell (``from_obj``) provides SBML Solver
 object templates and based on these templates new SBML Solver objects
-are gets created and CC3D assigns them to target cell (``to_cell``). All
+are gets created and CC3D assigns them to target cell (``to_obj``). All
 the state variables in the target SBML Solver objects are the same as
-values in the source objects.
+values in the source objects. In general, a cell or link can be passed
+to both ``from_obj`` and ``to_obj``.
 
 If you want to copy only select models you would use the following
 syntax:
@@ -307,7 +330,7 @@ syntax:
 
    cell_10 = self.fetch_cell_by_id(10)
    cell_25 = self.fetch_cell_by_id(25)
-   self.copy_sbml_simulators(from_cell=cell_10, to_cell=cell_25, sbml_names=['dp'])
+   self.clone_sbml_simulators(from_obj=cell_10, to_obj=cell_25, sbml_names=['dp'])
 
 As you can see there is third argument - a Python list that specifies
 which models to copy. Here we are copying only dp models. All other
