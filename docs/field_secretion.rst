@@ -269,6 +269,21 @@ would like to construct another steppable to be also simulated with the previous
 ``SecretionSteppable``, and say this additional steppable computes the volume integral of the
 diffusing field ``ATTR`` everywhere, and in each cell. Such a steppable could look like the following,
 
+Obtaining how much chemical the cell is exposed to (sampling)
+-------------------------------------------------------------
+
+To fetch the total amount of chemical a cell is exposed to we can simpli call ``secretor_object.amountSeenByCell(cell)``. In more detail
+
+.. code-block:: python
+
+    class SecretionSteppable(SecretionBasePy):
+        def __init__(self,frequency=1):
+            SecretionBasePy.__init__(self,frequency)
+
+        def step(self,mcs):
+            attr_secretor = self.get_field_secretor("ATTR")
+            for cell in self.cell_list:
+                print('Cell exposed to  ', attr_secretor.amountSeenByCell(cell), 'units of ATTR')
 
 .. code-block:: python
 
