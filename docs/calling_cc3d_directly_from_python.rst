@@ -26,7 +26,6 @@ very easy step - take a look at the code below:
 .. code-block:: python
 
     from cc3d.core.PySteppables import *
-    from cc3d import CompuCellSetup
     from random import random
 
 
@@ -35,24 +34,21 @@ very easy step - take a look at the code below:
             SteppableBasePy.__init__(self, frequency)
 
         def start(self):
-            pg = CompuCellSetup.persistent_globals
-            input_val = pg.input_object
+            input_val = self.external_input
 
         def step(self, mcs):
             if mcs == 100:
-                pg = CompuCellSetup.persistent_globals
-                pg.return_object = 200.0 + random()
+                self.external_output = 200.0 + random()
 
 
 This is a "regular" steppable. There are two new parts of interest. The first new part is where we retrieve a value
-from ``CompuCellSetup.persistent_globals.input_object``. This variable is set in Python *before* CC3D is called and is
+from ``external_input``. The value of this property is set in Python *before* CC3D is called and is
 passed to CC3D during instantiation of a simulation through a Python function. The second new part is the line where we
-modify ``CompuCellSetup.persistent_globals.return_object``. This variable that will persist even after simulation is
+modify ``external_output``. This property that will persist even after simulation is
 finished is the way we set what is returned by our simulation. Here, our return value is set to be a sum of number
 ``200.0`` and a random number between 0 and 1. This return value can be set at any point in the simulation. In
 particular it often makes sense to set it in the ``finish`` function, but for illustration purposes we set it in
-``step`` function. When accessing persistent_globals object , do not forget to include necessary import:
-``from cc3d import CompuCellSetup``.
+``step`` function.
 
 Step 2
 ~~~~~~
@@ -126,9 +122,9 @@ stored in the list ``sim_fnames``.
 In line 20 we create ``CC3DCaller`` object where we pass simulation name, screenshot output frequency, output directory
 for this specific simulation, input to the simulation and a tag (identifier) that is used to identify return results.
 In our case we use integer number ``i`` as an input and identifier but you can be more creative. In general,
-whatever is passed to the keyword argument ``sim_input`` is available to our steppables as
-``CompuCellSetup.persistent_globals.input_object``, and whatever we set
-``CompuCellSetup.persistent_globals.return_object`` to in our steppables will be returned. Finally in line 28 we
+whatever is passed to the keyword argument ``sim_input`` is available to our steppables as the property
+``external_input``, and whatever we set the steppable property
+``external_output`` to in our steppables will be returned. Finally in line 28 we
 execute simulation and get return value of the simulation and in line 29 is appended to ``ret_values``. Line 31 prints
 return values.
 
@@ -158,46 +154,27 @@ simple example of integrating CC3D with the SciPy optimization module to do mode
 Step 3
 ~~~~~~
 
-In order to run above script you need to set up few environment variables and, in particular, specify location of
-appropriate Python interpreter. This must be a Python interpreter that is either shipped with CC3D binary distribution
-or a one that you used to compile CC3D against. Let's get started. We will walk you steps necessary to run above scripts on
-various platforms. For your convenience we provide simple scripts where you specify two paths (CC3D installation path
-and Path to Python interpreter) and then the script takes care of setting your environment
+In order to run above script you need to set up the environment that is shipped with the CC3D binary distribution
+or the one that you used to compile CC3D. Let's get started. We will walk you through the steps necessary to run
+the above scripts on various platforms.
+
+.. note::
+
+    Users who installed CC3D directly from conda only need to activate the conda environment in which CC3D is installed
+    to configure the environment from a terminal.
 
 Let's start with windows.
 
 Windows
 ~~~~~~~
 
-Go to ``CompuCell3D/core/Demos/CallableCC3D/environment_var_setters/cc3d_caller_env_var_set_windows.bat`` and open it
-in your editor and you will see the following content:
+Open a terminal in the root directory of the CC3D installation and issue ``call`` on the script ``conda-shell.bat``,
 
 .. code-block:: console
 
-    @ECHO OFF
-    @SET PREFIX_CC3D=<path to where cc3d is installed>
-    @SET PYTHON_INSTALL_PATH=<path to where python used for cc3d is installed>
-    @SET PYTHONPATH=%PREFIX_CC3D%\lib\site-packages
+    call conda-shell
 
-Replace it with actual paths to where CC3D is installed and to location where python interpreter used with CC#D resides
-
-For example in my case CC3D is installed to ``c:\CompuCell3D-py3-64bit\`` so I modify the script as follows:
-
-.. code-block:: console
-
-    @ECHO OFF
-    @SET PREFIX_CC3D=`c:\CompuCell3D-py3-64bit
-    @SET PYTHON_INSTALL_PATH=`c:\CompuCell3D-py3-64bit\python36
-    @SET PYTHONPATH=%PREFIX_CC3D%\lib\site-packages
-
-
-I save this script as ``c:\CompuCell3D-py3-64bit\Demos\CC3DCaller\environment_var_setters\win_set_path.bat``. I open
-console and execute this script by typing:
-
-.. code-block:: console
-
-    cd c:\CompuCell3D-py3-64bit\Demos\CC3DCaller\environment_var_setters
-    win_set_path.bat
+The environment is now configured to execute CC3D in Python.
 
 Next I navigate to location where my script from ``Step 2`` is installed
 
@@ -231,55 +208,12 @@ Make sure that you are in the correct directory when you run the last command.
 Linux
 ~~~~~
 
-Running simulation on Linux is very similar to running on Windows. We start by modifying script
-``Demos/CallableCC3D/environment_var_setters/cc3d_caller_env_var_set_linux.sh``:
+Running simulation on Linux is very similar to running on Windows. We start by opening a terminal in the
+root directory of the CC3D installation and calling ``source`` on ``conda-shell.sh``,
 
 .. code-block:: bash
 
-    #!/bin/sh
-    current_directory=$(pwd)
-
-    # necessary to enforce standard convention for numeric values specification on non-English OS
-    export LC_NUMERIC="C.UTF-8"
-
-    # export PREFIX_CC3D=/home/m/411_auto
-    export PREFIX_CC3D=<path to where cc3d is installed>
-
-    # export PYTHON_INSTALL_PATH=/home/m/miniconda3/envs/cc3d_2021/bin
-    export PYTHON_INSTALL_PATH=<path to where python executable is. Make sure it is same python as used by cc3d>
-
-    ...
-
-and in the line that says ``export PREFIX_CC3D`` we specify where CC3D is installed in your linux system and in line
-with ``export PYTHON_INSTALL_PATH`` we specify path to where python interpreter used in CC3D is installed
-
-In my case I changed the script as follows and saved it under ``/home/m/411_auto/pathset.sh``
-
-.. code-block:: bash
-
-    #!/bin/sh
-    current_directory=$(pwd)
-
-    # necessary to enforce standard convention for numeric values specification on non-English OS
-    export LC_NUMERIC="C.UTF-8"
-
-    export PREFIX_CC3D=/home/m/411_auto
-    export PYTHON_INSTALL_PATH=/home/m/miniconda3/envs/cc3d_2021/bin
-
-    ...
-
-.. note::
-
-    My ``PYTHON_INSTALL_PATH`` points to Python installation folder that is outside CC3D installation folder. This is because I compiled CC3D on linux. If you do not compile but want to use Python that is bundled with the distribution you would type ``export PYTHON_INSTALL_PATH=$PREFIX_CC3D/Python37/bin``. Regardless of what your configuration is make sure that you are specifying here a path to the folder in which Python interpreter resides.
-
-Next, in the open console I execute path setting script :
-
-.. code-block:: console
-
-    source /home/m/411_auto/pathset.sh
-
-Note, it is essential to call ``source`` to ensure that the paths you set in the ``pathset.sh`` script will "carry over"
-to your open console. On windows we did not have to do it.
+    source conda-shell.sh
 
 Next, I go to  ``/home/m/411_auto/Demos/CC3DCaller\cc3d_call_single_cpu`` and execute the script from ``Step 2``.
 It is also useful to change line 11 of the script from
@@ -311,9 +245,7 @@ Mac
 ~~~
 
 To run script from ``Step 2`` you would follow described in the Linux section above. The only difference is that
-you will be using ``cc3d_caller_env_var_set_mac.command`` environment variable setter script instead of
-``cc3d_caller_env_var_set_mac.sh``. As before, all you need to set is the Path to Where CC3D is installed and path
-to the folder where Python interpreter resides. The remaining steps are analogous as those for linux i.e.
-modify environment setter script, run ``source cc3d_caller_env_var_set_mac.command`` to set environment variables
-and modify script from ``Step 2`` to include direct path to the simulation
+you will be using ``conda-shell.command`` environment variable setter script instead of
+``conda-shell.sh``. As before, all you need to run is ``source conda-shell.command`` to set up the environment
+and modify script from ``Step 2`` to include direct path to the simulation.
 
