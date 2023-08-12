@@ -12,6 +12,9 @@ in an arbitrary Python project (*e.g.*, integrated applications, cluster executi
 This section describes basic Python specification of CC3D simulations and built-in plugins and steppables,
 and usage in CC3D project structures, arbitrary Python projects and a Jupyter Notebook.
 
+.. warning::
+
+    hello this is how you edit manual
 
 Overview
 --------
