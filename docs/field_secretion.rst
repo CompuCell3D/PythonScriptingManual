@@ -1,5 +1,29 @@
+Interacting with PDE Solver Fields
+==================================
+
+Every field declared in a PDE solver is accessible by name in Python from every registered steppable using
+the property ``field``, which allows us to retrieve and change the value of a field at a particular point by
+using the coordinates of the point as indices of the field. For example, if we have a PDE solver running
+with a field named ``ATTR`` and we would like to increment the value of ``ATTR`` at a point ``(10, 20, 30)``,
+we could write in a steppable,
+
+.. code-block:: python
+
+    self.field.ATTR[10, 20, 30] += 1
+
+Likewise we can manipulate a field using slicing operators, such as setting the value of our ``ATTR`` field
+to a value of ``1.0`` along a line,
+
+.. code-block:: python
+
+    self.field.ATTR[0:11, 20, 0] = 1.0
+
+.. note::
+
+    The functionality described up to this point is also applicable for extra scalar and vector fields. They can also be accessed and manipulated using the ``field`` property of a steppable. For more on extra fields, see :ref:`AddingExtraFields`.
+
 Field Secretion
-===============
+---------------
 
 PDE solvers in the CC3D allow users to specify secretion properties
 individually for each cell type. However, there are situations where you
@@ -56,12 +80,12 @@ definition of ``SecretionBasePy`` we will see that it inherits from
 .. code-block:: python
 
     class SecretionBasePy(SteppableBasePy):
-        def __init__(self,frequency=1):
-            SteppableBasePy.__init__(self,frequency)
+        def __init__(self, frequency=1):
+            SteppableBasePy.__init__(self, frequency)
             self.runBeforeMCS = 1
 
 Direct (but somewhat naive) Implementation
----------------------
+------------------------------------------
 Now, for the sake of completeness, let us implement cell secretion at
 the COM using alternative code:
 
@@ -105,7 +129,7 @@ writeup **“Hexagonal Lattices in CompuCell3D”**
 (http://www.compucell3d.org/BinDoc/cc3d_binaries/Manuals/HexagonalLattice.pdf)
 for more information. To convert between hex and Cartesian lattice
 coordinates we can use ``SteppableBasePy`` built-in functions
-(``self.cartesian_2_hex``, ``and self.hex_2_cartesian``) – see also Twedit++ CC3D
+(``self.cartesian_2_hex``, and ``self.hex_2_cartesian``) – see also Twedit++ CC3D
 Python menu Distances, Vectors, Transformations:
 
 .. code-block:: python
@@ -128,21 +152,21 @@ chemical that was added:
 .. code-block:: python
 
     class SecretionSteppable(SecretionBasePy):
-        def __init__(self,frequency=1):
-            SecretionBasePy.__init__(self,frequency)
+        def __init__(self, frequency=1):
+            SecretionBasePy.__init__(self, frequency)
 
-        def step(self,mcs):
+        def step(self, mcs):
             attr_secretor = self.get_field_secretor("ATTR")
             for cell in self.cell_list:
                 if cell.type == 3:
 
-                    res = attr_secretor.secreteInsideCellTotalCount(cell,300)
+                    res = attr_secretor.secreteInsideCellTotalCount(cell, 300)
                     print('secreted  ', res.tot_amount, ' inside cell')
-                    res = attr_secretor.secreteInsideCellAtBoundaryTotalCount(cell,300)
+                    res = attr_secretor.secreteInsideCellAtBoundaryTotalCount(cell, 300)
                     print('secreted  ', res.tot_amount, ' inside cell at the boundary')
-                    res = attr_secretor.secreteOutsideCellAtBoundaryTotalCount(cell,500)
+                    res = attr_secretor.secreteOutsideCellAtBoundaryTotalCount(cell, 500)
                     print('secreted  ', res.tot_amount, ' outside the cell at the boundary')
-                    res = attr_secretor.secreteInsideCellAtCOMTotalCount(cell,300)
+                    res = attr_secretor.secreteInsideCellAtCOMTotalCount(cell, 300)
                     print('secreted  ', res.tot_amount, ' inside the cell at the COM')
 
 As you can see the calls to that return the total amount of chemical added/uptaked are the same calls as we
@@ -154,7 +178,7 @@ member of the ``res`` object we get the total amount that was added/uptaken from
 
 .. code-block:: python
 
-    res = attr_secretor.secreteInsideCellTotalCount(cell,300)
+    res = attr_secretor.secreteInsideCellTotalCount(cell, 300)
     print('secreted  ', res.tot_amount, ' inside cell')
 
 For completeness we present a complete list of C++ signatures of all the functions that can be used to fine-control
@@ -227,8 +251,9 @@ For example if we want to use ``uptakeInsideCellAtCOMTotalCount(CellG * _cell, f
 from python we would use the following code:
 
 .. code-block:: python
+
     ...
-    res = attr_secretor.uptakeInsideCellAtCOMTotalCount(cell,3,0.1)
+    res = attr_secretor.uptakeInsideCellAtCOMTotalCount(cell, 3, 0.1)
     print('uptaken ', res.tot_amount, ' inside cell and the COM')
 
 In this case  ``_cell`` is a ``cell`` object that we normally deal with in Python, ``_maxUptake`` has value of ``3``
@@ -236,7 +261,60 @@ and ``_relativeUptake`` is set to ``0.1``
 
 In similar fashion we could use remaining functions listed above
 
+Volume Integrals
+----------------
+Field secretor objects also provide convenience methods to easily and quickly compute a volume
+integral of a PDE solver field over a particular cell or the entire simulation domain. Say we
+would like to construct another steppable to be also simulated with the previously described
+``SecretionSteppable``, and say this additional steppable computes the volume integral of the
+diffusing field ``ATTR`` everywhere, and in each cell. Such a steppable could look like the following,
 
+Obtaining how much chemical the cell is exposed to (sampling)
+-------------------------------------------------------------
 
+To fetch the total amount of chemical a cell is exposed to we can simpli call ``secretor_object.amountSeenByCell(cell)``. In more detail
 
+.. code-block:: python
 
+    class SecretionSteppable(SecretionBasePy):
+        def __init__(self,frequency=1):
+            SecretionBasePy.__init__(self,frequency)
+
+        def step(self,mcs):
+            attr_secretor = self.get_field_secretor("ATTR")
+            for cell in self.cell_list:
+                print('Cell exposed to  ', attr_secretor.amountSeenByCell(cell), 'units of ATTR')
+
+.. code-block:: python
+
+    class IntegralSteppable(SteppableBasePy):
+        def __init__(self, frequency=1):
+            SteppableBasePy.__init__(self, frequency)
+
+        def step(self, mcs):
+            attr_secretor = self.get_field_secretor("ATTR")
+            total_attr = attr_secretor.totalFieldIntegral()
+            for cell in self.cell_list:
+                cell_total_attr = attr_secretor.amountSeenByCell(cell)
+
+Like in ``SecretionSteppable``, a field secretor object is obtained for the diffusing field
+``ATTR``. However, ``IntegralSteppable`` computes the volume integral of the ``ATTR`` field over
+the simulation domain using the field secretor method ``totalFieldIntegral`` (and stores it in
+``total_attr``). Likewise, in a loop over every cell, ``IntegralSteppable`` then computes the
+volume integral of the ``ATTR`` field over the domain of each cell using the field secretor method
+``amountSeenByCell`` by simply passing as argument a cell of interest (and stores it in
+``cell_total_attr``).
+
+Algorithmic Considerations
+--------------------------
+
+Note that, in the previous example, ``IntegralSteppable`` inherits from ``SteppableBasePy`` instead
+of from ``SecretionBasePy``. This distinction is important because CC3D calls ``step`` on all steppables
+that inherit from ``SteppableBasePy`` `after` executing diffusion by the PDE solvers. In our case, we are
+then enforcing that computing volume integrals occurs `after` diffusion and secretion have been
+implemented for a simulation step. If we were to simulate ``SecretionSteppable`` and
+``IntegralSteppable`` with a PDE solver, then the order of calls to ``step`` would be executed as follows,
+
+- ``SecretionSteppable`` instance performs cell-based secretion for ``ATTR`` field
+- PDE solver performs diffusion of ``ATTR`` field
+- ``IntegralSteppable`` instance computes volume integrals of ``ATTR`` field

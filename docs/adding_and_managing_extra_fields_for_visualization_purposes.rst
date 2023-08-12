@@ -1,3 +1,5 @@
+.. _AddingExtraFields:
+
 Adding and managing extra fields for visualization purposes
 ===========================================================
 
@@ -177,8 +179,6 @@ example code:
             self.create_scalar_field_cell_level_py("IdFieldNew")
 
         def step(self, mcs):
-
-
             # clear id field
             try:
                 id_field = self.field.IdFieldNew

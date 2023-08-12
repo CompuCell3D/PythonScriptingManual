@@ -19,16 +19,16 @@ Let us look at the code:
         def start(self):
 
             for cell in self.cell_list:
-                if cell.type == self.MACROPHAGE:
+                if cell.type == self.cell_type.Macrophage:
                     cd = self.chemotaxisPlugin.addChemotaxisData(cell, "ATTR")
-                    cd.setLambda(30.0)
-                    cd.assignChemotactTowardsVectorTypes([self.MEDIUM, self.BACTERIUM])
+                    cd.setLambda(20.0)
+                    cd.assignChemotactTowardsVectorTypes([self.cell_type.Medium, self.cell_type.Bacterium])
                     break
 
         def step(self, mcs):
             if mcs > 100 and not mcs % 100:
                 for cell in self.cell_list:
-                    if cell.type == self.MACROPHAGE:
+                    if cell.type == self.cell_type.Macrophage:
 
                         cd = self.chemotaxisPlugin.getChemotaxisData(cell, "ATTR")
                         if cd:
@@ -85,34 +85,52 @@ CC3DML to the following call:
 
 .. code-block:: xml
 
-    <ChemotaxisByType ChemotactTowards="CELL_TYPES" Lambda="1.0" SaturationCoef="100.0" Type="CHEMOTAXING_TYPE"/>
+    <ChemotaxisByType ChemotactTowards="Medium, Bacterium" Lambda="1.0" SaturationCoef="100.0" Type="Macrophage"/>
 
 The Python code would look like:
 
 .. code-block:: python
 
     for cell in self.cell_list:
-        if cell.type == self.MACROPHAGE:
+        if cell.type == self.cell_type.Macrophage:
             cd = self.chemotaxisPlugin.addChemotaxisData(cell, "ATTR")
-            cd.setLambda(30.0)
-            cd.setSaturationCoef(100)
-            cd.assignChemotactTowardsVectorTypes([self.MEDIUM, self.BACTERIUM])
+            cd.setLambda(1.0)
+            cd.setSaturationCoef(100.0)
+            cd.assignChemotactTowardsVectorTypes([self.cell_type.Medium, self.cell_type.Bacterium])
 
 If we want to replicate the following CC3DML version of chemotaxis for a
 single cell:
 
 .. code-block:: xml
 
-    <ChemotaxisByType ChemotactTowards="CELL_TYPES" Lambda="1.0" SaturationLinearCoef="10.1" Type="CHEMOTAXING_TYPE"/>
+    <ChemotaxisByType ChemotactTowards="Medium, Bacterium" Lambda="1.0" SaturationLinearCoef="10.1" Type="Macrophage"/>
 
 we would use the following Python snippet:
 
 .. code-block:: python
 
     for cell in self.cell_list:
-        if cell.type == self.MACROPHAGE:
+        if cell.type == self.cell_type.Macrophage:
             cd = self.chemotaxisPlugin.addChemotaxisData(cell, "ATTR")
-            cd.setLambda(30.0)
-            cd.setSaturationLinearCoef(100)
-            cd.assignChemotactTowardsVectorTypes([self.MEDIUM, self.BACTERIUM])
+            cd.setLambda(1.0)
+            cd.setSaturationLinearCoef(10.1)
+            cd.assignChemotactTowardsVectorTypes([self.cell_type.Medium, self.cell_type.Bacterium])
+
+If we want to replicate the following CC3DML version of chemotaxis for a
+single cell:
+
+.. code-block:: xml
+
+    <ChemotaxisByType ChemotactTowards="Medium, Bacterium" Lambda="1.0" LogScaledCoef="1.0" Type="Macrophage"/>
+
+we would use the following Python snippet:
+
+.. code-block:: python
+
+    for cell in self.cell_list:
+        if cell.type == self.cell_type.Macrophage:
+            cd = self.chemotaxisPlugin.addChemotaxisData(cell, "ATTR")
+            cd.setLambda(1.0)
+            cd.setLogScaledCoef(1.0)
+            cd.assignChemotactTowardsVectorTypes([self.cell_type.Medium, self.cell_type.Bacterium])
 
