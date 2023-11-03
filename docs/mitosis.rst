@@ -171,7 +171,7 @@ or
         <LambdaVolume>2.0</LambdaVolume>
     </Plugin>
 
-
+**********************************************
 
 Directionality of mitosis - a source of possible simulation bias
 -----------------------------------------------------------------
@@ -194,10 +194,22 @@ cell will always appear on the right of the parent cell. Conversely, when the
 argument is a positive integer, the child cell will appear always on the
 left hand side of the parent cell.
 
+**********************************************
 
+Example: Contact-Inhibited Cell Growth
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Troubleshooting
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Cell-cell contact generally inhibits proliferation (contact inhibition).
 
-1. Always grow your cells if dividing by volume. Are the cells reaching their critical volume?
-    * Use the VolumePlugin in XML
+`Download the sample code here <https://drive.google.com/file/d/1GIk6VyTcZnwZ8_LgCClAxUYzb-clhbTY/view?usp=drive_link>`_, 
+then watch the video from the latest workshop to follow along:
+
+`Get the slides here <https://docs.google.com/presentation/d/1KNnXN1p7J81UrFxDw6c6yc0o0NmDl3sa/edit#slide=id.p24>`_.
+
+.. image:: https://img.youtube.com/vi/x0FG5LRf1U8/maxresdefault.jpg
+    :alt: Workshop Tutorial Video
+    :target: https://www.youtube.com/watch?v=x0FG5LRf1U8&list=PLiEtieOeWbMKTIF2mekBc9cABFPEDwCdj&index=19&t=4030
+    :width: 80%
+
+..
+    [Last Updated] November 2023
