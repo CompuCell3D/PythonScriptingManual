@@ -110,3 +110,78 @@ Think of a macrophage eating a bacterium and becoming slightly larger.
     As in apoptosis, it's important to use move all cells to delete to a new list, ``cells_to_delete``,
     so that a separate Python loop will make the calls to ``self.delete_cell(cell)``.
     This ensures that the first loop does not lose its place as it searches for dying cells.
+
+
+How to Turn off Mitosis for Dying Cells
+************************************************
+
+If you have a separate cell type for dying cells, then just add a line
+like ``if cell.type != self.NECROTIC``.
+
+.. code-block:: python
+
+    class MitosisSteppable(MitosisSteppableBase):
+        def __init__(self,frequency=1):
+            MitosisSteppableBase.__init__(self,frequency)
+
+        def step(self, mcs):
+
+            cells_to_divide=[]
+            
+            for cell in self.cell_list:
+                if cell.type != self.NECROTIC:
+                    cells_to_divide.append(cell)
+                        
+            for cell in cells_to_divide:
+                self.divide_cell_random_orientation(cell)
+        
+
+        def update_attributes(self):
+            # ...
+
+Otherwise, for apoptosis, you could check the targetVolume:
+
+.. code-block:: python
+
+    for cell in self.cell_list_by_type(self.CENTROBLAST):
+        if cell.targetVolume > 0:
+            cells_to_divide.append(cell)
+
+
+How to Control Division Time
+************************************************
+
+If you want to divide every cell every 70 MCS, for instance, you should 
+track each cell's last division time independently using ``cell.dict``.
+
+
+.. code-block:: python
+
+    DIVISION_TIME = 70 #mcs
+
+    class MitosisSteppable(MitosisSteppableBase):
+        def __init__(self,frequency=1):
+            MitosisSteppableBase.__init__(self,frequency)
+
+        def step(self, mcs):
+
+            cells_to_divide=[]
+            
+            for cell in self.cell_list:
+                last_div_time = cell.dict["last division time"]
+                if mcs - last_div_time >= DIVISION_TIME:
+                    cell.dict["last division time"] = mcs
+                    cells_to_divide.append(cell)
+            
+            for cell in cells_to_divide:
+                self.divide_cell_random_orientation(cell)
+        
+
+        def update_attributes(self):
+            # ...
+
+.. note::
+
+    You may like to implement some rules to reduce crowding, such as contact-inhibited growth
+    or a very simple if-statement that prevents cells with too many neighbors from dividing. 
+    Using pressure tends to be more realistic. 
