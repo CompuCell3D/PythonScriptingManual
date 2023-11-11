@@ -5,7 +5,7 @@ This guide covers apoptosis, necrosis, and phagocytosis.
 
 
 Death by Apoptosis
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+************************************************
 
 For each cell you want to kill, set its ``targetVolume`` to 0.
 The cell will begin to shrink over time. 
@@ -56,7 +56,7 @@ This is __optional__, but it may provide a slight boost to performance.
     This ensures that the first loop does not lose its place as it searches for dying cells.
 
 Death by Necrosis
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+************************************************
 
 There are many ways to achieve this, but one is to create a separate cell type, ``Necrotic``,
 that has a very high target surface and lamda surface. Its volume can remain the same as before. 
@@ -87,23 +87,41 @@ all cells die at Monte Carlo Step 100.
                 cell.type = self.NECROTIC
 
 Death by Phagocytosis
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+************************************************
 
 This time, another cell will absorb the ``volume`` of the cell that dies.
 Think of a macrophage eating a bacterium and becoming slightly larger. 
+This code checks every bacteria cell to see if its ownly neighbors are macrophage(s).
 
 .. code-block:: python
     
-    cells_to_delete = []
-    for i, cell in enumerate(self.cell_list_by_type(self.MACROPHAGE)):
-        for neighbor, common_surface_area in self.get_cell_neighbor_data_list(cell):
-            if neighbor and neighbor.type == self.BACTERIA:
-                cell.targetVolume += neighbor.volume
-                cell.targetSurface += 2 * sqrt(neighbor.volume) #Try to retain volume-to-surface ratio
-                cells_to_delete.append(neighbor)
-                
-    for cell in cells_to_delete:
-        self.delete_cell(cell)
+    def step(self, mcs):
+        cells_to_delete = []
+        for i, bacteria in enumerate(self.cell_list_by_type(self.BACTERIA)):
+            is_only_touching_macrophage = True
+            macrophage = None
+            for neighbor, common_surface_area in self.get_cell_neighbor_data_list(bacteria):
+                if neighbor:
+                    if neighbor.type == self.MACROPHAGE:
+                        macrophage = neighbor
+                    else:
+                       is_only_touching_macrophage = False
+            
+            if is_only_touching_macrophage and macrophage != None:
+                #Now, the macrophage eats the bacteria.
+                macrophage.targetVolume += bacteria.volume
+                macrophage.targetSurface += 2 * sqrt(bacteria.volume) #Try to retain volume-to-surface ratio
+                cells_to_delete.append(bacteria)
+                    
+        for cell in cells_to_delete:
+            self.delete_cell(cell)
+
+
+Alternative Approach 1: You could also check the length of ``cell_list_by_type`` to see if it is 1,
+but that would prevent phagocytosis from happening if the cell is touching any of the Medium.
+
+Alternative Approach 2: Since ``common_surface_area`` is not used in this example, CC3D has no way
+to know if one cell is inside of another. You could check the shared surface area against each cell's current surface.
 
 .. note::
 
@@ -111,9 +129,10 @@ Think of a macrophage eating a bacterium and becoming slightly larger.
     so that a separate Python loop will make the calls to ``self.delete_cell(cell)``.
     This ensures that the first loop does not lose its place as it searches for dying cells.
 
+************************************************
 
 How to Turn off Mitosis for Dying Cells
-************************************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you have a separate cell type for dying cells, then just add a line
 like ``if cell.type != self.NECROTIC``.
@@ -149,7 +168,7 @@ Otherwise, for apoptosis, you could check the targetVolume:
 
 
 How to Control Division Time
-************************************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you want to divide every cell every 70 MCS, for instance, you should 
 track each cell's last division time independently using ``cell.dict``.
