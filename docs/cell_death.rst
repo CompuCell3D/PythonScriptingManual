@@ -21,6 +21,7 @@ Once the cell's volume is small enough, you should delete it with ``self.delete_
         for b_cell, common_surface_area in self.get_cell_neighbor_data_list(tfh_cell):
             if b_cell and b_cell.type == self.CENTROCYTE:
                 b_cell.targetVolume = 0 #Starts apoptosis
+                b_cell.lambdaVolume = 1000 #Optional: make the shrinkage happen very fast
 
 **Example step 2:** Add this to your Main Python Script file. 
 We use a separate Steppable to check for cell death only periodically (that is, every 100 MCS instead of every 1 step). 
