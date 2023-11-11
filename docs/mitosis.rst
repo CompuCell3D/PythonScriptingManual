@@ -8,6 +8,10 @@ We **check if the cell has reached this volume threshold** at
 the end of every Monte Carlo Step (MCS). The folder containing this simulation is
 ``CompuCellPythonTutorial/steppableBasedMitosis``
 
+.. note::
+
+    *Tip:* Be sure to turn off mitosis for dying cells. `cell_death.rst`_`See how here`.
+
 **How to Implement a Simple Mitosis Steppable**
 
 .. code-block:: python
