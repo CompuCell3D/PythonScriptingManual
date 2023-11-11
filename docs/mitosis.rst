@@ -1,23 +1,18 @@
 Mitosis
 =======
 
-In developmental simulations we often need to simulate cells which grow
-and divide. In earlier versions of CompuCell3D we had to write quite
-complicated plugin to do that which was quite cumbersome and
-unintuitive. The only advantage of the plugin was that exactly after the
-pixel copy which had triggered mitosis condition CompuCell3D called cell
-division function immediately. This guaranteed that any cell which was
-supposed divide at any instance in the simulation, actually did.
-However, because state of the simulation is normally observed after
-completion of full a Monte Carlo Step, and not in the middle of MCS it
-makes actually more sense to implement Mitosis as a steppable. Let us
-examine the simplest simulation which involves mitosis. We start with a
-single cell and grow it. When cell reaches critical (doubling) volume it
-undergoes Mitosis. We check if the cell has reached doubling volume at
-the end of each MCS. The folder containing this simulation is
+In developmental simulations, we often need to simulate cells which grow
+and divide. We start with a single cell and grow it. 
+When a cell reaches a **critical volume**, it undergoes Mitosis. 
+We **check if the cell has reached this volume threshold** at
+the end of every Monte Carlo Step (MCS). The folder containing this simulation is
 ``CompuCellPythonTutorial/steppableBasedMitosis``
 
-Let’s see how we implement mitosis steppable:
+.. note::
+
+    *Tip:* Be sure to turn off mitosis for dying cells. `cell_death.rst`_`See how here`.
+
+**How to Implement a Simple Mitosis Steppable**
 
 .. code-block:: python
 
@@ -28,7 +23,8 @@ Let’s see how we implement mitosis steppable:
         def __init__(self, frequency=1):
             MitosisSteppableBase.__init__(self, frequency)
 
-            # 0 - parent child position will be randomized between mitosis event
+            # Optional: Customize where to place the new cell.
+            # 0 - parent and child positions will be randomized between mitosis events
             # negative integer - parent appears on the 'left' of the child
             # positive integer - parent appears on the 'right' of the child
             self.set_parent_child_position_flag(-1)
@@ -37,11 +33,11 @@ Let’s see how we implement mitosis steppable:
 
             cells_to_divide = []
             for cell in self.cell_list:
-                if cell.volume > 50:
+                if cell.volume > 50: #the critical mass, chosen arbitrarily
                     cells_to_divide.append(cell)
 
             for cell in cells_to_divide:
-                # to change mitosis mode leave one of the below lines uncommented
+                # To change mitosis mode, leave one of the below lines uncommented
                 self.divide_cell_random_orientation(cell)
                 # Other valid options
                 # self.divide_cell_orientation_vector_based(cell,1,1,0)
@@ -50,64 +46,79 @@ Let’s see how we implement mitosis steppable:
 
         def update_attributes(self):
 
-            # reducing parent target volume BEFORE cloning
+            # Reduce parent target volume BEFORE cloning
             self.parent_cell.targetVolume /= 2.0
 
             self.clone_parent_2_child()
 
-            # implementing
+            # Make the cell type change every time the cell divides
             if self.parent_cell.type == self.CONDENSING:
                 self.child_cell.type = self.NONCONDENSING
             else:
                 self.child_cell.type = self.CONDENSING
 
+How does the ``step(…)`` function work?
+    1. Check every cell to see if its volume is greater than 50.
+    2. All cells with this critical volume are placed into a list, ``cells_to_divide``.
+    3. Then, loop over all ``cells_to_divide`` to perform mitosis with a built-in function such as ``divide_cell_random_orientation(cell)``.
+    4. ``update_attributes()`` is automatically called before each division. Use this to control the data of the parent and child cells. 
+        * Here, ``self.clone_parent_2_child()`` copies over all data for you.
 
-The ``step`` function is quite simple – we iterate over all cells in the
-simulation and check if the volume of the cell is greater than 50. If it
-is we append this cell to the list of cells that will undergo mitosis.
-The actual mitosis happens in the second loop of the step function.
+.. note::
+    It's important to use two Python loops in ``step(…)`` to avoid iterating
+    over a newly-created cell. If we keep dividing cells in this loop we are adding elements to the list over which we iterate over and this might have unwanted side effects. 
+    The solution is to use use list of cells to divide as we did in the example.
 
-We have a choice there to divide cells along randomly oriented plane
-(line in 2D), along major, minor or user specified axis. When using user
-specified axis you specify vector which is perpendicular to the plane
+We have a choice in step 3 to divide cells along a randomly-oriented plane
+(line in 2D), along major, minor, or user-specified axis. When using a user
+specified axis, you specify a vector which is perpendicular to the plane
 (axis in 2D) along which you want to divide the cell. This vector does
-not have to be normalized but it has to have length different than 0.The
-updateAttributes function is called automatically each time you call any
+not have to be normalized but it has to have length different than 0. The
+``update_attributes`` function is called automatically each time you call any
 of the functions which divide cells.
 
 .. note::
 
-    The name of the function where we update attributes after mitosis has to be exactly ``update_attributes``. If it is called differently CC3D will not call it automatically. We can obviously call such function by hand, immediately we do the mitosis but this is not very elegant solution.
+    The name of the function where we update attributes after mitosis has to be exactly ``update_attributes``. If it is differen, CC3D will not call it automatically.
 
 The ``update_attributes`` of the function is actually the heart of the
 mitosis module and you implement parameter adjustments for parent and
 child cells inside this function. It is, in general, a good practice to
 make sure that you update attributes of both parent and child
-cells.Notice that we reset target volume of parent to 25:
+cells. Notice that we reset target volume of the parent to 25:
 
 .. code-block:: python
 
     self.parent_cell.targetVolume = 25.0
 
-Had we forgotten to do that parent cell would keep high target volume
+Had we forgotten to do that, the parent cell would keep the high target volume
 from before the mitosis and its actual volume would be, roughly 25
 pixels. As a result, after the mitosis, the parent cell would "explode"
-to get its volume close to the target target volume. As a matter of fact
+to get its volume close to the target target volume. As a matter of fact,
 if we keep increasing ``targetVolume`` without resetting, the target volume
 of parent cell would be higher for each consecutive mitosis event.
-Therefore you should always make sure that attributes of parent and
-child cells are adjusted properly in the updateAttribute function.
+Therefore, you should always make sure that the attributes of parent and
+child cells are adjusted properly in the ``update_attributes`` function.
 
 The next call in the ``update_attributes`` function is
 ``self.clone_parent_2_child()``. This function is a convenience function that
-copies all parent cell’s attributes to child cell. That includes python
-dictionary attached to a cell. It is completely up to you to call this
-function or do manula copy of select attributes from parent to child
+copies all parent cell’s attributes to child cell. It is completely up to you to call this
+function or do manual copy of select attributes from parent to child
 cell.
 
-If you would like to use automatic copy of parent attributes but skip
-certain dictionary elements (i.e. elements of the ``cell.dict``) you would
-use the following call:
+
+
+Deep-Copy a Cell (recommended)
+*********************************
+``clone_parent_2_child()``: Copies all attributes of the parent cell to the child cell, including ``cell.dict``.
+
+
+Shallow-Copy a Cell
+***************************
+``clone_attributes(source_cell, target_cell, no_clone_key_dict_list)``: Creates a shallow copy of a cell. 
+Parent attributes are copied, but dictionary elements, such as ``cell.dict``, are skipped.
+
+**Example:**
 
 .. code-block:: python
 
@@ -116,7 +127,7 @@ use the following call:
                          no_clone_key_dict_list=["ATTRIB_1", "ATTRIB_2"])
 
 
-where the dictionary elements ``ATTRIB_1`` and ``ATTRIB_2``
+The dictionary elements ``ATTRIB_1`` and ``ATTRIB_2``
 
 .. code-block:: python
 
@@ -126,86 +137,83 @@ are not copied. Remember that you can always ignore those convenience
 functions and assign parent and child cell attributes manually if this
 gives your code the behavior you want or makes code run faster.
 
-For example the implementation of the ``update_attribute`` function where we
+For example, the implementation of the ``update_attributes`` function where we
 manually set ``parent`` and ``child`` properties could look like that:
 
 .. code-block:: python
 
-    def updateAttributes(self):
+    def update_attributes(self):
 
-        self.child_cell.targetVolume = self.parent_ell.targetVolume
-        self.child_cell.lambdaVolume = self.parent_ell.lambdaVolume
+        self.child_cell.targetVolume = self.parent_cell.targetVolume
+        self.child_cell.lambdaVolume = self.parent_cell.lambdaVolume
         if self.parent_cell.type == self.CONDENSING:
             self.child_cell.type = self.NONCONDENSING
         else:
             self.child_cell.type = self.CONDENSING
 
-.. note::
-    It is important to divide cells outside the loop where we iterate over entire cell inventory. If we keep dividing cells in this loop we are adding elements to the list over which we iterate over and this might have unwanted side effects. The solution is to use use list of cells to divide as we did in the example.
 
-If you study the full example you will notice second steppable that we
-use to tom implement cell growth. Here is this steppable:
 
-.. code-block:: python
+Remember to Grow Your Cells
+**********************************
 
-    class VolumeParamSteppable(SteppablePy):
-        def __init__(self, frequency=1):
-            SteppablePy.__init__(self, frequency)
-            self.cellList = CellList(self.inventory)
+You can use either one of the two XML plugins to grow your cells to the target volume of 50.
+Let CC3D define this for you by clicking on **CCDML -> Plugins -> Volume** in Twedit++.
 
-        def start(self):
-            for cell in self.cellList:
-                cell.targetVolume = 25
-                cell.lambdaVolume = 2.0
+.. code-block:: xml
 
-        def step(self, mcs):
-            for cell in self.cell_list:
-                cell.targetVolume += 1
+    <Plugin Name="Volume">
+        <VolumeEnergyParameters CellType="Condensing" LambdaVolume="2.0" TargetVolume="50.0"/>
+        <VolumeEnergyParameters CellType="NonCondensing" LambdaVolume="2.0" TargetVolume="50.0"/>
+    </Plugin>
 
-Again, this is quite simple module where in start function we assign
-``targetVolume`` and ``lambdaVolume`` to every cell. In the step function we
-iterate over all cells in the simulation and increase target volume by 1
-unit. As you may suspect to get it to work we have to make sure that we
-use Volume without any parameters in the CC3DML plugin instead of ``Volume``
-plugin with parameters specified in the CC3DML.
+or 
 
-At this point you have enough tools in your arsenal to start building
-complex simulations using CC3D. For example, combining steppable
-developed so far you can write a steppable where cell growth is
-dependent on the value of e.g. FGF concentration at the centroid of the
-cell. To get x coordinate of a centroid of a cell use the following
-syntax:
-.. code-block:: python
+.. code-block:: xml
 
-    cell.xCOM
+    <Plugin Name="Volume">
+        <TargetVolume>50</TargetVolume>
+        <LambdaVolume>2.0</LambdaVolume>
+    </Plugin>
 
-or in earlier versions of CC3D
-
-.. code-block:: python
-
-    cell.xCM/float(cell.volume)
-
-Analogous code applies to remaining components of the centroid.
-Additionally , make sure you include CenterOfMass plugin in the XML or
-the above calls will return 0’s.
-
-Python helper for mitosis is available from Twedit++ ``CC3D Python->Mitosis``.
+**********************************************
 
 Directionality of mitosis - a source of possible simulation bias
 -----------------------------------------------------------------
 
-When mitosis module divides cells (and, for simplicity, let’s assume
-that division happens along vertical line) then the parent cell will
-always remain on the same side of the line i.e. if you run have a “stem”
-cell that keeps dividing all of it’s offsprings will be created on the
-same side of the dividing line. What you may observe then that if you
-reassign cell type of a child cell after mitosis than in certain
-simulations cell will appear to be biased to move in one direction of
-the lattice. To avoid this bias you need to set call
-``self.set_parent_child_position_flag`` function from ``Base`` class of the ``Mitosis``
-steppable. When you call this function with argument 0 then relative
+When the mitosis module divides cells (and, for simplicity, let’s assume
+that division happens along vertical line), then the parent cell will
+always remain on the same side of the line. For example, if you run have a “stem”
+cell that keeps dividing, all of its offsprings will be created on the
+same side of the dividing line. What you may observe then is that, if you
+reassign the cell type of a child cell after mitosis, then, in certain
+simulations, the cell will appear to be biased to move in one direction of
+the lattice. 
+
+To avoid this bias, you need to call the 
+``self.set_parent_child_position_flag`` function from the ``Base`` class of the ``Mitosis``
+steppable. When you call this function with argument 0, then the relative
 position of parent and child cell after mitosis will be randomized (this
-is default behavior). When the argument is negative integer the child
-cell will always appear on the right of the parent cell and when the
-argument is positive integer the child cell will appear always on the
+is default behavior). When the argument is a negative integer, the child
+cell will always appear on the right of the parent cell. Conversely, when the
+argument is a positive integer, the child cell will appear always on the
 left hand side of the parent cell.
+
+**********************************************
+
+Example: Contact-Inhibited Cell Growth
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Cell-cell contact generally inhibits proliferation (contact inhibition).
+
+`Download the sample code here <https://drive.google.com/file/d/1GIk6VyTcZnwZ8_LgCClAxUYzb-clhbTY/view?usp=drive_link>`_, 
+then watch the video from the latest workshop to follow along:
+
+`Get the slides here <https://docs.google.com/presentation/d/1KNnXN1p7J81UrFxDw6c6yc0o0NmDl3sa/edit#slide=id.p24>`_.
+
+.. image:: https://img.youtube.com/vi/x0FG5LRf1U8/maxresdefault.jpg
+    :alt: Workshop Tutorial Video
+    :target: https://www.youtube.com/watch?v=x0FG5LRf1U8&list=PLiEtieOeWbMKTIF2mekBc9cABFPEDwCdj&index=19&t=4030
+    :width: 80%
+
+..
+    [Last Updated] November 2023

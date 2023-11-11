@@ -4,15 +4,15 @@
 Python Scripting Manual for CompuCell3D - version 4.4.1
 =======================================================
 
-The focus of this manual is to teach you how to use Python 2
-scripting language to develop complex CompuCell3D simulations.
- We will assume that you have a working knowledge of Python.
- You do not have to be a Python guru but you should know how to write simple Python scripts
- that use functions, classes, dictionaries and lists.
- You can find decent tutorials online (e.g.
-`Instant Python Hacking <http://hetland.org/writing/instant-hacking.html>`__,
-or `Instant Python Hacking <http://hetland.org/writing>`__)
-or simply purchase a book on introductory Python programming.
+This manual teaches how to leverage Python for complex CompuCell3D simulations.
+You do not need to be an expert in Python, but you should know how to write simple Python scripts
+that use functions, classes, dictionaries, and lists.
+You can find decent tutorials online (e.g.
+`Instant Python Hacking <http://hetland.org/writing/instant-hacking.html>`__)
+or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.com/watch?v=f_PJOGoCoEw&list=PLiEtieOeWbMKTIF2mekBc9cABFPEDwCdj>`__.
+
+..
+    [Last Updated] November 2023
 
 .. toctree::
    :maxdepth: 2
@@ -48,7 +48,10 @@ or simply purchase a book on introductory Python programming.
    resizing_the_lattice
    changing_number_of_worknodes
    iterating_over_cell_neighbors
+   volume_and_growth
    mitosis
+   surface
+   cell_death
    dividing_clusters
    changing_cluster_id_of_a_cell
    sbml_solver
