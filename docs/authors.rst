@@ -5,3 +5,4 @@ Authors
 - Julio Belmonte
 - T.J. Sego
 - James Glazier
+- Peter Fyffe
