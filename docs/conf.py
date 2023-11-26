@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python_scripting_manual'
-copyright = u'2017, Maciej H. Swat, Julio Belmonte, T.J. Sego, James A. Glazier'
-author = u'Maciej H. Swat, Julio Belmonte, T.J. Sego, James A. Glazier'
+copyright = u'2017, Maciej H. Swat, Julio Belmonte, T.J. Sego, James A. Glazier, Peter Fyffe'
+author = u'Maciej H. Swat, Julio Belmonte, T.J. Sego, James A. Glazier, Peter Fyffe'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -137,7 +137,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'python_scripting_manual.tex', u'Python Scripting Manual for CC3D',
-     u'Maciej Swat, Julio Belmonte, T.J. Sego, James A. Glazier', 'manual'),
+     u'Maciej Swat, Julio Belmonte, T.J. Sego, James A. Glazier, Peter Fyffe', 'manual'),
 ]
 
 
