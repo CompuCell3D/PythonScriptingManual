@@ -1,10 +1,43 @@
 Chemotaxis
 ----------
 
-``Chemotaxis`` plugin, is used to simulate chemotaxis
-of cells. For every pixel copy, this plugin calculates change of energy
-associated with pixel move. There are several methods to define a change
-in energy due to chemotaxis. By default we define a chemotaxis using the
+``Chemotaxis`` plugin, is used to simulate the chemotaxis
+of cells. Put simply, a cell will follow the highest concentration of a chemical field. 
+Note that a cell can only move towards or away from a 
+chemical field if it can detect any concentration above 0 at its surface. 
+The cell cannot "see" far away to know where to move. 
+See also: `Chemotaxis Examples in Python <https://pythonscriptingmanual.readthedocs.io/en/latest/chemotaxis_on_a_cell-by-cell_basis.html>`_.
+
+Properties
+****************************
+
+Assume ``self`` is an instance of SteppableBasePy.
+
+**self.chemotaxisPlugin.addChemotaxisData(cell, fieldName: string)**: adds a chemotaxis behavior that will cause the given ``cell`` 
+to respond to the chemical field specified by ``fieldName``. 
+``fieldName`` must match the name of the chemical field exactly.  
+Returns a chemotaxis data object, which has the following methods: 
+
+    - **chemotaxisData.setLambda(lambda: float)**: assigns the lambda of the given chemotaxis behavior, which controls the intensity of the chemotaxis 
+    (see definition below).
+    - **chemotaxisData.assignChemotactTowardsVectorTypes([cellType1, cellType2, ...])**: causes chemotaxis to trigger when the cell touches
+    one or more of the other cell types in the provided list.
+    - **chemotaxisData.setLogScaledCoef(coef: float)**: assign the log-scaled
+    coefficient of the given chemotaxis behavior, which helps to mitigate 
+    excessive orders of magnitude in chemotaxis decisions (see definition below).
+
+**self.chemotaxisPlugin.getChemotaxisData(cell, fieldName: string)**: finds a chemotaxis behavior that is already assigned to the ``cell`` and returns it. 
+``fieldName`` must match the name of the chemical field exactly. 
+
+****************************
+
+
+How It Works
+***************************
+
+For every pixel copy, this plugin calculates the change of energy
+associated with the pixel move. There are several methods to define a change
+in energy due to chemotaxis. By default, we define a chemotaxis using the
 following formula:
 
 .. math::
@@ -19,15 +52,25 @@ where :math:`c(x_{source})` and :math:`c(x_{destination})` denote chemical conce
 the pixel-copy-source and pixel-copy-destination pixel, respectively.
 
 The body of the ``Chemotaxis`` plugin description contains sections called
-``ChemicalField``. In this section we tell CompuCell3D which module contains
-chemical field that we wish to use for chemotaxis. In our case it is
-``FlexibleDiffusionSolverFE``. Next we specify the name of the field - ``FGF``.
+``ChemicalField``. In this section, we tell CompuCell3D which module contains
+a chemical field that we wish to use for chemotaxis. In our case it is
+``FlexibleDiffusionSolverFE``. Next, we specify the name of the field - ``FGF``.
 Subsequently, we specify ``lambda`` for each cell type so that cells of
-different type may respond differently to a given chemical. In
-particular types not listed will not respond to chemotaxis at all.
+different types may respond differently to a given chemical. In
+particular, types not listed will not respond to chemotaxis at all.
 
-Occasionally we may want to use different formula for the chemotaxis
-than the one presented above. Current version of CompCell3D supports the
+**Lambda**: Controls how quickly a cell will move in response to a chemical field. 
+More precisely, it affects the *decision* of whether or not a cell's pixel will be copied so that the cell can move.
+If a cell has multiple chemicals that it is exposed to, it is more inclined to move towards the field that its lambda is higher for. 
+If lambda is positive, the cell will move toward the field. 
+Conversely, if it is negative, the cell will move away.
+Note that the *absolute value* controls the intensity, 
+so -100 and +100 will each have a similar effect on the cell.
+
+****************************
+
+Occasionally, we may want to use a different formula for the chemotaxis
+than the one presented above. The current version of CompCell3D supports the
 following definitions of change in chemotaxis energy (``Saturation`` and
 ``SaturationLinear`` respectively ):
 
@@ -48,8 +91,8 @@ or
    \end{eqnarray}
 
 
-where ``s`` denotes saturation constant. To use first of the above
-formulas we set the value of the saturation coefficient:
+where ``s`` denotes saturation constant. To use the first of the above
+formulas, we set the value of the saturation coefficient:
 
 .. code-block:: xml
 
@@ -61,7 +104,7 @@ formulas we set the value of the saturation coefficient:
     </Plugin>
 
 
-Notice that this only requires small change in line where you previously
+Notice that this only requires a small change in line where you previously
 specified only lambda.
 
 .. code-block:: xml
@@ -69,7 +112,7 @@ specified only lambda.
     <ChemotaxisByType Type="Bacteria" Lambda="2000000" SaturationCoef="1"/>
 
 
-To use second of the above formulas use ``SaturationLinearCoef`` instead of
+To use the second of the above formulas use ``SaturationLinearCoef`` instead of
 ``SaturationCoef``:
 
 .. code-block:: xml
@@ -110,9 +153,10 @@ the following attribute:
     <ChemotaxisByType Type="Amoeba" Lambda="100 "ChemotactTowards="Medium"/>
 
 
-This will cause that the change in chemotaxis energy will be non-zero
+This will cause the change in chemotaxis energy to be non-zero
 only for those pixel copy attempts that happen between pixels belonging
-to ``Amoeba`` and ``Medium``.
+to ``Amoeba`` and ``Medium``. 
+Essentially, the amoeba will follow the highest concentration of the medium it can find.
 
 .. note::
 
@@ -176,10 +220,10 @@ fields listed in the CC3DML will be used to calculate chemotaxis energy:
     …
 
 
-In the above excerpt from the CC3DML configuration file we see that
+In the above excerpt from the CC3DML configuration file, we see that
 cells of type ``Macrophage`` will chemotax in response to ``ATTR`` gradient.
 
-Using Python scripting we can modify chemotaxis properties of individual
+Using Python scripting we can modify the chemotaxis properties of individual
 cells as follows:
 
 
@@ -207,12 +251,11 @@ cells as follows:
                            cd.setLambda(lam)
                        break
 
-In the ``start`` function for first encountered cell of type ``Macrophage``
-(``type==self.cell_type.Macrophage``) we insert ``ChemotaxisData`` object (it determines chemotaxing
-properties) and initialize ``λ`` parameter to ``20``. We also initialize vector
-of cell types towards which Macrophage cell will chemotax (it will
-chemotax towards Medium and Bacterium cells). Notice the break statement
-inside the if statement, inside the loop. It ensures that only first
+In the ``start`` function for the first encountered cell of type ``Macrophage``
+(``type==self.cell_type.Macrophage``), we insert a ``ChemotaxisData`` object (it determines chemotaxing
+properties) and initialize ``λ`` parameter to ``20``. 
+We also initialize a vector of cell types towards which Macrophage cells will chemotax 
+(it will chemotax towards Medium and Bacterium cells). Notice the break statement inside the if statement, inside the loop. It ensures that only first
 encountered Macrophage cell will have chemotaxing properties altered.
 
 In the step function we decrease lambda chemotaxis by ``3`` units every ``100``

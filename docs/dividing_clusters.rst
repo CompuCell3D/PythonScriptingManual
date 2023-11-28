@@ -176,7 +176,7 @@ A Python helper for mitosis is available from Twedit++'s code snippets:
 ``CC3D Python->Mitosis``.
 
 
-How it Works
+How It Works
 ***************************
 
 While dividing non-clustered cells is straightforward, doing the same

@@ -1,10 +1,10 @@
 Chemotaxis on a cell-by-cell basis
 ==================================
 
-Just like the secretion is typically defined for cell types the same
-applies to chemotaxis. And similarly as in the case of the secretion
+Just like the secretion is typically defined for cell types, the same
+applies to chemotaxis. And, as in the case of secretion,
 there is an easy way to implement chemotaxis on a cell-by-cell basis.
-You can find relevant example in ``Demos/PluginDemos/chemotaxis_by_cell_id``.
+You can find a relevant example in ``Demos/PluginDemos/chemotaxis_by_cell_id``.
 Let us look at the code:
 
 .. code-block:: python
@@ -50,37 +50,37 @@ the chemotaxis plugin:
 
 
 As you can see we have commented out ``ChemotaxisByType`` but leaving
-information about fields so that chemotaxis plugin can fetch pointers to
-the fields. Clearly, leaving such definition of chemotaxis in the CC3DML
-would have no effect on the simulation. However, as you can see in the
-Python steppable code we define chemotaxis on a cell-by-cell basis.We
-loop over all cells and when we encounter cell of type Macrophage we
-assign to it object called ``ChemotaxisData`` (we use
+information about fields so that the chemotaxis plugin can fetch pointers to
+the fields. Clearly, leaving such a definition of chemotaxis in the CC3DML
+would not affect the simulation. However, as you can see in the
+Python steppable code, we define chemotaxis on a cell-by-cell basis. 
+We loop over all cells, and, when we encounter a cell of type Macrophage, we
+assign to it an object called ``ChemotaxisData`` (we use
 ``self.chemotaxisPlugin.addChemotaxisData`` function to do that).
-ChemotaxisData object allows definition of all chemotaxis properties
+The ChemotaxisData object allows the definition of all chemotaxis properties
 available via CC3DML but here we apply them to single cells. In our
-example code we set lambda describing chemotaxis strength and cells
+example code, we set lambda to describe chemotaxis strength and cell
 types that don’t inhibit chemotaxis by touching our cell (in other
-words, cell experiences chemotaxis when it touches cell types listed in
+words, the cell experiences chemotaxis when it touches cell types listed in
 assignChemotactTowardsVectorTypes function).
 
 Notice ``break`` instruction at the end of the loop. It ensures that the for
-loop that iterates over all cells stops after it encounters first cell
+loop that iterates over all cells stops after it encounters the first cell
 of type ``Macrophage``.
 
-In the step function iterate through all cells and search for first
+In the step function iterate through all cells and search for the first
 occurrence of Macrophage cell (``break`` instruction at the end of this
-function will ensure it). This time however, instead of adding
+function will ensure it). This time, however, instead of adding
 chemotaxis data we fetch ``ChemotaxisData`` object associated with a cell.
 We extract lambda and decrease it by 3 units. The net result of several
-operations like that is that lambda chemotaxis will go from positive
-number to negative number and cell that initially chemotaxed up the
-concentration gradient, now will start moving away from the source of
+operations like that are that lambda chemotaxis will go from a positive
+number to negative number, and the cell that initially chemotaxed up the
+concentration gradient will now start moving away from the source of
 the chemical.
 
 When you want to implement chemotaxis using alternative calculations
-with saturation terms all you need to do is to add cd.setSaturationCoef
-function call to enable type of chemotaxis that corresponds in the
+with saturation terms, all you need to do is to add cd.setSaturationCoef
+function call to enable the type of chemotaxis that corresponds to the
 CC3DML to the following call:
 
 .. code-block:: xml
