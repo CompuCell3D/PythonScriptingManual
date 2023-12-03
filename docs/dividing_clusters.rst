@@ -1,9 +1,9 @@
 Dividing Clusters (aka compartmental cells)
 ===========================================
 
-So far, we have shown examples of how to deal with cells that consist
-of only a single compartment. CC3D allows to use compartmental models
-where a single cell is actually composed of several compartments.
+Related: `Compartmentalized Cells, ContactInternal Plugin, and related XML <compartments.html>`_
+
+In compartmental models, a single cell is actually composed of several compartments.
 Each compartment is somewhat like an individual cell in that its behaviors
 can be specified independently, yet all the compartments can be treated as a single entity called a "cluster." 
 A cluster is a collection of compartment cells with the same ``clusterId``. If you use "simple" (non-compartmentalized) cells, then you can check that each such cell has a distinct id and clusterId. 
@@ -116,7 +116,7 @@ attributes are not to be copied (in our case ``cell.dict`` members
 ``ATTR_NAME_1`` and ``ATTR_NAME_2`` will not be copied).
 
 Finally, if you prefer manually setting the parent and child cells, you
-would use the flowing code:
+would use the following code:
 
 .. code-block:: python
 
@@ -182,9 +182,10 @@ How It Works
 While dividing non-clustered cells is straightforward, doing the same
 for clustered cells is more challenging. To divide non-clustered cells
 using the directional mitosis algorithm, we construct a line or a plane
-passing through the center of mass of a cell and pixels of the cell (we are
-using PixelTracker plugin with mitosis) on one side of the line/plane
-end up in the child cell and the rest stays in the parent cell. The orientation
+passing through the center of mass of a cell and pixels of the cell on one side of the line/plane
+end up in the child cell and the rest stays in the parent cell. 
+Be sure to use the `PixelTracker plugin <pixel_tracking_plugins.html>`_ with mitosis to enable this pixel manipulation. 
+The orientation
 of the line/plane can be either specified by the user, or we can use CC3D's
 built-in feature to calculate the orientation of the principal
 axes and divide either along the minor or major axis.
@@ -199,9 +200,9 @@ which we implemented in CC3D works in the following way:
    to a cluster cell. You may think of it as a single “regular” cell.
 
 2) We store volumes of compartments so that we know how big compartments
-   should be after mitosis (they will be half of original volume)
+   should be after mitosis (they will be half of the original volume)
 
-3) We calculate the center of mass of the entire cluster and calculate vector
+3) We calculate the center of mass of the entire cluster and calculate the vector
    offsets between the center of mass of a cluster and the center of mass of
    particular compartments as in the figure below:
 
@@ -229,27 +230,25 @@ line/plane. If we try to divide the cluster along a dashed line as in the pictur
 **Figure 8**. Division of cell along dashed line. Notice the orientation of :math:`\vec{n}` .
 The offsets after the mitosis for child and parent cell will be
 :math:`\vec{p}_1=\frac{1}{2}\vec{o}_1` and :math:`\vec{p}_2=\vec{o}_2` as
-expected because both parent and child cells will retain their heights
-but after mitosis will become twice narrower (cell with grey outer
-
-compartments is a parent cell):
+expected because both parent and child cells will retain their heights,
+but these cells will also become twice as narrow. 
 
 |compartments_fig_9|
 
-**Figure 9**.Child and parent (the one with grey outer compartments)
-cells after mitosis.
+**Figure 9**.Child and parent cells after mitosis. 
+The parent cell is the one with gray outer compartments. 
 
 The formula given above is heuristic. It gives a fairly simple way of
 assigning pixels of child/parent clusters to cellular compartments.
-It is not perfect but the idea is to get the approximate shape of the
+It is not perfect, but the idea is to get the approximate shape of the
 cell after the mitosis, and, as the simulation runs, the cell shape will
-readjust based on constraints such as adhesion of focal point
-plasticity. Before continuing with mitosis, we check if the center of
-masses of compartments belong to child/parent clusters. If the
+readjust based on constraints such as adhesion of `focal point
+plasticity <focal_point_plasticity.html>`_. Before continuing with mitosis, we check if the center of
+masses of the compartments belong to child/parent clusters. If the
 center of masses are outside their target pixels, we abandon mitosis
 and wait for readjustment of the cell shape, at which point the mitosis
 algorithm will pass this sanity check. For certain “exotic” shapes
-of cluster shapes presented mitosis algorithm may not work well or
+of cluster shapes, this mitosis algorithm may not work well or
 at all. In this case, we would have to write a specialized mitosis
 algorithm.
 
@@ -262,8 +261,7 @@ as compared to distances between centroids of other compartments. If
 the given compartment has reached its target volume and other compartments
 are underpopulated, we would assign pixels to other compartments based
 on the closest distance criterion. Although this method may result in
-some deviation from perfect 50-50 division of compartment volume, in
-most cases after a few MCS cells will readjust their volume.
+some deviation from perfect 50-50 division of compartment volume, the cells will typically readjust their volume after a few MCS.
 
    |compartments_fig_10|
 

@@ -1,6 +1,20 @@
 
-Compartmentalized cells. ContactInternal Plugin
------------------------------------------------
+Compartmentalized Cells | ContactInternal Plugin
+-------------------------------------------------------
+
+Related: `Dividing Clusters (aka compartmental cells) and Python examples <dividing_clusters.html>`_
+
+**Contact Plugin:** controls how easily cells adhere to one another or themselves. 
+
+**ContactInternal Plugin:** controls how easily sub-cells within the same
+compartment adhere to each other. 
+
+In both cases, low energy values "encourage" pixels to stick together whereas
+high values cause them to spread apart. 
+The ContactInternal Plugin can help to control the shape and arrangement of a compartmentalized cell. 
+Usually, the standard Contact Plugin should still be included to control how clusters interact with one another. 
+
+**********************************
 
 Calculating contact energies between compartmentalized cells is
 analogous to the non-compartmentalized case. The energy expression takes
@@ -17,18 +31,18 @@ the following form:
 
 where ``i`` and ``j`` denote pixels , ``σ(µ,ν)`` denotes a cell
 type of a cell with cluster id *µ* and cell id *ν* . In compartmental
-cell models a cell is a collection of subcells. Each subcell has a
-unique id  *ν* (cell id). In addition to that each subcell will have
-additional attribute, a cluster id (*µ*) that determines to which cluster of
-subcells a given subcell belongs. Tthink of a cluster as a cell with
-nonhomogenous cytoskeleton. So a cluster corresponds to a biological cell and
-subcells (or compartments) represents parts of a cell e.g. a nucleus. The core
+cell models, a cell is a collection of subcells. Each subcell has a
+unique id  *ν* (cell id). In addition to that, each subcell will have
+an additional attribute, a cluster id (*µ*) that determines to which cluster of
+subcells a given subcell belongs. Think of a cluster as a cell with
+a non-homogenous cytoskeleton. So a cluster corresponds to a biological cell and
+subcells (or compartments) represent parts of a cell, e.g., a nucleus. The core
 idea here is to have different contact
 energies between subcells belonging to the same cluster and different
 energies for cells belonging to different clusters. Technically subcells
 of a cluster are "regular" CompuCell3D cells. By giving them an extra
-attribute cluster id ((*µ*) we can introduce a concept of compartmental cells.
-In our convention *σ(0,0)* denotes medium
+attribute, cluster id (*µ*), we can introduce the concept of compartmental cells.
+In our convention, *σ(0,0)* denotes medium. 
 
 |compartments|
 
@@ -49,12 +63,12 @@ Indeed:
           J\left ( \sigma (\mu_{i},\nu_{i}),\sigma (\mu_{j},\nu_{j})  \right ) =  J^{internal}\left ( \sigma (\mu_{i},\nu_{i}),\sigma (\mu_{j},\nu_{j})  \right ) & \text{ if } \mu_i = \mu_j
         \end{cases}
 
-As we can see from above there are two hierarchies of contact energies –
+As we can see above, there are two hierarchies of contact energies –
 external and internal. To describe adhesive interactions between
-different compartmentalized cells we use two plugins: ``Contact`` and
+different compartmentalized cells, we use two plugins: ``Contact`` and
 ``ContactInternal``. ``Contact`` plugin calculates energy between two cells
-belonging to different clusters and ``ContactInternal`` calculates energies
-between cells belonging to the same cluster. An example syntax is shown
+belonging to different clusters and ``ContactInternal`` **calculates energies
+between cells belonging to the same cluster**. An example syntax is shown
 below
 
 .. code-block:: xml
@@ -135,9 +149,9 @@ and
         <NeighborOrder>2</NeighborOrder>
     </Plugin>
 
-Depending whether pixels for which we calculate contact energies belong
-to the same cluster or not we will use internal or external contact
-energies respectively.
+Depending on whether or not the pixels for which we calculate contact energies belong
+to the same cluster, we will use internal or external contact
+energies, respectively.
 
 .. |compartments| image:: images/compartments.png
    :width: 6.00000in
