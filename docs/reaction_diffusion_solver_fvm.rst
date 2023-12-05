@@ -1,5 +1,7 @@
-ReactionDiffusionSolverFVM
----------------------------
+ReactionDiffusionSolverFVM Plugin
+--------------------------------------
+
+Related: `ReactionDiffusionSolver Plugin <docs\reaction_diffusion_solver.html>`_
 
 The reaction diffusion finite volume (RDFVM) solver uses the finite volume method to
 solve the following system of :math:`N` reaction diffusion equations:
@@ -14,7 +16,7 @@ solve the following system of :math:`N` reaction diffusion equations:
         \int \iiint \frac{\partial c_N}{\partial t} dV dt &= \int \iiint \left( \nabla \left(D_N \nabla c_N \right) + A_N \left(c_1, c_2, ..., c_N \right) c_N + B_N \left(c_1, c_2, ..., c_N \right) \right) dV dt
     \end{align*}
 
-The RDFVM solver provides a broad range of basic and detailed modeling and simulation capability,
+The RDFVM solver provides a broad range of basic and detailed modeling and simulation capabilities,
 including the following,
 
 * Explicit surface transport modeling and boundary conditions on the basis of location
@@ -72,17 +74,17 @@ The following is a representative example of a specification for the RDFVM solve
 
 .. code-block:: xml
 
-    <Steppable Type=”ReactionDiffusionSolverFVM”>
+    <Steppable Type="ReactionDiffusionSolverFVM">
         <DeltaX>1.0</DeltaX>
         <DeltaY>1.0</DeltaY>
         <DeltaZ>1.0</DeltaZ>
         <AutoTimeSubStep/>
         <FluctuationCompensator/>
-        <DiffusionField Name=”U”>
+        <DiffusionField Name="U">
             <DiffusionData>
                 <DiffusionConstant>0.1</DiffusionConstant>
-                <DiffusionCoefficient CellType=”CellType1”>0.1</DiffusionCoefficient>
-                <DiffusionCoefficient CellType=”CellType2”>0.1</DiffusionCoefficient>
+                <DiffusionCoefficient CellType="CellType1">0.1</DiffusionCoefficient>
+                <DiffusionCoefficient CellType="CellType2">0.1</DiffusionCoefficient>
                 <DiffusivityByType/>
                 <DiffusivityFieldInMedium/>
                 <InitialConcentrationExpression>x</InitialConcentrationExpression>
@@ -99,17 +101,17 @@ The following is a representative example of a specification for the RDFVM solve
                 ...
             </BoundaryConditions>
         </DiffusionField>
-        <DiffusionField Name=”V”>
+        <DiffusionField Name="V">
             <DiffusionData>
                 <DiffusionConstant>0.1</DiffusionConstant>
-                <DiffusionCoefficient CellType=”CellType1”>0.1</DiffusionCoefficient>
-                <DiffusionCoefficient CellType=”CellType2”>0.1</DiffusionCoefficient>
+                <DiffusionCoefficient CellType="CellType1">0.1</DiffusionCoefficient>
+                <DiffusionCoefficient CellType="CellType2">0.1</DiffusionCoefficient>
                 <DiffusivityByType/>
                 <DiffusivityFieldEverywhere/>
-                <PermIntCoefficient Type1=”CellType1”, Type2=”CellType1”>0.1</PermIntCoefficient>
-                <PermIntCoefficient Type1=”CellType1”, Type2=”CellType2”>0.1</PermIntCoefficient>
-                <PermIntCoefficient Type1=”CellType2”, Type2=”CellType2”>0.1</PermIntCoefficient>
-                <PermIntBias Type1=”CellType1”, Type2=”CellType2”>0.01</PermIntBias>
+                <PermIntCoefficient Type1="CellType1", Type2="CellType1">0.1</PermIntCoefficient>
+                <PermIntCoefficient Type1="CellType1", Type2="CellType2">0.1</PermIntCoefficient>
+                <PermIntCoefficient Type1="CellType2", Type2="CellType2">0.1</PermIntCoefficient>
+                <PermIntBias Type1="CellType1", Type2="CellType2">0.01</PermIntBias>
                 <SimplePermInt/>
             </DiffusionData>
             <SecretionData>
@@ -173,7 +175,7 @@ The complete CC3DML interface for the RDFVM solver is as follows,
             * Activates editable field diffusivity in the medium.
         * **Element** ``<DiffusivityFieldEverywhere>`` (optional)
             * Activates editable field diffusivity in the simulation domain.
-            * The diffusivity field of a field with name “Field” can be accessed in Python as a concentration field with the name “FieldDiff”.
+            * The diffusivity field of a field with name "Field" can be accessed in Python as a concentration field with the name "FieldDiff".
             * Diffusion mode precedence is ``<DiffusivityFieldEverywhere>`` over ``<DiffusivityFieldInMedium>`` over ``<DiffusivityByType>`` over constant diffusion.
         * **Element** ``<SimplePermInt>`` (optional)
             * Activates simple interface transport flux at cell-cell and cell-medium interfaces.
@@ -200,7 +202,7 @@ The complete CC3DML interface for the RDFVM solver is as follows,
         * **Element** ``<ExpressionSymbol>`` (optional)
             * Declares a custom symbol for the field in reaction expressions.
             * Can be used to refer to a field in reactions defined for other fields.
-            * Value defaults to the field name + “ExpSym” (*e.g.*, ``MyFieldExpSym``).
+            * Value defaults to the field name + "ExpSym" (*e.g.*, ``MyFieldExpSym``).
             * Only one can be defined per field.
             * **Value**: expression symbol (*e.g.*, ``MyField``)
         * **Element** ``<ExpressionMult>`` (optional)

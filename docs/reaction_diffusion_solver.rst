@@ -1,5 +1,7 @@
-ReactionDiffusionSolver
------------------------
+ReactionDiffusionSolver Plugin
+-----------------------------------
+
+Related: `ReactionDiffusionSolverFVM (finite volume) Plugin <docs\reaction_diffusion_solver_fvm.html>`_
 
 The reaction diffusion solver solves the following system of N reaction
 diffusion equations:
@@ -55,8 +57,8 @@ It can be coded as follows:
 
 Notice how we implement functions ``f`` from the general system of
 reaction diffusion equations. We simply use ``<AdditionalTerm>`` tag and
-there we type arithmetic expression involving field names (tags
-``<FieldName>``). In addition to this we may include in those expression
+there we type an arithmetic expression involving field names (tags
+``<FieldName>``). In addition to this, we may include in those expressions the 
 word ``CellType``. For example:
 
 .. code-block:: xml
@@ -64,14 +66,14 @@ word ``CellType``. For example:
     <AdditionalTerm>0.01*F*CellType</AdditionalTerm>
 
 This means that function ``f`` will depend also on ``CellType`` . ``CellType``
-holds the value of the type of the cell at particular location - ``x``, ``y``, ``z``
+holds the value of the type of the cell at a particular location - ``x``, ``y``, ``z``
 - of the lattice. The inclusion of the cell type might be useful if you
-want to use additional terms which may change depending of the cell
+want to use additional terms which may change depending on the cell
 type. Then all you have to do is to either use if statements inside
 ``<AdditionalTerm>`` or form equivalent mathematical expression using
 functions allowed by ``muParser``: http://muparser.sourceforge.net/mup_features.html#idDef2
 
-For example, let's assume that additional term for second equation is
+For example, let's assume that the additional term for the second equation is
 the following:
 
 .. math::
@@ -84,15 +86,13 @@ the following:
             \end{cases}
 
 
-In such a case additional term would be coded as follows:
+In such a case, additional terms would be coded as follows:
 
 .. code-block:: xml
 
     <AdditionalTerm>CellType==1 ? 0.01*F : 0.15*F</AdditionalTerm>
 
-Notice that we have used here, so called ternary operator which might be
-familiar to you from other programing languages such as C or C++ and is
-equivalent to`` if-then-els``e statement
+We used a ternary operator, which functions the same as an `` if-then-else`` statement, to decide which expression to use based on whether or not the CellType is 1. (The syntax is similar to programming languages like C or C++)
 
 The syntax of the ternary (aka ``if-then-else`` statement) is as follows:
 
@@ -111,7 +111,7 @@ The syntax of the ternary (aka ``if-then-else`` statement) is as follows:
     that ``<1`` is the beginning of the new XML element. To fix this you could
     use two approaches:
 
-    1.Present your expression as ``CDATA``
+    1. Present your expression as ``CDATA``
 
     .. code-block:: xml
 
@@ -121,7 +121,7 @@ The syntax of the ternary (aka ``if-then-else`` statement) is as follows:
             ]]>
         </AdditionalTerm>
 
-    In this case XML parser will correctly interpret the expression enclosed
+    In this case, the XML parser will correctly interpret the expression enclosed
     between ``<![CDATA[`` and ``]]>`` .
 
     2. Replace XML using equivalent Python syntax - see (http://pythonscriptingmanual.readthedocs.io/en/latest/replacing_cc3dml_with_equivalent_python_syntax.html)
@@ -129,10 +129,10 @@ The syntax of the ternary (aka ``if-then-else`` statement) is as follows:
 
     .. code-block:: python
 
-        DiffusionDataElmnt\_2.ElementCC3D('AdditionalTerm', {}, 'CellType<1 ? 0.01*F : 0.15*F')
+        DiffusionDataElmnt.ElementCC3D('AdditionalTerm', {}, 'CellType<1 ? 0.01*F : 0.15*F')
 
-    The moral from this story is that if like to use muParser in the XML
-    file make sure to use this general syntax:
+    In summary, if you would like to use muParser for more flexibility in your XML,
+    make sure to use this general syntax: 
 
     .. code-block:: xml
 
@@ -142,11 +142,11 @@ The syntax of the ternary (aka ``if-then-else`` statement) is as follows:
             ]]>
         </AdditionalTerm>
 
-One thing to remember is that computing time of the additional term
+One thing to remember is that the computing time of the additional term
 depends on the level of complexity of this term. Thus, you might get some
-performance degradation for very complex expressions coded in muParser
+performance degradation for very complex expressions coded in muParser.
 
-Similarly as in the case of ``FlexibleDiffusionSolverFE`` we may use
-``<AutoscaleDiffusion>`` tag tells CC3D to automatically rescale diffusion
-constant. See section ``FlexibleDiffusionSolver`` or the ``Appendix`` for more
+Similarly as in the case of ``FlexibleDiffusionSolverFE``, we may use the 
+``<AutoscaleDiffusion>`` tag, which tells CC3D to automatically rescale the diffusion constant. 
+See section `FlexibleDiffusionSolver <flexible_diffusion_solver.html>`_ or the `Appendix` for more
 information.

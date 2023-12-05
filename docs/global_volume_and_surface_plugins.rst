@@ -1,41 +1,40 @@
 Global Volume and Surface Constraints
 -------------------------------------
 
-One of the most commonly used energy term in the GGH Hamiltonian is a
+Related: `Volume and Cell Growth [Reference] <volume_and_growth.html>`_ and 
+`Surface and Cell Contact [Reference] <surface.html>`_
+
+One of the most commonly used energy terms in the GGH Hamiltonian is a
 term that restricts variation of single cell volume. Its simplest form
-can be coded as show below:
+can be coded like this:
 
 .. code-block:: xml
 
     <Plugin Name="Volume">
-        <TargetVolume>25</TargetVolume>
-        <LambdaVolume>2.0</LambdaVolume>
+        <VolumeEnergyParameters CellType="CellA" LambdaVolume="2.0" TargetVolume="25"/>
     </Plugin>
 
 
-By analogy we may define a term which will put similar constraint
+By analogy, we may define a term which will put a similar constraint
 regarding the surface of the cell:
 
 .. code-block:: xml
 
     <Plugin Name="Surface">
-        <TargetSurface>20</TargetSurface>
-        <LambdaSurface>1.5</LambdaSurface>
+        <SurfaceEnergyParameters CellType="CellA" LambdaSurface="1.5" TargetSurface="20.0"/>
     </Plugin>
 
 
 These two plugins inform CompuCell that the Hamiltonian will have two
-additional terms associated with volume and surface conservation. That
-is when pixel copy is attempted one cell will increase its volume and
-another cell will decrease. Thus overall energy of the system changes.
+additional terms associated with volume and surface conservation. That is, when a pixel copy is attempted, one cell will increase its volume and
+another cell will decrease. Thus, the overall energy of the system changes.
 Volume constraint essentially ensures that cells maintain
-the volume which close (this depends on thermal fluctuations) to target
-volume. The role of surface plugin is analogous to volume, that is to
-"preserve" surface. Note that surface plugin is commented out in the
-example above.
+the volume which close to (this depends on thermal fluctuations) its target
+volume. The role of the surface plugin is analogous to volume; it
+"preserves" the total length of the cell's surface. 
 
 The examples shown below apply volume and surface constraints to all cells in the simulation.
-you can however apply volume and surface constraints to individual cell types or individual cells
+You can, however, apply volume and surface constraints to individual cell types or individual cells.
 
 Energy terms for volume and surface constraints have the form:
 
@@ -55,4 +54,11 @@ Energy terms for volume and surface constraints have the form:
 .. note::
 
     Copying a single pixel may cause surface change
-    in more that two cells – this is especially true in 3D.
+    in more than two cells – this is especially true in 3D.
+
+
+.. note:: 
+
+    The Volume and Surface plugins handle their respective behaviors automatically as long as they are added to the XML. 
+    However, if your particular use case needs to avoid the built-in constraints brought by these plugins,
+    you can still `track the volume and surface manually <volume_and_surface_tracker_plugins.html>`_.
