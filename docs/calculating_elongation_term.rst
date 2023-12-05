@@ -1,27 +1,35 @@
-Calculating shape constraint of a cell – elongation term
---------------------------------------------------------
+Calculating the Shape Constraint of a Cell – the Elongation Term
+------------------------------------------------------------------
 
-The shape of single cell immersed in medium and not subject to too
+Related: `Calculating Inertia Tensor in CC3D <inertia_tensor.html>`_ and `MomentOfInertia Plugin <moment_of_inertia.html>`_
+
+Learning Objectives:
+   - Learn how CC3D leverages inertia tensors to elongate cells
+
+*****************************************************
+
+The shape of a single cell immersed in medium and not subject to too
 drastic surface or surface constraints will be spherical (circular in
-2D). However in certain situation we may want to use cells which are
-elongated along one of their body axes. To facilitate this we can place
-constraint on principal lengths of cell. In 2D it is sufficient to
-constrain one of the principal lengths of cell how ever in 3D we need
-to constrain 2 out of 3 principal lengths. Our first task is to
-diagonalize inertia tensor (i.e. find a coordinate frame transformation
-which brings inertia tensor to a diagonal form)
+2D). However, in certain situations, we may want to use cells that are
+elongated along one of their body axes. To facilitate, this we can place
+constraints on the principal lengths of the cell. In 2D, it is sufficient to
+constrain one of the principal lengths of the cell. However, in 3D, we need
+to constrain 2 out of 3 principal lengths. 
+
+Our first task is to diagonalize the inertia tensor 
+(i.e. find a coordinate frame transformation
+which brings the inertia tensor to a diagonal form)
 
 Diagonalizing inertia tensor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We will consider here more difficult 3D case. The 2D case is described
-in detail in M.Zajac, G.L.jones, J,A,Glazier "*Simulating convergent
-extension by way of anisotropic differential adhesion"* Journal of
+We will consider here a more difficult 3D case. The 2D case is described
+in detail in M. Zajac, G.L. Jones, and J.A. Glazier in "*Simulating convergent
+extension by way of anisotropic differential adhesion*" Journal of
 Theoretical Biology **222** (2003) 247–259.
 
-In order to diagonalize inertia tensor we need to solve eigenvalue
-equation:
-
+In order to diagonalize the inertia tensor, 
+we need to solve the following eigenvalue equation:
 
 .. math::
    :nowrap:
@@ -53,11 +61,11 @@ or in full form
 The eigenvalue equation will be in the form of 3\ :sup:`rd` order
 polynomial. The roots of it are guaranteed to be real. The polynomial
 itself can be found either by explicit derivation, using symbolic
-calculation or simply in Wikipedia ( http://en.wikipedia.org/wiki/Eigenvalue_algorithm )
+calculation, or simply in Wikipedia ( http://en.wikipedia.org/wiki/Eigenvalue_algorithm )
 
 |eigenvalue_formula_wiki|
 
-so in our case the eigenvalue equation takes the form:
+so in our case, the eigenvalue equation takes the form:
 
 .. math::
    :nowrap:
@@ -70,9 +78,9 @@ so in our case the eigenvalue equation takes the form:
 This equation can be solved analytically, again we may use Wikipedia (
 http://en.wikipedia.org/wiki/Cubic_function )
 
-Now, the eigenvalues found that way are principal moments of inertia of
-a cell. That is they are components of inertia tensor in a coordinate
-frame rotated in such a way that off-diagonal elements of inertia tensor
+Now, the eigenvalues found that way are the principal moments of inertia of
+a cell. That is they are components of the inertia tensor in a coordinate
+frame rotated in such a way that off-diagonal elements of the inertia tensor
 are 0:
 
 .. math::
@@ -87,9 +95,9 @@ are 0:
    \end{eqnarray}
 
 
-In our cell shape constraint we will want to obtain ellipsoidal cells.
-Therefore the target tensor of inertia for the cell should be tensor if
-inertia for ellipsoid:
+In our cell shape constraint, we will want to obtain ellipsoidal cells.
+Therefore the target tensor of inertia for the cell should be the tensor if
+inertia for the ellipsoid:
 
 .. math::
    :nowrap:
@@ -112,7 +120,7 @@ where ``a``, ``b``, ``c`` are parameters describing the surface of an ellipsoid:
    \end{eqnarray}
 
 In other words ``a``, ``b``, ``c`` are half lengths of principal axes (they are
-analogues of circle's radius).
+analogues of the circle's radius).
 
 Now we can determine semi axes lengths in terms of principal moments of
 inertia by inverting the following set of equations:
@@ -126,11 +134,13 @@ inertia by inverting the following set of equations:
      I_{zz} = \frac{1}{5}(a^2+b^2)
    \end{eqnarray}
 
-Once we have calculated semiaxes lengths in terms of moments of inertia
-we can plug –in actual numbers for moment of inertia (the ones for
-actual cell) and obtain lengths of semiexes. Next we apply quadratic
-constraint on largest (semimajor) and smallest (seminimor axes). This is
-what elongation plugin does.
+Once we have calculated semiaxes lengths in terms of moments of inertia,
+we can plug in actual numbers for moment of inertia (the ones for
+actual cell) and obtain lengths of semiaxes. 
+
+Next, we apply a quadratic
+constraint on largest (semimajor) and smallest (semiminor axes). This is
+what the elongation plugin does.
 
 .. |eigenvalue_formula_wiki| image:: images/eigenvalue_formula_wiki.png
    :width: 9.00000in
