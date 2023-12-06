@@ -1,7 +1,7 @@
 Mitosis
 =======
 
-In developmental simulations, we often need to simulate cells which grow
+In developmental simulations, we often need to simulate cells that grow
 and divide. We start with a single cell and grow it. 
 When a cell reaches a **critical volume**, it undergoes Mitosis. 
 We **check if the cell has reached this volume threshold** at
@@ -102,8 +102,8 @@ child cells are adjusted properly in the ``update_attributes`` function.
 
 The next call in the ``update_attributes`` function is
 ``self.clone_parent_2_child()``. This function is a convenience function that
-copies all parent cell’s attributes to child cell. It is completely up to you to call this
-function or do manual copy of select attributes from parent to child
+copies all parent cell’s attributes to the child cell. It is completely up to you to call this
+function or do a manual copy of select attributes from parent to child
 cell.
 
 
@@ -181,9 +181,9 @@ Directionality of mitosis - a source of possible simulation bias
 -----------------------------------------------------------------
 
 When the mitosis module divides cells (and, for simplicity, let’s assume
-that division happens along vertical line), then the parent cell will
+that division happens along a vertical line), then the parent cell will
 always remain on the same side of the line. For example, if you run have a “stem”
-cell that keeps dividing, all of its offsprings will be created on the
+cell that keeps dividing, all of its offspring will be created on the
 same side of the dividing line. What you may observe then is that, if you
 reassign the cell type of a child cell after mitosis, then, in certain
 simulations, the cell will appear to be biased to move in one direction of
@@ -192,28 +192,14 @@ the lattice.
 To avoid this bias, you need to call the 
 ``self.set_parent_child_position_flag`` function from the ``Base`` class of the ``Mitosis``
 steppable. When you call this function with argument 0, then the relative
-position of parent and child cell after mitosis will be randomized (this
-is default behavior). When the argument is a negative integer, the child
+position of parent and child cells after mitosis will be randomized (this
+is the default behavior). When the argument is a negative integer, the child
 cell will always appear on the right of the parent cell. Conversely, when the
 argument is a positive integer, the child cell will appear always on the
-left hand side of the parent cell.
+left-hand side of the parent cell.
 
 **********************************************
 
-Example: Contact-Inhibited Cell Growth
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Cell-cell contact generally inhibits proliferation (contact inhibition).
-
-`Download the sample code here <https://drive.google.com/file/d/1GIk6VyTcZnwZ8_LgCClAxUYzb-clhbTY/view?usp=drive_link>`_, 
-then watch the video from the latest workshop to follow along:
-
-`Get the slides here <https://docs.google.com/presentation/d/1KNnXN1p7J81UrFxDw6c6yc0o0NmDl3sa/edit#slide=id.p24>`_.
-
-.. image:: https://img.youtube.com/vi/x0FG5LRf1U8/maxresdefault.jpg
-    :alt: Workshop Tutorial Video
-    :target: https://www.youtube.com/watch?v=x0FG5LRf1U8&list=PLiEtieOeWbMKTIF2mekBc9cABFPEDwCdj&index=19&t=4030
-    :width: 80%
-
-..
-    [Last Updated] November 2023
+**Related Examples**
+    - `General Mitosis Examples <example_mitosis>`_
+    - `Contact-Inhibited Cell Growth <example_contact_inhibited_cell_growth.html>`_
