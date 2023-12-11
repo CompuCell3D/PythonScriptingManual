@@ -1,7 +1,12 @@
 Secretion / SecretionLocalFlex Plugin
 --------------------------------------
 
-Related: `Field Secretion <field_secretion.html>`_ and `Secretion (legacy version for pre-v3.5.0) <legacy_secretion.html>`_
+Related: 
+    - `Secretion Reference <reference_field_secretor.html>`_
+    - `Field Secretion <field_secretion.html>`_ 
+    - `Secretion (legacy version for pre-v3.5.0) <legacy_secretion.html>`_
+
+****************************************
 
 `Download the sample code here <https://drive.google.com/drive/folders/1ZjLrFyHcX7iPV6WisxSRs4iMLN2vxDRI>`_, 
 then watch the video from the latest workshop to follow along:
@@ -58,7 +63,7 @@ below:
             SecretionBasePy.__init__(self, _simulator, _frequency)
 
         def step(self, mcs):
-            attrSecretor = self.getFieldSecretor("ATTR")
+            attrSecretor = self.get_field_secretor("ATTR")
             for cell in self.cellList:
                 if cell.type == 3:
                     attrSecretor.secreteInsideCell(cell, 300)
@@ -94,7 +99,7 @@ below for alternative implementation of ``SecretionSteppable`` using
             SteppableBasePy.__init__(self,_simulator, _frequency)
             self.runBeforeMCS=1
         def step(self,mcs):
-            attrSecretor=self.getFieldSecretor("ATTR")
+            attrSecretor=self.get_field_secretor("ATTR")
             for cell in self.cellList:
                 if cell.type==3:
                     attrSecretor.secreteInsideCell(cell,300)
@@ -113,7 +118,7 @@ we first create a field secretor object:
 
 .. code-block:: python
 
-    attrSecretor = self.getFieldSecretor("ATTR")
+    attrSecretor = self.get_field_secretor("ATTR")
 
 which allows us to manipulate how much which cells secrete into the ``ATTR` field.
 
@@ -124,63 +129,19 @@ chemical ``ATTR`` by a cell:
 
     attrSecretor.secreteInsideCell(cell,300)
 
-Currently, we support 7 secretion modes for individual cells:
 
-1. ``secreteInsideCell`` – this is equivalent to secretion in every pixel
-   belonging to a cell
-
-2. ``secreteInsideCellConstantConcentration`` – this is equivalent to
-   secretion in every pixel belonging to a cell and setting
-   concentration to fixed, constant level
-
-3. ``secreteInsideCellAtBoundary`` – secretion takes place in the pixels
-   belonging to the cell boundary
-
-4. ``secreteInsideCellAtBoundaryOnContactWith`` - secretion takes place in
-   the pixels belonging to the cell boundary that touches any of the
-   cells listed as the last argument of the function call
-
-5. ``secreteOutsideCellAtBoundary`` – secretion takes place in pixels which
-   are outside the cell but in contact with cell boundary pixels
-
-6. ``secreteOutsideCellAtBoundaryOnContactWith`` - secretion takes place in
-   pixels which are outside the cell but in contact with cell boundary
-   pixels and in contact with cells listed the last argument of the
-   function call
-
-7. ``secreteInsideCellAtCOM`` – secretion at the center of mass of the cell
-
-and 6 uptake modes:
-
-1. ``uptakeInsideCell`` – this is equivalent to uptake in every pixel
-   belonging to a cell
-
-2. ``uptakeInsideCellAtBoundary`` – uptake takes place in the pixels
-   belonging to the cell boundary
-
-3. ``uptakeInsideCellAtBoundaryOnContactWith`` - uptake takes place in the
-   pixels belonging to the cell boundary that touches any of the cells
-   listed as the last argument of the function call
-
-4. ``uptakeOutsideCellAtBoundary`` – uptake takes place in pixels which are
-   outside the cell but in contact with cell boundary pixels
-
-5. ``uptakeOutsideCellAtBoundaryOnContactWith`` - uptake takes place in
-   pixels which are outside the cell but in contact with cell boundary
-   pixels and in contact with cells listed the last argument of the
-   function call
-
-6. ``uptakeInsideCellAtCOM`` – uptake at the center of mass of the cell
 
 Secretion functions use the following syntax:
 
 .. code-block:: python
 
-    secrete*(cell,amount,list_of_cell_types)
+    secrete*(cell, amount)
+    #or...
+    secrete*(cell, amount, list_of_cell_types)
 
 .. note::
 
-    The ``list_of_cell_types`` is used only for function which
+    The ``list_of_cell_types`` is used only for functions which
     implement such functionality *i.e.* ``secreteInsideCellAtBoundaryOnContactWith`` and
     ``secreteOutsideCellAtBoundaryOnContactWith``
 
@@ -188,11 +149,13 @@ Uptake functions use the following syntax:
 
 .. code-block:: python
 
-    uptake*(cell,max_amount,relative_uptake,list_of_cell_types)
+    uptake*(cell, max_amount, relative_uptake, list_of_cell_types)
+    #or...
+    uptake*(cell, max_amount, relative_uptake)
 
 .. note::
 
-    The ``list_of_cell_types`` is used only for function which
+    The ``list_of_cell_types`` is used only for functions which
     implement such functionality *i.e.* ``uptakeInsideCellAtBoundaryOnContactWith`` and
     ``uptakeOutsideCellAtBoundaryOnContactWith``
 
@@ -247,7 +210,7 @@ of the below snippet:
 .. code-block:: python
 
     for cell in self.cellList:
-        attrSecretor = self.getFieldSecretor("ATTR")
+        attrSecretor = self.get_field_secretor("ATTR")
         for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
             if neighbor.type in [self.WALL]:
                 attrSecretor.secreteInsideCell(cell, 300)

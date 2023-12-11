@@ -1,7 +1,7 @@
 Cell Death
 ==============================
 
-This guide covers apoptosis, necrosis, and phagocytosis. 
+This guide covers suggested apoptosis, necrosis, and phagocytosis. 
 
 
 Death by Apoptosis
@@ -92,7 +92,7 @@ Death by Phagocytosis
 
 This time, another cell will absorb the ``volume`` of the cell that dies.
 Think of a macrophage eating a bacterium and becoming slightly larger. 
-This code checks every bacteria cell to see if its ownly neighbors are macrophage(s).
+This code checks every bacteria cell to see if its only neighbors are macrophage(s).
 
 .. code-block:: python
     

@@ -1,7 +1,22 @@
-Interacting with PDE Solver Fields
-==================================
+Field Secretion | Interacting with PDE Solver Fields
+======================================================
 
-Related: `Secretion <secretion.html>`_
+Related: 
+    - `Secretion Reference <reference_field_secretor.html>`_
+    - `Secretion Guide <secretion.html>`_ 
+    - `Secretion (legacy version for pre-v3.5.0) <legacy_secretion.html>`_
+    
+****************************************
+
+Methods
+****************************
+
+1. fieldSecretor.``secreteInsideCellTotalCount`` – returns a ``FieldSecretorResult` object that contains the summary of the secretion/uptake operation.  Most importantly, when we access ``total_amount``
+member of the ``res`` object we get the total amount that was added/uptaken from the chemical field e.g. :
+
+2. ``cell.lambdaVolume`` – 
+
+****************************
 
 Every field declared in a PDE solver is accessible by name in Python from every registered steppable using
 the property ``field``, which allows us to retrieve and change the value of a field at a particular point by
@@ -27,9 +42,9 @@ to a value of ``1.0`` along a line,
 Field Secretion
 ---------------
 
-PDE solvers in the CC3D allow users to specify secretion properties
-individually for each cell type. However, there are situations where you
-want only a single cell to secrete the chemical. In this case, you have
+PDE solvers in CC3D allow you to specify secretion properties
+individually for each cell type. However, there are situations where **you
+want only a single cell to secrete the chemical**. In this case, you have
 to use ``Secretor`` objects. In Twedit++, go to the ``CC3D Python->Secretion`` menu
 to see what options are available. Let us look at the example code to
 understand what kind of capabilities CC3D offers in this regard (see
@@ -60,24 +75,29 @@ understand what kind of capabilities CC3D offers in this regard (see
 In the step function, we obtain a handle to field secretor object that
 operates on diffusing field ``ATTR``. In the for loop where we go over all
 cells in the simulation we pick cells that are of type 3 (notice we use
-a numeric value here instead of an alias). Inside the loop we use
+a numeric value here instead of an alias). Inside the loop, we use
 ``secreteInsideCell``, ``secreteInsideCellAtBoundary``,
 ``secreteOutsideCellAtBoundary``, and ``secreteInsideCellAtCOM`` member
 functions of the secretor object to carry out secretion in the region
-occupied by a given cell. ``secreteInsideCell`` increases concentration by a
+occupied by a given cell. See the `secretion reference guide <secretion.html>`_ for more details.
+
+``secreteInsideCell``: increases concentration by a
 given amount (here ``300``) in every pixel occupied by a cell.
-``secreteInsideCellAtBoundary`` and ``secreteOutsideCellAtBoundary`` increase
-concentration but only in pixels which at the boundary but are inside
-cell or outside pixels touching cell boundary. Finally,
-``secreteInsideCellAtCOM`` increases concentration in a single pixel that is
-closest to cell center of mass of a cell.
+
+``secreteInsideCellAtBoundary`` and ``secreteOutsideCellAtBoundary``: increases
+concentration but only in pixels at the cell's boundary. 
+The "inside" version chooses the cell's pixels (recommended) whereas 
+the "outside" version chooses pixels touching the cell's boundary. 
+
+``secreteInsideCellAtCOM``: increases concentration for the single pixel that is
+closest to the cell's center of mass.
 
 Notice that ``SecretionSteppable`` inherits from ``SecretionBasePy``. We do this
 to ensure that Python-based secretion plays nicely with PDE solvers.
 This requires that such steppable must be called before MCS, or rather
 before the PDE solvers start evolving the field. If we look at the
-definition of ``SecretionBasePy`` we will see that it inherits from
-``SteppableBasePy`` and in the ``__init__`` function it sets
+definition of ``SecretionBasePy``, we will see that it inherits from
+``SteppableBasePy``. In the ``__init__`` function, it sets the 
 ``self.runBeforeMCS`` flag to ``1``:
 
 .. code-block:: python
@@ -120,20 +140,20 @@ solution.
 Lattice Conversion Factors
 ---------------------------
 
-In the code where we manually implement secretion at the cell’sCOM we use
-strange looking variables ``lmf_length``, ``x_scale`` and ``y_scale``. CC3D allows
-users to run simulations on square (Cartesian) or hexagonal lattices.
-Under the hood these two lattices rely on the Cartesian lattice. However
+In the code where we manually implement secretion at the cell's COM, we use
+strange-looking variables like ``lmf_length``, ``x_scale`` and ``y_scale``. 
+CC3D allows users to run simulations on square (Cartesian) or hexagonal lattices.
+Under the hood, these two lattices rely on the Cartesian lattice. However,
 distances between neighboring pixels are different on Cartesian and hex
-lattice. This is what those 3 variables accomplish. The take home
+lattices. This is what those 3 variables accomplish. The take-home
 message is that to convert COM coordinates on hex lattice to Cartesian
-lattice coordinates we need to use converting factors. Please see
+lattice coordinates, we need to use converting factors. Please see
 writeup **“Hexagonal Lattices in CompuCell3D”**
 (http://www.compucell3d.org/BinDoc/cc3d_binaries/Manuals/HexagonalLattice.pdf)
 for more information. To convert between hex and Cartesian lattice
 coordinates we can use ``SteppableBasePy`` built-in functions
-(``self.cartesian_2_hex``, and ``self.hex_2_cartesian``) – see also Twedit++ CC3D
-Python menu Distances, Vectors, Transformations:
+(``self.cartesian_2_hex``, and ``self.hex_2_cartesian``). 
+You can use Twedit++'s Python snippets menu: Distances → Vectors → Transformations to get code like this:
 
 .. code-block:: python
 
@@ -146,9 +166,9 @@ Tracking Amount of Secreted (Uptaken) Chemical
 
 While the ability to have fine control over how the chemicals get secreted/uptaken
 is a useful feature, quite often we would like to know the total amount of the chemical that was added
-to the simulation as a result of the call to one of the ``secrete`` or ``uptake`` functions from he secretor object.
+to the simulation as a result of the call to one of the ``secrete`` or ``uptake`` functions from the secretor object.
 
-Let us rewrite previous example using the API ythat facilitates tracking of the amount of
+Let us rewrite the previous example using the API that facilitates tracking the amount of
 chemical that was added:
 
 
@@ -172,10 +192,10 @@ chemical that was added:
                     res = attr_secretor.secreteInsideCellAtCOMTotalCount(cell, 300)
                     print('secreted  ', res.tot_amount, ' inside the cell at the COM')
 
-As you can see the calls to that return the total amount of chemical added/uptaked are the same calls as we
-used in our previous example except we add ``TotalCount`` to the name of the function. The new function e.g.
-``secreteInsideCellTotalCount`` returns object ``res`` that is an instance of ``FieldSecretorResult`` class
-that contains the summary of the secreion/uptake operation. Most importantly when we access ``total_amount``
+As you can see, the calls that return the total amount of chemical added/uptaked are the same calls as we
+used in our previous example except we add ``TotalCount`` to the name of the function. The new function, ``secreteInsideCellTotalCount``, returns an object called ``res`` that is an instance of the ``FieldSecretorResult`` class
+that contains the summary of the secretion/uptake operation. 
+Most importantly, when we access ``total_amount``
 member of the ``res`` object we get the total amount that was added/uptaken from the chemical field e.g. :
 
 
@@ -184,93 +204,14 @@ member of the ``res`` object we get the total amount that was added/uptaken from
     res = attr_secretor.secreteInsideCellTotalCount(cell, 300)
     print('secreted  ', res.tot_amount, ' inside cell')
 
-For completeness we present a complete list of C++ signatures of all the functions that can be used to fine-control
-how uptake/secretion happens in CC3D. All those functions are members of the ``secretor`` object and are
-accessible from Python
-
-.. code-block:: cpp
-
-    bool _secreteInsideCellConstantConcentration(CellG * _cell, float _amount);
-
-    FieldSecretorResult _secreteInsideCellConstantConcentrationTotalCount(CellG * _cell, float _amount);
-
-    bool _secreteInsideCell(CellG * _cell, float _amount);
-
-    FieldSecretorResult _secreteInsideCellTotalCount(CellG * _cell, float _amount);
-
-    bool _secreteInsideCellAtBoundary(CellG * _cell, float _amount);
-
-    FieldSecretorResult _secreteInsideCellAtBoundaryTotalCount(CellG * _cell, float _amount);
-
-    bool _secreteInsideCellAtBoundaryOnContactWith(CellG * _cell, float _amount,
-    const std::vector<unsigned char> & _onContactVec);
-
-    FieldSecretorResult _secreteInsideCellAtBoundaryOnContactWithTotalCount(CellG * _cell,
-    float _amount, const std::vector<unsigned char> & _onContactVec);
-
-    bool _secreteOutsideCellAtBoundary(CellG * _cell, float _amount);
-
-    FieldSecretorResult _secreteOutsideCellAtBoundaryTotalCount(CellG * _cell, float _amount);
-
-    bool _secreteOutsideCellAtBoundaryOnContactWith(CellG * _cell, float _amount,
-    const std::vector<unsigned char> & _onContactVec);
-
-    FieldSecretorResult  _secreteOutsideCellAtBoundaryOnContactWithTotalCount(CellG * _cell,
-    float _amount, const std::vector<unsigned char> & _onContactVec);
-
-    bool secreteInsideCellAtCOM(CellG * _cell, float _amount);
-
-    FieldSecretorResult secreteInsideCellAtCOMTotalCount(CellG * _cell, float _amount);
-
-    bool _uptakeInsideCell(CellG * _cell, float _maxUptake, float _relativeUptake);
-
-    FieldSecretorResult _uptakeInsideCellTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);
-
-    bool _uptakeInsideCellAtBoundary(CellG * _cell, float _maxUptake, float _relativeUptake);
-
-    FieldSecretorResult _uptakeInsideCellAtBoundaryTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);
-
-    bool _uptakeInsideCellAtBoundaryOnContactWith(CellG * _cell, float _maxUptake,
-    float _relativeUptake,const std::vector<unsigned char> & _onContactVec);
-
-    FieldSecretorResult _uptakeInsideCellAtBoundaryOnContactWithTotalCount(CellG * _cell,
-    float _maxUptake, float _relativeUptake, const std::vector<unsigned char> & _onContactVec);
-
-    bool _uptakeOutsideCellAtBoundary(CellG * _cell, float _maxUptake, float _relativeUptake);
-
-    FieldSecretorResult _uptakeOutsideCellAtBoundaryTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);
-
-    bool _uptakeOutsideCellAtBoundaryOnContactWith(CellG * _cell, float _maxUptake,
-     float _relativeUptake,const std::vector<unsigned char> & _onContactVec);
-
-    FieldSecretorResult _uptakeOutsideCellAtBoundaryOnContactWithTotalCount(CellG * _cell,
-    float _maxUptake, float _relativeUptake, const std::vector<unsigned char> & _onContactVec);
-
-    bool uptakeInsideCellAtCOM(CellG * _cell, float _maxUptake, float _relativeUptake);
-
-    FieldSecretorResult  uptakeInsideCellAtCOMTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);
-
-For example if we want to use ``uptakeInsideCellAtCOMTotalCount(CellG * _cell, float _maxUptake, float _relativeUptake);``
-from python we would use the following code:
-
-.. code-block:: python
-
-    ...
-    res = attr_secretor.uptakeInsideCellAtCOMTotalCount(cell, 3, 0.1)
-    print('uptaken ', res.tot_amount, ' inside cell and the COM')
-
-In this case  ``_cell`` is a ``cell`` object that we normally deal with in Python, ``_maxUptake`` has value of ``3``
-and ``_relativeUptake`` is set to ``0.1``
-
-In similar fashion we could use remaining functions listed above
 
 Volume Integrals
 ----------------
-Field secretor objects also provide convenience methods to easily and quickly compute a volume
+FieldSecretor objects also provide convenience methods to easily and quickly compute a volume
 integral of a PDE solver field over a particular cell or the entire simulation domain. Say we
 would like to construct another steppable to be also simulated with the previously described
 ``SecretionSteppable``, and say this additional steppable computes the volume integral of the
-diffusing field ``ATTR`` everywhere, and in each cell. Such a steppable could look like the following,
+diffusing field ``ATTR`` everywhere for each cell. Such a steppable could look like the following...
 
 Obtaining how much chemical the cell is exposed to (sampling)
 -------------------------------------------------------------
