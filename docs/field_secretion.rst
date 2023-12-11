@@ -1,6 +1,8 @@
 Interacting with PDE Solver Fields
 ==================================
 
+Related: `Secretion <secretion.html>`_
+
 Every field declared in a PDE solver is accessible by name in Python from every registered steppable using
 the property ``field``, which allows us to retrieve and change the value of a field at a particular point by
 using the coordinates of the point as indices of the field. For example, if we have a PDE solver running
@@ -11,7 +13,7 @@ we could write in a steppable,
 
     self.field.ATTR[10, 20, 30] += 1
 
-Likewise we can manipulate a field using slicing operators, such as setting the value of our ``ATTR`` field
+Likewise, we can manipulate a field using slicing operators, such as setting the value of our ``ATTR`` field
 to a value of ``1.0`` along a line,
 
 .. code-block:: python
@@ -27,8 +29,8 @@ Field Secretion
 
 PDE solvers in the CC3D allow users to specify secretion properties
 individually for each cell type. However, there are situations where you
-want only a single cell to secrete the chemical. In this case you have
-to use ``Secretor`` objects. In Twedit++, go to ``CC3D Python->Secretion`` menu
+want only a single cell to secrete the chemical. In this case, you have
+to use ``Secretor`` objects. In Twedit++, go to the ``CC3D Python->Secretion`` menu
 to see what options are available. Let us look at the example code to
 understand what kind of capabilities CC3D offers in this regard (see
 ``Demos/SteppableDemos/Secretion``):
@@ -43,6 +45,7 @@ understand what kind of capabilities CC3D offers in this regard (see
             attr_secretor = self.get_field_secretor("ATTR")
             for cell in self.cell_list:
                 if cell.type == self.WALL:
+                    # Choose one of the secretion methods according to your use case
                     attr_secretor.secreteInsideCellAtBoundaryOnContactWith(cell, 300, [self.WALL])
                     attr_secretor.secreteOutsideCellAtBoundaryOnContactWith(cell, 300, [self.MEDIUM])
                     attr_secretor.secreteInsideCell(cell, 300)
@@ -52,12 +55,12 @@ understand what kind of capabilities CC3D offers in this regard (see
 
 .. note::
 
-    As we mentioned in the introductory section we switched Python functions capitalization conventions. For example we use ``get_field_secretor`` and not getFieldSecretor. However, there are function calls in the above snippet that do not follow this convention - e.g. ``secreteInsideCell``. This is because those functions belong to a C++ object (here, ``attr_secretor``) that is accessed through Python. We decided to keep those two conventions (snake-case for pure Python functions) and Pascal-case for C++ functions. It should help users with identification of where various functions come from.
+    [History] As we mentioned in the introductory section, we switched capitalization conventions for Python functions. For example, we use ``get_field_secretor`` and not getFieldSecretor. However, there are function calls in the above snippet that do not follow this convention - e.g. ``secreteInsideCell``. This is because those functions belong to a C++ object (here, ``attr_secretor``) that is accessed through Python. We decided to keep those two conventions (snake-case for pure Python functions) and Pascal-case for C++ functions. It provides a clue for where various functions come from.
 
-In the step function we obtain a handle to field secretor object that
+In the step function, we obtain a handle to field secretor object that
 operates on diffusing field ``ATTR``. In the for loop where we go over all
-cells in the simulation we pick cells which are of type 3 (notice we use
-numeric value here instead of an alias). Inside the loop we use
+cells in the simulation we pick cells that are of type 3 (notice we use
+a numeric value here instead of an alias). Inside the loop we use
 ``secreteInsideCell``, ``secreteInsideCellAtBoundary``,
 ``secreteOutsideCellAtBoundary``, and ``secreteInsideCellAtCOM`` member
 functions of the secretor object to carry out secretion in the region

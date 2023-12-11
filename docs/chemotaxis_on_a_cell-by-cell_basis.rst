@@ -5,6 +5,9 @@ Just like the secretion is typically defined for cell types, the same
 applies to chemotaxis. And, as in the case of secretion,
 there is an easy way to implement chemotaxis on a cell-by-cell basis.
 You can find a relevant example in ``Demos/PluginDemos/chemotaxis_by_cell_id``.
+
+Related: `Chemotaxis Plugin <chemotaxis_plugin.html>`_
+
 Let us look at the code:
 
 .. code-block:: python

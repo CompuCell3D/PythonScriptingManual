@@ -1,9 +1,24 @@
 Secretion / SecretionLocalFlex Plugin
 --------------------------------------
 
+Related: `Field Secretion <field_secretion.html>`_ and `Secretion (legacy version for pre-v3.5.0) <legacy_secretion.html>`_
+
+`Download the sample code here <https://drive.google.com/drive/folders/1ZjLrFyHcX7iPV6WisxSRs4iMLN2vxDRI>`_, 
+then watch the video from the latest workshop to follow along:
+
+.. image:: https://img.youtube.com/vi/LgROO9LrzwM/maxresdefault.jpg
+    :alt: Workshop Tutorial Video
+    :target: https://www.youtube.com/watch?v=LgROO9LrzwM&list=PLiEtieOeWbMKTIF2mekBc9cABFPEDwCdj&index=24
+    :width: 80%
+
+..
+    [Last Updated] November 2023
+
+****************************************
+
 Secretion "by cell type" can and should be handled by the appropriate
-PDE solver. To implement secretion in individual cells using Python we
-can use secretion plugin defined in the CC3DML as:
+PDE solver. To implement secretion from individual cells using Python, we
+first add the secretion plugin in CC3DML:
 
 .. code-block:: xml
 
@@ -26,12 +41,12 @@ implement secretion for individual cells from Python.
 
 .. warning::
 
-    Secretion plugin can be used to implement secretion by
-    cell type however **we strongly advise against doing so**. Defining
+    Although the secretion plugin can be used to implement secretion by
+    cell type, **we strongly advise against doing so**. Defining
     secretion by cell type in the ``Secretion`` plugin will lead to performance
-    degradation on multi-core machines. Please see section below for more
-    information if you are still interested in using secretion by cell-type
-    inside ``Secretion`` plugin
+    degradation on multi-core machines. Please see the section below for more
+    information if you are still interested in using secretion by cell type
+    inside the ``Secretion`` plugin.
 
 Typical use of secretion from Python is demonstrated best in the example
 below:
@@ -56,15 +71,10 @@ below:
 .. note::
 
     Instead of using ``SteppableBasePy`` class we are using
-    ``SecretionBasePy`` class. The reason for this is that in order for
-    secretion plugin with secretion modes accessible from Python to behave
-    exactly as previous versions of PDE solvers (where secretion was done
-    first followed by the "diffusion" step) we have to ensure that secretion
-    steppable implemented in Python is called **before** each Monte Carlo
-    Step, which implies that it will be also called before "diffusing"
-    function of the PDE solvers. ``SecretionBasePy`` sets extra flag which
-    ensures that steppable which inherits from ``SecretionBasePy`` is called
-    before MCS (and before all "regular" Python steppables).
+    ``SecretionBasePy`` class. This ensures that 
+    the secretion plugin will be performed before diffusion by
+    calling the Python secretion steppable *before* each Monte Carlo
+    Step. 
 
 There is no magic to ``SecretionBasePy`` - if you still want to use
 ``SteppableBasePy`` as a base class for secretion do so, but remember that you need to set flag:
@@ -98,23 +108,23 @@ below for alternative implementation of ``SecretionSteppable`` using
 
 The secretion of individual cells is handled through ``FieldSecretor``
 objects. ``FieldSecretor`` concept is quite convenient because the amount
-of Python coding is quite small. To secrete chemical (this is now done
-for individual cell) we first create field secretor object:
+of Python coding is quite small. To secrete a chemical from a cell, 
+we first create a field secretor object:
 
 .. code-block:: python
 
     attrSecretor = self.getFieldSecretor("ATTR")
 
-which allows us to secrete into field called ``ATTR``.
+which allows us to manipulate how much which cells secrete into the ``ATTR` field.
 
-Then we pick a cell and using field secretor we simulate secretion of
+Then, we pick a cell, and using this field secretor, we simulate secretion of
 chemical ``ATTR`` by a cell:
 
 .. code-block:: python
 
     attrSecretor.secreteInsideCell(cell,300)
 
-Currently we support 7 secretion modes for individual cells:
+Currently, we support 7 secretion modes for individual cells:
 
 1. ``secreteInsideCell`` – this is equivalent to secretion in every pixel
    belonging to a cell
@@ -241,79 +251,3 @@ of the below snippet:
         for neighbor, commonSurfaceArea in self.getCellNeighborDataList(cell):
             if neighbor.type in [self.WALL]:
                 attrSecretor.secreteInsideCell(cell, 300)
-
-
-Secretion Plugin (legacy version)
----------------------------------
-
-.. warning::
-
-    While we still support ``Secretion`` plugin as described
-    in this section we observed performance degradation when when declaring
-    ``<Field>`` elements inside the plugin. To resolve this issue we encourage
-    users to implement secretion "by cell type" in the PDE solver and keep
-    using secretion plugin to implement secretion on a per-cell basis using
-    Python scripting.
-
-.. note::
-
-    In version 3.6.2 ``Secretion`` plugin should not be used with
-    ``DiffusionSolverFE`` or any of the GPU-based solvers.
-
-In earlier version os of CC3D secretion was part of PDE solvers. We
-still support this mode of model description however, starting in 3.5.0
-we developed separate plugin which handles secretion only. Via secretion
-plugin we can simulate cellular secretion of various chemicals. The
-secretion plugin allows users to specify various secretion modes in the
-CC3DML file – CC3DML syntax is practically identical to the
-SecretionData syntax of PDE solvers. In addition to this Secretion
-plugin allows users to manipulate secretion properties of individual
-cells from Python level. To account for possibility of PDE solver being
-called multiple times during each MCS, the ``Secretion`` plugin can be
-called multiple times in each MCS as well. We leave it up to user the
-rescaling of secretion constants when using multiple secretion calls in
-each MCS.
-
-.. note::
-
-    Secretion for individual cells invoked via Python
-    will be called only once per MCS.
-
-Typical CC3DML syntax for Secretion plugin is presented below:
-
-.. code-block:: xml
-
-    <Plugin Name="Secretion">
-        <Field Name="ATTR" ExtraTimesPerMC=”2”>
-            <Secretion Type="Bacterium">200</Secretion>
-            <SecretionOnContact Type="Medium" SecreteOnContactWith="B">300</SecretionOnContact>
-            <ConstantConcentration Type="Bacterium">500</ConstantConcentration>
-        </Field>
-    </Plugin>
-
-
-
-By default ``ExtraTimesPerMC`` is set to ``0`` - meaning no extra calls to
-``Secretion`` plugin per MCS.
-
-Typical use of secretion from Python is demonstrated best in the example
-below:
-
-.. code-block:: python
-
-    class SecretionSteppable(SecretionBasePy):
-        def __init__(self, _simulator, _frequency=1):
-            SecretionBasePy.__init__(self, _simulator, _frequency)
-
-        def step(self, mcs):
-            attrSecretor = self.getFieldSecretor("ATTR")
-            for cell in self.cellList:
-                if cell.type == 3:
-                    attrSecretor.secreteInsideCell(cell, 300)
-                    attrSecretor.secreteInsideCellAtBoundary(cell, 300)
-                    attrSecretor.secreteOutsideCellAtBoundary(cell, 500)
-                    attrSecretor.secreteInsideCellAtCOM(cell, 300)
-
-
-
-
