@@ -79,7 +79,7 @@ for simulations in 3D.
 
 .. note::
 
-    We can use Python to control secretion in the steady state solvers but
+    We can use Python to control `secretion <secretion.html>`_ in the steady state solvers but
     it requires a little bit of low level coding. Implementing secretion
     in steady state diffusion solver is different from "regular" Forward
     Euler solvers. Steady state solver takes secretion rate that is

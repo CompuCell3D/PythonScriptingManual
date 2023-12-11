@@ -172,7 +172,7 @@ concentration every MCS. Line:
 
 means that cells of type ``Medium`` will get additional ``0.1`` increase in
 concentration **but only when** they touch cell of type ``Amoeba``. This mode of
-secretion is called ``SecretionOnContact``.
+`secretion <secretion.html>`_ is called ``SecretionOnContact``.
 
 We can also see new CC3DML tags ``<DeltaT>`` and ``<DeltaX>``. Their values
 determine the correspondence between MCS and actual time and between
@@ -197,9 +197,9 @@ once per MCS. The number of extra calls per MCS is specified by the user
 on a per-field basis using ``ExtraTimesPerMCS`` tag.
 
 .. warning::
-    When using ``ExtraTimesPerMCS`` secretion functions will
-    called only once per MCS. This is different than using ``PDESolverCaller``
-    where entire module is called multiple times (this include diffusion and
+    When using ``ExtraTimesPerMCS``, secretion functions will
+    called only once per MCS. This is different than using ``PDESolverCaller``,
+    where the entire module is called multiple times (this includes diffusion and
     secretion for all fields).
 
 .. tip::
