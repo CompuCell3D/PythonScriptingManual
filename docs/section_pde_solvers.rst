@@ -1,7 +1,7 @@
 PDESolvers in CompuCell3D
 =========================
 
-One of the most important and time consuming parts of the CC3D
+One of the most important and time-consuming parts of the CC3D
 simulation is to solve all sorts of Partial Differential Equations which
 describe behavior of certain simulation objects (usually chemical
 fields). Most of the CC3D PDE solvers solve PDE with diffusive terms.
@@ -15,6 +15,7 @@ life cycle and often in response to particular user requests, CC3DML
 specification may differ from solver to solver. However, the basic
 structure of CC3DML PDE solver code follows similar pattern .
 
+* :doc:`accessing_concentration_fields_managed_of_pde_solvers`
 * :doc:`flexible_diffusion_solver`
 * :doc:`diffusion_solver_settings`
 * :doc:`diffusion_solver`
@@ -27,6 +28,7 @@ structure of CC3DML PDE solver code follows similar pattern .
 * :doc:`fluctuation_compensator_addon`
 
 
+.. include:: accessing_concentration_fields_managed_of_pde_solvers.rst
 .. include:: flexible_diffusion_solver.rst
 .. include:: diffusion_solver_settings.rst
 .. include:: diffusion_solver.rst

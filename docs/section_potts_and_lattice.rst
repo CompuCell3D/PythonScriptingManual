@@ -1,5 +1,5 @@
-Potts and Lattice
-=================
+Potts and Lattice Section
+============================
 
 
 * :doc:`potts`

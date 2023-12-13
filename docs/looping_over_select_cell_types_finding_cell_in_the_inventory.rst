@@ -29,7 +29,7 @@ general syntax is:
 
 .. code-block:: python
 
-    self.cell_list_by_type(cellType1, cellType2, …)
+    self.cell_list_by_type(cellType1, cellType2, ...)
 
 Occasionally we may want to fetch from a cell inventory a cell object
 with specific a cell id. This is how we do it (``CC3D Python -> Cell Manipulation->Fetch Cell By Id``):

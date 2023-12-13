@@ -1,12 +1,14 @@
-Appendix B
-==========
+Appendix B: List of Cell Attributes
+=============================================
 
-In this appendix we present alphabetical list of CellG attributes:
+In this appendix, we present an alphabetical list of CellG attributes:
 
 clusterId`` - cluster id
 
 ``clusterSurface`` - total surface of a cluster that a given cell belongs
 to. Needs ClusterSurface Plugin
+
+``dict`` - stores any custom attributes you wish to assign to the cell
 
 ``ecc`` - eccentricity of cell . Needs MomentOfInertia plugin
 

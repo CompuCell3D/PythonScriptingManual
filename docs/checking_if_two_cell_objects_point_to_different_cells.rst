@@ -1,3 +1,6 @@
+How to Check if Two Cells are Unique
+=========================================================================
+
 In the above examples we were printing cell attributes such as cell
 type, cell id etc. Sometimes in the simulations you will have two cells
 and you may want to test if they are different. The most straightforward

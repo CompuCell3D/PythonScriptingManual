@@ -1,18 +1,15 @@
 Adding Steppable to Simulation using Twedit++
 =============================================
 
-In the above example Python steppable was created by a simulation
-wizard. But what if you want to add additional steppable? Twedit++ lets
-you do it with pretty much single click. In the CC3D Project Panel
-right-click on Steppable Python file and choose Add Steppable option:
+In the CC3D Project Panel of Twedit++, right-click on a Steppable Python file and choose the 'Add Steppable' option:
 
 |image7|
 
-*Figure 8 Adding seppable using Twedit++*
+*Figure 8 Adding steppable using Twedit++*
 
-The dialog will pop up where you specify name and type of the new
-steppable, call frequency. Click ``OK`` and new steppable gets added to your
-code.
+A dialog will pop up where you can specify the name and type of the new
+Steppable as well as its call frequency. 
+Click ``OK``, and a new steppable gets added to your code.
 
 |image8|
 

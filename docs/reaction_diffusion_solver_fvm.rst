@@ -108,10 +108,10 @@ The following is a representative example of a specification for the RDFVM solve
                 <DiffusionCoefficient CellType="CellType2">0.1</DiffusionCoefficient>
                 <DiffusivityByType/>
                 <DiffusivityFieldEverywhere/>
-                <PermIntCoefficient Type1="CellType1", Type2="CellType1">0.1</PermIntCoefficient>
-                <PermIntCoefficient Type1="CellType1", Type2="CellType2">0.1</PermIntCoefficient>
-                <PermIntCoefficient Type1="CellType2", Type2="CellType2">0.1</PermIntCoefficient>
-                <PermIntBias Type1="CellType1", Type2="CellType2">0.01</PermIntBias>
+                <PermIntCoefficient Type1="CellType1" Type2="CellType1">0.1</PermIntCoefficient>
+                <PermIntCoefficient Type1="CellType1" Type2="CellType2">0.1</PermIntCoefficient>
+                <PermIntCoefficient Type1="CellType2" Type2="CellType2">0.1</PermIntCoefficient>
+                <PermIntBias Type1="CellType1" Type2="CellType2">0.01</PermIntBias>
                 <SimplePermInt/>
             </DiffusionData>
             <SecretionData>

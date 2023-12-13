@@ -7,7 +7,7 @@ Note that a cell can only move towards or away from a
 chemical field if it can detect any concentration above 0 at its surface. 
 The cell cannot "see" far away to know where to move. 
 
-Related: `Chemotaxis Examples in Python <https://pythonscriptingmanual.readthedocs.io/en/latest/chemotaxis_on_a_cell-by-cell_basis.html>`_.
+Related: `Chemotaxis Examples in Python <chemotaxis_on_a_cell-by-cell_basis.html>`_.
 
 Properties
 ****************************
