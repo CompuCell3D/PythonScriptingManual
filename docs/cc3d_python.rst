@@ -1,5 +1,5 @@
-CC3D Python API
-===============
+Introduction to Python-Based CC3D Simulations
+==============================================
 
 .. note::
 
@@ -23,9 +23,9 @@ CC3D Projects vs. Python Projects
 The `Twedit <https://github.com/CompuCell3D/cc3d-twedit5>`_ and
 `Player <https://github.com/CompuCell3D/cc3d-player5>`_ GUIs facilitate the generation, development,
 execution and sharing of simulations in a project structure that can consist of
-Python and `CC3DML <https://compucell3dreferencemanual.readthedocs.io/en/latest/index.html>`_ source
+Python and `CC3DML <index.html>`_ source
 code, auxiliary resources (*e.g.*,
-`PIF files <https://compucell3dreferencemanual.readthedocs.io/en/latest/steppable_section.html#pif-initializer>`_)
+`PIF files <steppable_section.html#pif-initializer>`_)
 and a ``.cc3d`` project file that describes the contents of a CC3D project.
 This structure is the officially supported CC3D project structure that the complete
 distribution of CC3D packages supports.
@@ -38,7 +38,7 @@ simulation instances.
 
 In general, the ``cc3d`` python module contains the entire CC3D Python runtime API.
 CC3D projects typically define plugins and steppables in
-`CC3DML <https://compucell3dreferencemanual.readthedocs.io/en/latest/index.html>`_ and custom
+`CC3DML <index.html>`_ and custom
 steppables in a single Python script, the complete project of which can be loaded in the
 `Player <https://github.com/CompuCell3D/cc3d-player5>`_ GUI.
 In Python projects, model and simulation specification through the Python API requires
@@ -177,12 +177,12 @@ in the ``cc3d.core.PyCoreSpecs`` module contains all internal data necessary to 
 a corresponding built-in plugin or steppable, which can be manipulated through the
 interface of each interactive object.
 For example, a typical simulation specification consists of the
-`Potts specification <https://compucell3dreferencemanual.readthedocs.io/en/latest/potts_and_lattice.html#potts-section>`_,
-`CellType <https://compucell3dreferencemanual.readthedocs.io/en/latest/cell_type_plugin.html>`_,
-`Volume <https://compucell3dreferencemanual.readthedocs.io/en/latest/volume_and_surface_flex_plugins.html>`_ and
-`Contact <https://compucell3dreferencemanual.readthedocs.io/en/latest/plugins_section.html#contact-plugin>`_
+`Potts specification <potts_and_lattice.html#potts-section>`_,
+`CellType <cell_type_plugin.html>`_,
+`Volume <volume_and_surface_flex_plugins.html>`_ and
+`Contact <plugins_section.html#contact-plugin>`_
 plugins and a
-`BlobInitializer steppable <https://compucell3dreferencemanual.readthedocs.io/en/latest/steppable_section.html#blobinitializer-steppable>`_
+`BlobInitializer steppable <steppable_section.html#blobinitializer-steppable>`_
 to initialize a cell distribution, which can look like the following when using the Python API,
 
 .. code-block:: python
@@ -271,7 +271,7 @@ way. The single difference between their deployment in CC3D and Python projects 
 registration, which in CC3D projects is done through the ``CompuCellSetup.register_specs`` method in
 the same way as through the ``CC3DSimService.register_specs`` method in Python projects.
 Specification cannot mix ``cc3d.core.PyCoreSpecs`` objects and
-`CC3DML <https://compucell3dreferencemanual.readthedocs.io/en/latest/index.html>`_.
+`CC3DML <index.html>`_.
 However, passing a list of ``cc3d.core.PyCoreSpecs`` objects to the method
 ``cc3d.core.PyCoreSpecs.build_xml`` generates CC3DML data, and likewise
 passing the absolute path to a ``.xml`` file containing a CC3DML specification, or

@@ -5,4 +5,11 @@
 Tutorials Section
 ====================
 
-* :doc:`recording_screenshots`
+
+.. toctree::
+    :maxdepth: 1
+
+    modifying_attributes_of_cellg_object
+    steppable_frequency
+    resizing_the_lattice
+    recording_screenshots

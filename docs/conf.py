@@ -99,7 +99,7 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
 # documentation.
 #
 html_theme_options = {
-    "collapse_navigation" : False
+    "collapse_navigation" : True
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

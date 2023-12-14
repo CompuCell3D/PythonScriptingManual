@@ -23,16 +23,11 @@ currently available in the CompuCell3D and describe their usage.
 
 This section "off-the-shelf" steppables that are available in CC3D and were implemented using C++
 
-* :doc:`uniform_initializer`
-* :doc:`blob_initializer`
-* :doc:`pif_initializer`
-* :doc:`pif_dumper`
-* :doc:`mitosis`
-* :doc:`mu_parser`
+.. toctree::
+    :maxdepth: 1
 
-.. include:: uniform_initializer.rst
-.. include:: blob_initializer.rst
-.. include:: pif_initializer.rst
-.. include:: pif_dumper.rst
-.. include:: mitosis.rst
-.. include:: mu_parser.rst
+    uniform_initializer
+    blob_initializer
+    pif_initializer
+    pif_dumper
+    mu_parser

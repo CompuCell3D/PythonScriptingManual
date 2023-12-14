@@ -15,27 +15,17 @@ life cycle and often in response to particular user requests, CC3DML
 specification may differ from solver to solver. However, the basic
 structure of CC3DML PDE solver code follows similar pattern .
 
-* :doc:`accessing_concentration_fields_managed_of_pde_solvers`
-* :doc:`flexible_diffusion_solver`
-* :doc:`diffusion_solver_settings`
-* :doc:`diffusion_solver`
-* :doc:`advection_diffusion_solver`
-* :doc:`fast_diffusion_solver_2D`
-* :doc:`kernel_diffusion_solver`
-* :doc:`reaction_diffusion_solver`
-* :doc:`reaction_diffusion_solver_fvm`
-* :doc:`steady_state_diffusion_solver`
-* :doc:`fluctuation_compensator_addon`
+.. toctree::
+    :maxdepth: 1
 
-
-.. include:: accessing_concentration_fields_managed_of_pde_solvers.rst
-.. include:: flexible_diffusion_solver.rst
-.. include:: diffusion_solver_settings.rst
-.. include:: diffusion_solver.rst
-.. include:: advection_diffusion_solver.rst
-.. include:: fast_diffusion_solver_2D.rst
-.. include:: kernel_diffusion_solver.rst
-.. include:: reaction_diffusion_solver.rst
-.. include:: reaction_diffusion_solver_fvm.rst
-.. include:: steady_state_diffusion_solver.rst
-.. include:: fluctuation_compensator_addon.rst
+    accessing_concentration_fields_managed_of_pde_solvers
+    flexible_diffusion_solver
+    diffusion_solver_settings
+    diffusion_solver
+    advection_diffusion_solver
+    fast_diffusion_solver_2D
+    kernel_diffusion_solver
+    reaction_diffusion_solver
+    reaction_diffusion_solver_fvm
+    steady_state_diffusion_solver
+    fluctuation_compensator_addon

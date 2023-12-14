@@ -1,10 +1,8 @@
 Potts and Lattice Section
 ============================
 
+.. toctree::
+    :maxdepth: 1
 
-* :doc:`potts`
-* :doc:`lattice_type`
-
-
-.. include:: potts.rst
-.. include:: lattice_type.rst
+    potts
+    lattice_type
