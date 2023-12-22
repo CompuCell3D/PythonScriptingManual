@@ -1,4 +1,3 @@
-
 Example: Epithelial-Mesenchymal Transition (EMT)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
