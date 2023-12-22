@@ -2,8 +2,8 @@
    follow proper hierarchy  - see http://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html
     and making sure that the document that is at the "top of" of toc has subdocs listed as in this exa  mple
 
-Tutorials Section
-====================
+General Tutorials Section
+===============================
 
 
 .. toctree::
@@ -13,3 +13,4 @@ Tutorials Section
     steppable_frequency
     resizing_the_lattice
     recording_screenshots
+    building_a_wall

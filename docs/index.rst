@@ -12,7 +12,7 @@ You can find decent tutorials online (e.g.
 or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.com/watch?v=f_PJOGoCoEw&list=PLiEtieOeWbMKTIF2mekBc9cABFPEDwCdj>`__.
 
 ..
-    [Last Updated] 2023
+    [Link Last Updated] 2023
 
 
 .. toctree::
@@ -21,8 +21,11 @@ or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.c
     :hidden:
 
     introduction
+    how_to_use_python_in_cc3d
     cc3d_python
-    section_python_tutorials
+    debugging_cc3d_simulations_in_PyCharm
+    SteppableBasePy_class
+
 
 .. toctree::
    :maxdepth: 1
@@ -31,20 +34,20 @@ or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.c
 
    section_steppable
 
+
 .. toctree::
     :caption: Textbook and Guides
     :maxdepth: 1
     :hidden:
 
     section_potts_and_lattice
-    section_tutorials
     section_plugins
     section_initializers
     section_algorithms
 
 
 .. toctree::
-    :caption: Reference
+    :caption: Quick Reference
     :hidden:
 
     volume_and_growth
@@ -76,10 +79,9 @@ or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.c
     :caption: Examples
     :hidden:
 
-    building_a_wall
-    checking_if_two_cell_objects_point_to_different_cells
-    example_mitosis
-    example_contact_inhibited_cell_growth
+    section_python_tutorials
+    section_tutorials
+    section_real_world_examples
 
 
 .. toctree::
