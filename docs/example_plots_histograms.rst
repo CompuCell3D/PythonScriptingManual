@@ -1,16 +1,16 @@
-Adding plots to the simulation
+Adding Plots to the Simulation
 ==============================
 
 Some modelers like to monitor simulation progress by displaying “live”
-plots that characterize current state of the simulation. In CC3D it is
+plots that characterize the current state of the simulation. In CC3D, it is
 very easy to add to the Player windows. The best way to add plots is via
-Twedit++ CC3D Python->Scientific Plots menu. Take a look at example code
+Twedit++ CC3D Python->Scientific Plots menu. Take a look at this example code
 to get a flavor of what is involved when you want to work with plots in
 CC3D:
 
 .. code-block:: python
 
-    class cellsortingSteppable(SteppableBasePy):
+    class CellSortingSteppable(SteppableBasePy):
         def __init__(self, frequency=1):
             SteppableBasePy.__init__(self, frequency)
 
@@ -47,27 +47,28 @@ CC3D:
             self.plot_win.add_data_point('Cell1Vol', mcs, cell1.volume)
 
 
-In the ``start`` function we create plot window (``self.plot_win``) – the arguments of
-this function are self-explanatory. After we have plot windows object
-(``self.plot_win``) we are adding actual plots to it. Here, we will plot two
-time-series data, one showing average volume of all cells and one
-showing instantaneous volume of cell with id 1:
+In the ``start`` function, we create a plot window (``self.plot_win``) – the arguments of
+this function are self-explanatory. After we have a plot window object
+(``self.plot_win``), we add data to it at every time step. Here, we will plot two
+time-series data, one showing the average volume of all cells and one
+showing the instantaneous volume of a cell with id 1:
 
 .. code-block:: python
 
       self.plot_win.add_plot('AverageVol', style='Dots', color='red', size=5)
       self.plot_win.add_plot('Cell1Vol', style='Steps', color='black', size=5)
 
-We are specifying here plot symbol types (``Dots``, ``Steps``), their sizes and
-colors. The first argument is then name of the data series. This name
+The first argument is the name of the data series. This name
 has two purposes – **1.** It is used in the legend to identify data points
 and **2.** It is used as an identifier when appending new data. We can also
-specify logarithmic axis by using ``y_scale_type='log'`` as in the example
-above.
+specify a logarithmic axis by using ``y_scale_type='log'`` as in the example
+above. 
 
-In the ``step`` function we are calculating average volume of all cells and
-extract instantaneous volume of cell with id ``1``. After we are done with
-calculations we are adding our results to the time series:
+Calling ``add_plot`` multiple times will produce independent plots as long as you name them distinctly. 
+
+In the ``step`` function, we calculate the average volume of all cells and
+extract the instantaneous volume of the cell with id ``1``. 
+Then, we add that result to the time series:
 
 .. code-block:: python
 
@@ -78,33 +79,29 @@ calculations we are adding our results to the time series:
 
 Notice that we are using data series identifiers (``AverageVol`` and
 ``Cell1Vol``) to add new data. The second argument in the above function
-calls is current Monte Carlo Step (mcs) whereas the third is actual
-quantity that we want to plot on Y axis. We are done at this point
+calls is the current Monte Carlo Step (mcs) whereas the third is an actual
+quantity that we want to plot on the Y axis. We are done at this point.
 
-The results of the above code may look something like:
+The results of the above code may look something like this:
 
 |image12|
 
 Figure 13 Displaying plot window in the CC3D Player with 2 time-series
 data.
 
-Notice that the code is fairly simple and, for the most parts,
-self-explanatory. However, the plots are not particularly pretty and
-they all have same style. This is because this simple code creates plots
-based on same template. The plots are usable but if you need high
-quality plots you should save your data in the text data-file and use
-stand-alone plotting programs. Plots provided in CC3D are used mainly as
-a convenience feature and used to monitor current state of the
-simulation.
+**Styling**: If you need prettier plots, we recommend saving the data
+you need to plot to a separate CSV file, then use a framework like
+Seaborn or Matplotlib to refine your plots. 
+Plots provided in CC3D are used mainly as a convenience feature and to monitor the current state of the simulation.
+
 
 Histograms
 ----------
 
-Adding histograms to CC3D player is a bit more complex than adding
-simple plots. This is because you need to first process data to produce
-histogram data. Fortunately Numpy has the tools to make this task
+When using a histogram, you plot a list of data at each time step rather than a single value. 
+Numpy has the tools to make this task
 relatively simple. An example ``scientificHistBarPlots`` in
-CompuCellPythonTutorial demonstrates the use of histogram. Let us look
+CompuCellPythonTutorial demonstrates the use of histograms. Let us look
 at the example steppable (you can also find relevant code snippets in
 ``CC3D Python-> Scientific Plots`` menu):
 
@@ -152,22 +149,26 @@ at the example steppable (you can also find relevant code snippets in
                # here we specify size of the image saved - default is 400 x 400
                self.plot_win.save_plot_as_png(png_output_path, 1000, 1000)
 
-In the start function we call ``self.add_new_plot_window`` to add new plot
-window -``self.plot_win``- to the Player. Subsequently we specify display
+In the start function, we call ``self.add_new_plot_window`` to add a new plot
+window -``self.plot_win``- to the Player. Subsequently, we specify the display
 properties of different data series (histograms). Notice that we can
-specify opacity using ``alpha`` parameter.
+specify opacity using the ``alpha`` parameter.
 
-In the step function we first iterate over each cell and append their
-volumes to Python list. Later plot histogram of the array using a very
+In the step function, we first iterate over each cell and append their
+volumes to the Python list. Later, we plot a histogram of the array using a very
 simple call:
 
 .. code-block:: python
 
     self.plot_win.add_histogram(plot_name='Hist 2', value_array=vol_list, number_of_bins=10)
 
-that takes an array of values and the number of bins and adds histogram
-to the plot window.
+Parameters:
+ * ``value_array``: holds an unordered collection of data at one time step, such as the volume of 100 cells. 
+ * ``number_of_bins``: controls how many "bars" will appear, which can make the plot look more coarse- or fine-grained.
 
+
+Example: Create a Histogram from a Random Distribution
+--------------------------------------------------------------------------------
 
 The following snippet:
 
@@ -191,23 +192,30 @@ code:
 When we look at the code in the ``start`` function we will see that this
 data series will be displayed using green bars.
 
-At the end of the steppable we output histogram plot as a png image file
+
+Save Plot as an Image
+----------------------------------------
+
+At the end of the steppable, we can output the histogram plot as a PNG image file
 using:
 
 .. code-block:: python
 
-    self.plot_win.save_plot_as_png(png_output_path,1000, 1000)
+    self.plot_win.save_plot_as_png(png_output_path, 1000, 1000)
 
-two last arguments of this function represent ``x`` and ``y`` sizes of the
-image.
+The last two arguments of this function represent the ``x`` and ``y`` sizes of the image. 
+
+The image file will be written in the simulation output directory.
 
 .. note::
 
-   As of writing this manual we do not support scaling of the plot image output. This might change in the future releases. However, we strongly recommend that you save all the data you plot in a separate file and post-process it in the full-featured plotting program
+   As of writing this manual, we do not support scaling of the plot image output. This might change in a future release. However, we strongly recommend that you save all the data you plot in a separate file and post-process it in a full-featured plotting program.
 
-We construct ``file_name`` in such a way that it contains MCS in it.
-The image file will be written in the simulation outpt directory.
-Finally, for any plot we can output plotted data in the form of a text
+
+Save Plot as CSV Data File
+----------------------------------------
+
+Finally, for any plot, we can output plotted data in the form of a text
 file. All we need to do is to call ``save_plot_as_data`` from the plot windows
 object:
 
@@ -217,8 +225,31 @@ object:
     self.plot_win.save_plot_as_data(output_path, CSV_FORMAT)
 
 This file will be written in the simulation output directory. You can
-use it later to post process plot data using external plotting software.
+use it later to post-process plot data using external plotting software.
 
 .. |image12| image:: images/image13.jpeg
    :width: 3.86458in
    :height: 2.10003in
+
+
+
+How to Improve Plot Performance
+----------------------------------------
+
+Create a separate steppable specifically for plotting. 
+In your Main Python Script, increase the `frequency <steppable_frequency.html>`_ property of the plot steppable so that it updates less often.
+
+Of course, this plot will not look as smooth for demonstrations; 
+it's just an efficient monitoring tool.
+
+.. code-block:: python
+
+    from cc3d import CompuCellSetup
+    
+    from MyProjectSteppables import MyMainSteppable
+    CompuCellSetup.register_steppable(steppable=MyMainSteppable(frequency=1))
+
+    from MyProjectSteppables import UpdatePlotsSteppable
+    CompuCellSetup.register_steppable(steppable=UpdatePlotsSteppable(frequency=200))
+
+    CompuCellSetup.run()

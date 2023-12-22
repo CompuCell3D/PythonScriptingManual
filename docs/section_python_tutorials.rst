@@ -15,7 +15,7 @@ Python Tutorials Section
     calculating_distances_in_CC3D_simulations
     looping_over_select_cell_types_finding_cell_in_the_inventory
     writing_data_files_in_the_simulation_output_directory
-    adding_plots_to_the_simulation
+    example_plots_histograms
     custom_cell_attributes_in_python
     adding_and_managing_extra_fields_for_visualization_purposes
     automatic_tracking_of_cells_attributes
