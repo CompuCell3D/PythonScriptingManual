@@ -69,6 +69,7 @@ The scalar field (we called it ``ExtraField``) is declared in the
 .. note::
 
     Ideally you would declare exrta fields in the ``__init__`` function but if you create them elsewhere they will work as well. HOwever in certain situations you may notice that fields declared outside ``__init__`` may be missing
+
 from e.g. player menus. Normally it is not a big deal but if you want to have full functionality associated with the fields declare them inside ``__init__``
 
 

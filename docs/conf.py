@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python_scripting_manual'
-copyright = u'2017, Maciej H. Swat, Julio Belmonte, T.J. Sego, James A. Glazier'
-author = u'Maciej H. Swat, Julio Belmonte, T.J. Sego, James A. Glazier'
+copyright = u'2017, Maciej H. Swat, Julio Belmonte, T.J. Sego, James A. Glazier, Peter Fyffe'
+author = u'Maciej H. Swat, Julio Belmonte, T.J. Sego, James A. Glazier, Peter Fyffe'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -98,7 +98,9 @@ if not on_rtd:  # only import and set the theme if we're building docs locally
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    "collapse_navigation" : True
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -137,7 +139,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'python_scripting_manual.tex', u'Python Scripting Manual for CC3D',
-     u'Maciej Swat, Julio Belmonte, T.J. Sego, James A. Glazier', 'manual'),
+     u'Maciej Swat, Julio Belmonte, T.J. Sego, James A. Glazier, Peter Fyffe', 'manual'),
 ]
 
 

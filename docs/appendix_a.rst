@@ -1,7 +1,7 @@
-Appendix A
-==========
+Appendix A: List of Base Steppable Functions
+=======================================================
 
-In this appendix we present alphabetical list of member functions and
+In this appendix, we present an alphabetical list of member functions and
 objects of the SteppableBasePy class from which all steppables should
 inherit:
 
