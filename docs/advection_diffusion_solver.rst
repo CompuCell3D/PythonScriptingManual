@@ -33,7 +33,7 @@ pattern as ``FlexibleDiffusionSolverFE``.
 
 Example syntax:
 
-.. code-block:: xml
+.. code-block:: XML
 
     <Steppable Type="AdvectionDiffusionSolverFE">
         <DiffusionField Name="FGF">
