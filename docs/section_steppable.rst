@@ -21,15 +21,20 @@ currently available in the CompuCell3D and describe their usage.
     It is most convenient to implement Steppables in Python. However, in certain situations
     where code performance is an issue users can implement steppables in C++
 
-This section "off-the-shelf" steppables that are available in CC3D and were implemented using C++
+This section presents "off-the-shelf" steppables that are available in CC3D and were implemented using C++.
+Those are the steppables that are pre-programmed for you and you have little control over them
+(except specifying input parameters). If you are interested in how to write your own Steppable in Python
+please see `Python Tutorials Section <section_python_tutorials.html>`_
+
+For more advanced users who want to write Steppables in C++ to improve the performance we recommend getting
+familiar with `Developers' Manual <https://compucell3ddevelopersmanual.readthedocs.io/en/master/>`_
+
 
 .. toctree::
     :maxdepth: 1
 
-    SteppableBasePy_class
     uniform_initializer
     blob_initializer
     pif_initializer
     pif_dumper
     mitosis
-    mu_parser
