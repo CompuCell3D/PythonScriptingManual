@@ -7,7 +7,7 @@ The mesenchymal cell may be elongated and fragment away from its neighbors to pr
 
 
 .. image:: images/epithelial_mesenchmal_diagrams.png
-    :alt: Epithelial and Mesenchmal Cell Diagrams
+    :alt: Epithelial and Mesenchymal Cell Diagrams
     :width: 80%
     
 

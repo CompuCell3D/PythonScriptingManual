@@ -108,6 +108,8 @@ Besides that, you generally will not need to touch the .cc3d file since CC3D rea
 When CC3D sees a ``<PythonScript>`` tag in that file, it knows that you are using Python scripting. 
 Likewise, the tag ``<XMLScript>`` signifies that you are using XML. 
 
+Later, we'll discuss the full `Cell Sorting <example_cell_sorting.html>`_ exercise. For now, save your project.
+
 ---------------------------------------------------------------------
 
 Let’s first look at a generated Python code:
