@@ -100,6 +100,9 @@ Finally, Twedit++ generates the draft simulation code. Double-click on
 ``cellsorting.cc3d`` to open both the CC3DML (``cellsorting.xml``) and Python
 scripts for the model.
 
+.. image:: images/twedit_files.png
+    :alt: An image showing the names of the files that are generated when creating a new project. 
+
 The names of the files for the newly-generated CC3D simulation code are stored in the .cc3d file
 (``C:\\CC3DProjects\\cellsorting``). 
 Whenever you want to **re-open the project**, you should **select the .cc3d file**. 
@@ -158,11 +161,17 @@ Finally, we start simulation using
 Exercise: Run the Simulation and Print Cell IDs
 -----------------------------------------------------------------------
 
+Right-click on the project name in Twedit, then click **Open In Player**.
+Or, if you already have Player ready, click **File->Open Simulation File (.cc3d)** then hit Play |Play|.
+
+.. image:: images/twedit_open_in_player.png
+    :alt: An image showing how to click on the Open In Player option. 
+
 Once we open the .cc3d file in CompuCell3D Player, the simulation begins to run. When
 you look at the console output from this simulation, it will look
 something like this:
 
-|image4|
+|image5|
 
 Figure 5 Printing cell IDs using Python script
 
@@ -227,13 +236,12 @@ These 3 functions form the essence of Python scripting in CC3D:
 
 #. ``finish(self)``
 
-
-.. [1]
-   We cropped the screenshots of Wizard pages to save space.
-
-.. |image4| image:: images/image5.jpeg
+.. |image5| image:: images/image5.jpeg
    :width: 4.52083in
    :height: 1.13806in
+
+.. |Play| image:: images/icons/play.png
+   :height: 14px
 
 -------------------------------------------------------------------------
 
