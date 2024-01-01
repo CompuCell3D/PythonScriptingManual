@@ -112,6 +112,9 @@ and ``Foam`` and ``Medium`` as well as Medium and Medium have contact energy of
 Suppose we have **8 cells** on the checkboard and **4 sides each**. 
 If the cells are in a checkerboard pattern, they have the most possible contact energy with the Medium. 
 
+.. image:: images/cellsort_legend.png
+    :alt: A legend for color coding of the two cell types. 
+
 .. image:: images/cellsort_checkerboard.png
     :alt: An arrangement of 8 cells in a checkboard pattern. The Medium fills in the empty space.
 
