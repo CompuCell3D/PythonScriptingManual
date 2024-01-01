@@ -1,5 +1,5 @@
-muParser
---------
+XML Expression Evaluator - muParser
+-----------------------------------
 
 CC3D uses ``muParser`` to allow users specify simple mathematical
 expressions in the XML (or XML-equivalent Python scripts). The following

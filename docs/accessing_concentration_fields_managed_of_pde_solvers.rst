@@ -1,5 +1,5 @@
 Accessing concentration fields managed by PDE solvers
-====================================================
+=====================================================
 
 Many of CC3D simulations have at least one diffusing field which
 represents some sort of chemical it can be growth factor, toxin or

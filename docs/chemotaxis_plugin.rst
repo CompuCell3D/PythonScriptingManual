@@ -21,8 +21,10 @@ Returns a chemotaxis data object, which has the following methods:
 
     - **chemotaxisData.setLambda(lambda: float)**: assigns the lambda of the given chemotaxis behavior, which controls the intensity of the chemotaxis 
     (see definition below).
+
     - **chemotaxisData.assignChemotactTowardsVectorTypes([cellType1, cellType2, ...])**: causes chemotaxis to trigger when the cell touches
     one or more of the other cell types in the provided list.
+
     - **chemotaxisData.setLogScaledCoef(coef: float)**: assign the log-scaled
     coefficient of the given chemotaxis behavior, which helps to mitigate 
     excessive orders of magnitude in chemotaxis decisions (see definition below).
@@ -167,7 +169,7 @@ CC3D supports slight modifications of the above formulas in the
 ``Chemotaxis`` plugin where :math:`\Delta E` is non-zero only if the cell located at :math:`x_{source}` *after*
 the pixel copy is non-medium. To enable this mode users need to include
 
-.. code-block:: xml
+.. code-block:: XML
 
     <Algorithm="Regular"/>
 
