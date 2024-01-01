@@ -1,6 +1,12 @@
 Mitosis
 =======
 
+**Related Examples**
+    - `General Mitosis Examples <example_mitosis>`_
+    - `Contact-Inhibited Cell Growth <example_contact_inhibited_cell_growth.html>`_
+
+**********************************************
+
 In developmental simulations, we often need to simulate cells that grow
 and divide. We start with a single cell and grow it. 
 When a cell reaches a **critical volume**, it undergoes Mitosis. 
@@ -197,9 +203,3 @@ is the default behavior). When the argument is a negative integer, the child
 cell will always appear on the right of the parent cell. Conversely, when the
 argument is a positive integer, the child cell will appear always on the
 left-hand side of the parent cell.
-
-**********************************************
-
-**Related Examples**
-    - `General Mitosis Examples <example_mitosis>`_
-    - `Contact-Inhibited Cell Growth <example_contact_inhibited_cell_growth.html>`_
