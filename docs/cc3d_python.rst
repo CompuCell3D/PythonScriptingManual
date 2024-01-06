@@ -7,17 +7,20 @@ How to programmatically control every aspect of the simulation
 
 Most new users start learning CompuCell3D by configuring and editing simulations in `Twedit GUI <https://github.com/CompuCell3D/cc3d-twedit5>`_
 and then running them via `Player GUI <https://github.com/CompuCell3D/cc3d-player5>`_.
-Starting from version 4.4.0 CompuCell3D is shipped with an upgraded Python API that allows modelers to bypass
+Starting from version 4.4.0, CompuCell3D is shipped with an upgraded Python API that allows modelers to bypass
 both Player and Twedit and configure simulations
 - or even an ensemble of multiple simulations running in parallel and informing each other - directly from a
 single Python script. This way of constructing simulations gives users full control over every aspect of the simulation.
-The material presented in this section explains how to configure entire simulation in pure Python
-(we are not using XML), how to write and control main CC3D loop where at every step we call Potts algorithm, how to
-run multiple concurrent and interacting simulations, how to specify and control visualization and how to use
-Jupyter notebook.
+The material presented in this section explains:
 
-In a sense this tutorial shows an alternative way of specifying and running simulations that bypasses legacy tools like
-Twedit++ and Player and gives user full programmatic control of the CC3D simulation.
+* how to configure the entire simulation in pure Python (*i.e.*, without XML)
+* how to write and control the main CC3D loop where, at every step, we call the `Potts algorithm <potts.html>`_
+* how to run multiple concurrent and interacting simulations
+* how to specify and control visualization
+* how to use Jupyter notebook.
+
+In a sense, this tutorial shows an alternative way of specifying and running simulations that bypasses legacy tools like
+Twedit++ and Player. It gives you full programmatic control of the CC3D simulation.
 
 We recommend that you use PyCharm or VS Code if you decide to work with the API presented in this section
 

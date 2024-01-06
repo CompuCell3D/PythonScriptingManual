@@ -1,92 +1,49 @@
-SteppableBasePy class
-=====================
+What is a Steppable? (SteppableBasePy class)
+===================================================
 
-In the example above you may wonder how it is possible that it is
-sufficient to type:
+``SteppableBasePy`` has built-in **functions that are called automatically** during the simulation.
+The most important functions are ``start`` and ``step``.
+
+Functions
+****************************
+
+**def __init__(self, frequency=1):** This code runs as the simulation is set up, and, in most cases, you will not need to edit it. 
+
+**def start(self):** This is called after cells are created but before the simulation starts, so use it to assign custom cell properties or create `plots <example_plots_histograms.html>`_. 
+
+**def step(self, mcs):** Almost everything will happen here. For example, you might grow, divide, or kill your cells here. 
+
+**def on_stop(self):** This runs when you click the stop button.
+
+**def finish(self):** This function is called at the end of the simulation, but it is used very infrequently. 
+Be careful: it will only run if the simulation reaches the maximum number of steps as specified by the XML attribute ``<Steps>``.
+
+**********************************************
+
+
+A very common line in a Python steppable will read:
 
 .. code-block:: python
 
         for cell in self.cell_list:
 
-to iterate over a list of all cells in the simulation. Where does
-``self.cell_list`` come from and how it accesses/stores information about all
-cells? The full answer to this question is beyond the scope of this
-manual so we will give you only a hint what happens here. The
-``self.cell_list`` is a member of a ``SteppableBasePy`` class. All CC3D Python
-steppable inherit this class and consequently ``self.cell_list`` is a member
-of all steppables (please see a chapter on class inheritance from any
-Python manual if this looks unfamiliar). Under the hood the
-``self.cell_list`` is a handle, or a “pointer”, if you prefer this
-terminology, to the C++ object that stores all cells in the simulation.
-The content of cell inventory, and cell ordering of cells there is fully
-managed by C++ code. We use self.cellList to access C++ cell objects
-usually iterating over entire list of cells. The cell in the
+``cell_list`` is a variable of the ``SteppableBasePy`` class, which 
+means that every steppable you create will automatically store
+every cell it creates in that list. 
 
-.. code-block:: python
+All steppables in CompuCell3D are extensions of SteppableBasePy, so they,
+too, can use ``cell_list``. 
 
-        for cell in self.cell_list:
+**If you're new to programming:** The word ``self`` refers to the class we're inside, which would the steppable.
+Please see chapters on classes and inheritance from any Python manual if this looks unfamiliar. 
+Also, if you want a full list of the cell attributes, see `Appendix B <appendix_b.rst>`_.
+
+**If you're a programmer:** Under the hood, the ``self.cell_list`` is a handle, or a “pointer”, to the C++ object that stores all cells in the simulation. 
+The content of cell inventory and cell ordering of cells there is fully
+managed by C++ code. 
+You can easily see what member variables the C++
+cell object has by calling ``dir(cell)`` with one of the cells from the ``self.cell_list`` or by checking out `Appendix B <appendix_b.rst>`_.
 
 .. note::
 
-   old syntax ``self.cellList`` is still supported
-
-is a pointer to C++ cell object. You can easily see what members C++
-cell object has by modifying the step function as follows:
-
-.. code-block:: python
-
-        def step(self, mcs):
-            for cell in self.cellList:
-                print dir(cell)
-                break
-
-The result looks as follows:
-
-|image5|
-
-*Figure 6 Checking out properties of a cell C++ object*
-
-The dir built-in Python function prints out names of members of any
-Python object. Here it printed out members of ``CellG`` class which
-represents CC3D cells. We will go over these properties later.
-
-The simplicity of the above code snippets is mainly due to underlying
-implementation of ``SteppableBasePy`` class. You can find this class in
-``<CC3D\_installation\_dir>/pythonSetupScripts/PySteppables.py``. The
-definition of this class goes on for several hundreds lines of code
-(clearly a bit too much to present it here). If you are interested in
-checking out what members this class has use the dir Python function
-again:
-
-.. code-block:: python
-
-    def step(self,mcs):
-        print ('Members of SteppableBasePy class')
-        print dir(self)
-
-You should know from Python programing manual that ``self`` refers to the
-class object. Therefore by printing ``dir(self)`` we are actually printing
-Python list of all members of ``cellsortingSteppable`` class. Because
-``cellsortingSteppable`` class contains all the functions of ``SteppableBasePy``
-class we can inspect this way base class ``SteppableBasePy``. The output of
-the above simulation should look as follows:
-
-|image6|
-
-*Figure 7 Printing all members of SteppableBasePy class*
-
-If you look carefully, you can see that cellList is a member of
-``SteppabeBasePy`` class. Alternatively you can study source code of
-``SteppablBasePy``.
-
-One of the goals of this manual is to teach you how to effectively use
-features of ``SteppableBasePy`` class to create complex biological
-simulations. This class is very powerful and has many constructs which
-make coding simple.
-
-.. |image5| image:: images/image6.jpeg
-   :width: 5.98958in
-   :height: 0.89583in
-.. |image6| image:: images/image7.jpeg
-   :width: 6.00000in
-   :height: 2.03125in
+   Old syntax like ``self.cellList`` is still supported.

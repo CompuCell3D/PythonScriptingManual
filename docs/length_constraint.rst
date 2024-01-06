@@ -1,14 +1,16 @@
 LengthConstraint Plugin
 -----------------------
 
-This plugin imposes elongation constraint on the cell. It
-“measures” a cell along its “axis of elongation” and ensures that cell
-length along the elongation axis is close to target length. For detailed
+This plugin imposes an elongation constraint on the cell. It
+“measures” a cell along its “axis of elongation” and ensures that the cell
+length along the elongation axis is close to the target length. For detailed
 description of this algorithm in 2D see Roeland Merks' paper “Cell
 elongation is a key to in silico replication of in vitro vasculogenesis
 and subsequent remodeling” Developmental Biology **289** (2006) 44-54).
-This plugin is usually used in conjunction with Connectivity Plugin or
-ConnectivityGlobal Plugin. The syntax is as follows:
+This plugin is usually used in conjunction with the Connectivity Plugin or
+ConnectivityGlobal Plugin. 
+
+The syntax is as follows:
 
 .. code-block:: xml
 
@@ -20,7 +22,7 @@ ConnectivityGlobal Plugin. The syntax is as follows:
 ``TargetLength`` parameter. The higher ``LambdaLength`` the less freedom a cell
 will have to deviate from ``TargetLength``.
 
-In the 3D case we use the following syntax:
+In the 3D case, we use the following syntax:
 
 .. code-block:: xml
 
@@ -29,9 +31,9 @@ In the 3D case we use the following syntax:
     </Plugin>
 
 
-Notice new attribute called ``MinorTargetLength``. In 3D it is not
+Notice a new attribute called ``MinorTargetLength``. In 3D it is not
 sufficient to constrain the "length" of the cell you also need to
-constrain "width" of the cell along axis perpendicular to the major axis
+constrain the "width" of the cell along an axis perpendicular to the major axis
 of the cell. This "width" is referred to as ``MinorTargetLength``.
 
 The parameters are assigned using Python – see *Demos/elongationFlexTest* example.
@@ -60,10 +62,10 @@ by adding 4\ :sup:`th` parameter to the above call:
     a single cell then the local definition of the constraint has priority
     over definitions for the cell type.
 
-If, in the simulation, we will be setting length constraint for only few
+If, in the simulation, we will be setting length constraints for only a few
 individual cells then it is best to manipulate the constraint parameters
-from the Python script. In this case in the CC3DML we only have to
-declare that we will use length constraint plugin and we may skip the
+from the Python script. In this case, in the CC3DML we only have to
+declare that we will use a length constraint plugin and we may skip the
 definition by-type definitions:
 
 .. code-block:: xml
@@ -72,12 +74,18 @@ definition by-type definitions:
 
 .. note::
 
-    **IMPORTANT**: When using target length plugins it is important to use
-    connectivity constraint. This constraint will check if a given pixel
-    copy breaks cell connectivity. If it does, the plugin will add large
-    energy penalty (defined by a user) to change of energy effectively
+    **IMPORTANT**: When using target length, plugins it is important to use
+    the connectivity constraint. This constraint will check if a given pixel
+    copy breaks cell connectivity. If it does, the plugin will add a large
+    energy penalty (defined by a user) to change energy effectively,
     prohibiting such pixel copy. In the case of 2D on square lattice
     checking cell connectivity can be done locally and thus is very fast.
-    In 3D the connectivity algorithm is a bit slower but but its performance is
+    In 3D the connectivity algorithm is a bit slower but its performance is
     acceptable. Therefore if you need large cell elongations you should always use connectivity in order to
     prevent cell fragmentation
+
+
+Here's how a cluster of elongated cells might look:
+
+.. image:: images/length_constraint_example.png
+    :alt: A cluster of elongated cells
