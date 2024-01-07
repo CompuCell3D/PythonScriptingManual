@@ -3,6 +3,10 @@ Volume and Cell Growth
 
 Related: `Global Volume and Surface Constraints [Mathematics] <global_volume_and_surface_plugins.html>`_
 
+Relevant Examples:
+    * `Example: Contact-Inhibited Cell Growth <example_contact_inhibited_cell_growth.html>`_
+
+
 Properties
 ****************************
 
@@ -113,20 +117,11 @@ Python Steppable
             cell.lambdaVolume = 5.0
 
 
-Complete Example: Contact-Inhibited Cell Growth
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+What is Lambda?
+**********************************************
 
-Cell-cell contact generally inhibits proliferation (contact inhibition).
-
-`Download the sample code here <https://drive.google.com/file/d/1GIk6VyTcZnwZ8_LgCClAxUYzb-clhbTY/view?usp=drive_link>`_, 
-then watch the video from the latest workshop to follow along:
-
-`Get the slides here <https://docs.google.com/presentation/d/1KNnXN1p7J81UrFxDw6c6yc0o0NmDl3sa/edit#slide=id.p24>`_.
-
-.. image:: https://img.youtube.com/vi/x0FG5LRf1U8/maxresdefault.jpg
-    :alt: Workshop Tutorial Video
-    :target: https://www.youtube.com/watch?v=x0FG5LRf1U8&list=PLiEtieOeWbMKTIF2mekBc9cABFPEDwCdj&index=19&t=4030
-    :width: 80%
-
-..
-    [Last Updated] November 2023
+Think of a simulation in CompuCell3D as a lazy person who wants to *minimize their energy usage* at all times, although they have a certain probability of going out of their way to do something.
+A lazy person may have competing interests in mind at the same time.
+If their "hunger" is 2 and their "sleepiness" is 100, then they will be much more likely to go to sleep than eat something. 
+Likewise, CC3D is more likely to accept a lattice site copy attempt when the result will lower the simulation's total energy. 
+Essentially, **lambda is a multiplier used to control a decision about the lattice**.

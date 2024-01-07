@@ -12,7 +12,7 @@ You can find decent tutorials online (e.g.
 or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.com/watch?v=f_PJOGoCoEw&list=PLiEtieOeWbMKTIF2mekBc9cABFPEDwCdj>`__.
 
 ..
-    [Last Updated] 2023
+    [Link Last Updated] 2023
 
 
 .. toctree::
@@ -23,11 +23,12 @@ or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.c
     introduction
 
 .. toctree::
-    :caption: Intro to CC3D Python Programing
+    :caption: Intro to CC3D Python Programming
     :maxdepth: 1
     :hidden:
 
     section_python_tutorials
+
 
 .. toctree::
     :caption: Writing Simulations in Pure Python
@@ -42,7 +43,7 @@ or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.c
     :maxdepth: 1
     :hidden:
 
-    how_to
+    section_how_to
     building_a_wall
     checking_if_two_cell_objects_point_to_different_cells
     example_mitosis
@@ -115,12 +116,20 @@ or watch the `CompuCell3D Workshop Python tutorial videos <https://www.youtube.c
 
 
 .. toctree::
-    :caption: Intro Into Cellular Potts Model
+    :caption: Intro to Cellular Potts Model
     :maxdepth: 1
     :hidden:
 
     section_potts_and_lattice
     section_algorithms
+
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Real-world Examples
+
+    section_real_world_examples
 
 
 .. toctree::

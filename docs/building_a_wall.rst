@@ -1,4 +1,4 @@
-Building a wall (it is going to be terrific. Believe me)
+Building a wall at the lattice boundary
 ========================================================
 
 One of the side effects of the Cellular Potts Model occurring when
