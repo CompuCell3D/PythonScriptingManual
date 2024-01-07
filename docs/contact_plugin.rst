@@ -87,7 +87,7 @@ Note that ``i`` and ``j`` are are at separate coordinates; for example, ``i = (0
 
 In the above formula, we need to differentiate between cell types and
 cell IDs. This formula shows that cell types and cell IDs **are not the
-same** and the expression in parentheses involving delta function ensures that we do not included contact surfaces
+same** and the expression in parentheses involving delta function ensures that we do not include contact surfaces
 of voxels that belong to the same cell. The ``Contact`` plugin in the ``.xml`` file, defines the energy per unit
 area of contact between cells of different types (:math:`J\left ( \tau_{\sigma(i)},\tau_{\sigma(j)} \right )`) and the interaction
 range ``NeighborOrder`` of the contact:
@@ -146,7 +146,7 @@ Again, count the number of contact surfaces and multiply them by the respective 
 
 .. note::
 
-    CompuCell3D never computes total contact energy. Such calculation would be costly and instead CC3D computes a change in Contact energy due to pixel c opy and such calculations are local because we are only examining pixels in a local neighborhood of the change pixel
+    CompuCell3D never computes total contact energy. Such calculation would be costly. Instead, CC3D computes a change in Contact energy from pixel copies, and such calculations are local because we are only examining pixels in a local neighborhood of the change pixel.
 
 .. |Play| image:: images/icons/play.png
    :height: 14px
