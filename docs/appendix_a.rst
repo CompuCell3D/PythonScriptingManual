@@ -102,7 +102,7 @@ attributes that should not be copied
 
 ``clone_parent_cluster_2_child_cluster`` - used in mitosis with compartmentalized
 cells. Copies all attributes from cell in a parent cluster to
-corresponging cell in the child cluster
+corresponding cell in the child cluster
 
 ``cluster_list`` - Python-iterable list of clusters. Obsolete
 
