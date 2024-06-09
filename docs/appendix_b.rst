@@ -59,8 +59,7 @@ Volume Plugin
 
 ``subtype`` - currently unused
 
-``surface`` - instantaneous cell surface. Needs Surface or SurfaceTracker
-plugin
+``surface`` - instantaneous cell surface. Needs Surface plugin
 
 ``targetClusterSurface`` - target value of cluster surface constraint.Needs
 ClusterSurface Plugin
